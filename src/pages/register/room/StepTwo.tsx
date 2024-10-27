@@ -4,7 +4,7 @@ import { FormProps } from "../customer/StepOne";
 
 const StepTwo = ({ formData, setFormData }: FormProps) => {
   const { room: rooms } = useDataContext();
-  
+
   useEffect(() => {
     if (formData.roomNumber && formData.orderMethod) {
       const room = rooms.find(

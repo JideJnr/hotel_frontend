@@ -8,7 +8,10 @@ import dayjs from "dayjs";
 const StepOne = ({ formData, setFormData }: FormProps) => {
   const { clients, room } = useDataContext();
 
-  const handleSelectChange = (name: string, option: { value: string | number | null; label: string | null } | null) => {
+  const handleSelectChange = (
+    name: string,
+    option: { value: string | number | null; label: string | null } | null,
+  ) => {
     setFormData({
       ...formData,
       [name]: {
@@ -39,11 +42,15 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
     });
   };
 
-  
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
   const [startDate, endDate] = dateRange;
 
-  const formattedStartDate = startDate ? dayjs(startDate).format("YYYY-MM-DD") : "";
+  const formattedStartDate = startDate
+    ? dayjs(startDate).format("YYYY-MM-DD")
+    : "";
   const formattedEndDate = endDate ? dayjs(endDate).format("YYYY-MM-DD") : "";
   const isFormValid = formattedStartDate !== "" && formattedEndDate !== "";
 
@@ -82,7 +89,8 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
         placeholder="Select the duration"
       />
 
-      {formData.duration?.value === "singleDay" || formData.duration?.value === "multipleDays" ? (
+      {formData.duration?.value === "singleDay" ||
+      formData.duration?.value === "multipleDays" ? (
         <div>
           <p className="mb-2 text-sm font-medium text-gray-700">Date</p>
           <div className="flex items-center border rounded-sm min-h-[39px] p-2">
@@ -95,7 +103,9 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
               selectsRange={formData.duration?.value === "multipleDays"}
               startDate={startDate}
               endDate={endDate}
-              onChange={(update: [Date | null, Date | null]) => setDateRange(update)}
+              onChange={(update: [Date | null, Date | null]) =>
+                setDateRange(update)
+              }
               isClearable={true}
               popperPlacement="bottom"
             />

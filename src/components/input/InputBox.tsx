@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface InputBoxProps {
   id: string;
@@ -14,12 +14,12 @@ interface InputBoxProps {
 const InputBox: React.FC<InputBoxProps> = ({
   id,
   name,
-  type = 'text',
-  placeholder = '',
+  type = "text",
+  placeholder = "",
   onChange,
   value,
   required = false,
-  className = '',
+  className = "",
 }) => {
   return (
     <input
@@ -30,7 +30,7 @@ const InputBox: React.FC<InputBoxProps> = ({
       onChange={onChange}
       value={value}
       required={required}
-      autoComplete={type === 'password' ? 'current-password' : 'on'}
+      autoComplete={type === "password" ? "current-password" : "on"}
       className={`block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${className}`}
     />
   );

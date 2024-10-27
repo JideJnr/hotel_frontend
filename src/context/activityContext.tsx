@@ -38,20 +38,23 @@ interface ActivitiesContextType {
 }
 
 const ActivitiesContext = createContext<ActivitiesContextType | undefined>(
-  undefined
+  undefined,
 );
 
 interface ActivityProviderProps {
   children: ReactNode;
 }
 
-export const ActivityProvider: React.FC<ActivityProviderProps> = ({ children }) => {
+export const ActivityProvider: React.FC<ActivityProviderProps> = ({
+  children,
+}) => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [perPage] = useState<number>(20);
   const [page, setPage] = useState<number>(1);
   const [filter, setFilter] = useState<Filter | null>(null);
-  const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  const [lastVisible, setLastVisible] =
+    useState<QueryDocumentSnapshot<DocumentData> | null>(null);
 
   useEffect(() => {
     const fetchActivities = async () => {

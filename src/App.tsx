@@ -27,10 +27,10 @@ const App: React.FC = () => (
   <IonApp>
     <AuthProvider>
       <DataProvider>
-      <ActivityProvider>
-        <IonReactRouter>
-          <Routes />
-        </IonReactRouter>
+        <ActivityProvider>
+          <IonReactRouter>
+            <Routes />
+          </IonReactRouter>
         </ActivityProvider>
       </DataProvider>
     </AuthProvider>

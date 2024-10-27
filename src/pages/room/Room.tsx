@@ -1,4 +1,4 @@
-import { useMemo, useState, } from "react";
+import { useMemo, useState } from "react";
 import "../../style.css";
 import DashboardTile from "../../components/dashboardtiles/DashboardTiles";
 import { useDataContext } from "../../context/dataContext";
@@ -16,8 +16,6 @@ const Room: React.FC = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-
-  
 
   const columns: Column[] = useMemo(
     () => [
@@ -60,58 +58,55 @@ const Room: React.FC = () => {
   const [createModal, setCreateModal] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
 
-
   return (
     <IonContent>
-
-      {roomModal && <RoomDetails formData={selectedData} setFormData={setRoomModal} />}
-      {createModal && <CreateRoom />}
+      {roomModal && (
+        <RoomDetails formData={selectedData} setFormData={setRoomModal} />
+      )}
+      {createModal && (
+        <CreateRoom formData={selectedData} setFormData={setRoomModal} />
+      )}
 
       {!roomModal && !createModal && (
-    <div className="flex flex-col gap-4 px-4 py-8">
-      
-      <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit ">
-        <DashboardTile label="Room Active" unit={activeRoom.length} />
-        <DashboardTile label="Room Available" unit={availableRoom.length} />
-        <DashboardTile label="Room Unavailable" unit={bookedRoom.length} />
-      </div>
-
-      <div className="flex flex-col gap-4">
-      <p>Active Rooms</p>
-      <div className="grid grid-cols-4 gap-2 w-full">
-        {activeRoom.map((room) => (
-          <div
-            key={room.id}
-            className="flex flex-col items-center justify-center gap-1.5 text-center"
-            onClick={() => {
-              setSelectedData(room);
-              setRoomModal(true);
-            }}
-          >
-            <IonIcon
-              src="assets/svgs/users.svg"
-              className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
-            ></IonIcon>
-            <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-              Room {room.id}
-            </span>
+        <div className="flex flex-col gap-4 px-4 py-8">
+          <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit ">
+            <DashboardTile label="Room Active" unit={activeRoom.length} />
+            <DashboardTile label="Room Available" unit={availableRoom.length} />
+            <DashboardTile label="Room Unavailable" unit={bookedRoom.length} />
           </div>
-        ))}
-      </div>
-      </div>
 
-      <div>
-        <div>
-        <button onClick={() => setCreateModal(true)}>
-          Add New
-        </button>
+          <div className="flex flex-col gap-4">
+            <p>Active Rooms</p>
+            <div className="grid grid-cols-4 gap-2 w-full">
+              {activeRoom.map((room) => (
+                <div
+                  key={room.id}
+                  className="flex flex-col items-center justify-center gap-1.5 text-center"
+                  onClick={() => {
+                    setSelectedData(room);
+                    setRoomModal(true);
+                  }}
+                >
+                  <IonIcon
+                    src="assets/svgs/users.svg"
+                    className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
+                  ></IonIcon>
+                  <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
+                    Room {room.id}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div>
+              <button onClick={() => setCreateModal(true)}>Add New</button>
+            </div>
+            <Table columns={columns} data={room} />
+          </div>
         </div>
-        <Table columns={columns} data={room} />
-      </div>
-      
-    </div>)}
-
-
+      )}
     </IonContent>
   );
 };

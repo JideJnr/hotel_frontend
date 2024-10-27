@@ -43,12 +43,12 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
 
   const createRoomProfile = async (): Promise<boolean> => {
     setError(null);
-  
+
     if (!formData.location || !formData.roomNumber) {
       handleError("Please fill in all required fields.");
       return false;
     }
-  
+
     try {
       setLoading(true);
       const roomData = {
@@ -60,10 +60,10 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
         by: auth.currentUser?.uid,
         status: "Available",
       };
-  
+
       await addDoc(collection(db, activityPath), roomData);
       await setDoc(doc(db, path), roomData);
-  
+
       toast.success("Room profile created successfully!");
       resetRoom();
       return true; // Indicate success

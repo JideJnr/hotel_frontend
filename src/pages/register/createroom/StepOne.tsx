@@ -6,7 +6,7 @@ import { FormProps } from "../customer/StepOne";
 const StepOne = ({ formData, setFormData }: FormProps) => {
   const handleSelectChange = (
     name: string,
-    option: { value: string; label: string } | null
+    option: { value: string; label: string } | null,
   ) => {
     setFormData({
       ...formData,
@@ -20,7 +20,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
   ];
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -66,7 +66,8 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
         placeholder="Select Room Type"
       />
 
-      {(formData.roomType?.value === 'shortRest'|| formData.roomType?.value === 'all') && (
+      {(formData.roomType?.value === "shortRest" ||
+        formData.roomType?.value === "all") && (
         <>
           <p>Short Rest Price</p>
           <InputBox
@@ -81,7 +82,8 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
         </>
       )}
 
-      {(formData.roomType?.value === 'lodge' || formData.roomType?.value === 'all')  && (
+      {(formData.roomType?.value === "lodge" ||
+        formData.roomType?.value === "all") && (
         <>
           <p>Lodge Price</p>
           <InputBox

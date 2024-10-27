@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useDataContext } from "../../context/dataContext";
 import { FormProps } from "../register/customer/StepOne";
 
-const Setting = ({setFormData:setModal}:FormProps) => {
+const Setting = ({ setFormData: setModal }: FormProps) => {
   const handleSignout = async () => {
     await signOut(auth);
   };
@@ -12,56 +12,50 @@ const Setting = ({setFormData:setModal}:FormProps) => {
   const { user } = useDataContext();
 
   return (
-    <div className="mt-2 flow-root  ">
-      <div className="w-full h-full  p-4 md:p-8 gap-10 flex flex-col overflow-x-none overflow-y-auto">
-        <div className="flex-col  ">
-          <div className="w-full flex my-5"></div>
-
-          <div className="mx-auto w-fit">
-            <p className="text-xl font-medium">{user?.name}</p>
+    <div className="w-full h-full   gap-5 flex flex-col overflow-x-none overflow-y-auto text-sm">
+      <div className="flex-col  ">
+        <div className="w-full flex my-2">
+          <div className=" mx-auto my-auto  border border-white w-16 h-16 ">
+            <img src={user?.imgSrc} className="w-full h-full rounded-full" />
           </div>
         </div>
 
-        <div className="w-full flex flex-col  px-8 md:px-12 py-4"></div>
+        <div className="mx-auto w-fit">
+          <p className="font-medium  text-lg">{user?.name}</p>
+        </div>
+      </div>
 
-        <div className="w-full flex flex-col  p-4 md:p-8">
-          <Link to="/orderroom">
-            <div className="flex w-full items-center justify-between border-y rounded-lg py-4 px-6  text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-              <p>Profile</p>
-            </div>
-          </Link>
-
-          <Link to="/runexpenses">
-            <div className="flex w-full items-center justify-between border-y rounded-lg py-4 px-6 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-              <p>Support</p>
-            </div>
-          </Link>
-
-          {user && user.role ==='admin'
-          &&
-          <div   onClick={() => {
-            setModal(false);
-            
-          }}className="flex w-full items-center justify-between border-y rounded-lg py-4 px-6 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-            <p>Switch Hotel</p>
+      <div className="w-full flex flex-col  px-4 2xl:px-8">
+        <Link to="/analytics">
+          <div className="flex w-full items-center justify-between border-y rounded-lg p-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+            <p>Analytics</p>
           </div>
-          }
+        </Link>
 
-          <Link to="/support">
-            <div className="flex w-full items-center justify-between border-y rounded-lg py-4 px-6 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-              <p>Contact Support</p>
-            </div>
-          </Link>
+        <Link to="/offer">
+          <div className="flex w-full items-center justify-between border-y rounded-lg p-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+            <p>Offer Request</p>
+          </div>
+        </Link>
+
+        <div className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+          <p>DarkMode</p>
         </div>
 
-        <div className="flex justify-center">
-          <button
-            className="cursor-pointer px-6 my-3  h-10 text-white  w-28 bg-[#111111]  rounded text-xs ] hover:text-blue-500 duration-500"
-            onClick={handleSignout}
-          >
-            Logout
-          </button>
-        </div>
+        <Link to="/support">
+          <div className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+            <p>Contact Support</p>
+          </div>
+        </Link>
+      </div>
+
+      <div className="flex justify-center">
+        <button
+          className="cursor-pointer px-6 my-3  h-10 text-white  w-fit bg-[#111111]  rounded text-xs  hover:text-blue-500 duration-500"
+          onClick={handleSignout}
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

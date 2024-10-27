@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { doc, updateDoc, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { auth, db } from "../../firebase";
 
 interface UpdateData {
@@ -18,7 +24,7 @@ const useUpdateFunction = (updatePath: string): UseUpdateFunctionReturn => {
   const [updatedData, setUpdatedData] = useState<UpdateData>({});
   const [error, setError] = useState<string | null>(null);
   const [updateLoading, setUpdateLoading] = useState<boolean>(false);
-  
+
   const updateRecord = async (dataToUpdate: UpdateData): Promise<void> => {
     if (!dataToUpdate) {
       setError("Input All Fields!!!");

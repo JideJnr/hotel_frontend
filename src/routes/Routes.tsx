@@ -39,8 +39,6 @@ const Routes: React.FC = () => (
       <Login />
     </Route>
 
-
-
     <Route path="/home" exact={true}>
       <Landing />
     </Route>

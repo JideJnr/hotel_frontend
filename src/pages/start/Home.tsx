@@ -24,16 +24,14 @@ import { FormProps } from "../register/customer/StepOne";
 import { useDataContext } from "../../context/dataContext";
 import Users from "../users/Users";
 
-function Start({formData:data, setFormData:setModal}:FormProps) {
- 
+function Start({ formData: data, setFormData: setModal }: FormProps) {
   const refresh = (e: CustomEvent) => {
     setTimeout(() => {
       e.detail.complete();
     }, 3000);
   };
 
-
-  const {user} = useDataContext();
+  const { user } = useDataContext();
 
   return (
     <IonPage id="home-page">
@@ -42,22 +40,26 @@ function Start({formData:data, setFormData:setModal}:FormProps) {
           <IonRefresherContent />
         </IonRefresher>
 
-
-
         <Header>
           <IonReactRouter>
             <IonTabs>
-
-              
-
               <IonRouterOutlet>
                 <Redirect exact path="/" to="/home" />
-                <Route path="/home" render={() => <Home formData={data} />} exact />
+                <Route
+                  path="/home"
+                  render={() => <Home formData={data} />}
+                  exact
+                />
                 <Route path="/room" render={() => <Room />} exact />
-                {user && user.role=== 'admin' && <Route path="/user" render={() => <Users />} exact />
-                }
+                {user && user.role === "admin" && (
+                  <Route path="/user" render={() => <Users />} exact />
+                )}
                 <Route path="/activity" render={() => <Activity />} exact />
-                <Route path="/settings" render={() => <Setting setFormData={setModal} />} exact />
+                <Route
+                  path="/settings"
+                  render={() => <Setting setFormData={setModal} />}
+                  exact
+                />
               </IonRouterOutlet>
               <IonTabBar slot="bottom">
                 <IonTabButton tab="home" href="/home">
@@ -70,13 +72,12 @@ function Start({formData:data, setFormData:setModal}:FormProps) {
                   <IonLabel>Room</IonLabel>
                 </IonTabButton>
 
-                {user && user.role=== 'admin' &&
-
-<IonTabButton tab="user" href="/user">
-<IonIcon icon={radio} />
-<IonLabel>Users</IonLabel>
-</IonTabButton>
-}
+                {user && user.role === "admin" && (
+                  <IonTabButton tab="user" href="/user">
+                    <IonIcon icon={radio} />
+                    <IonLabel>Users</IonLabel>
+                  </IonTabButton>
+                )}
 
                 <IonTabButton tab="activity" href="/activity">
                   <IonIcon icon={search} />
@@ -88,15 +89,9 @@ function Start({formData:data, setFormData:setModal}:FormProps) {
                   <IonLabel>Settings</IonLabel>
                 </IonTabButton>
               </IonTabBar>
-
-              
-
-
             </IonTabs>
           </IonReactRouter>
         </Header>
-
-
       </IonContent>
     </IonPage>
   );

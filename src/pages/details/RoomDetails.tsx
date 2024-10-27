@@ -8,7 +8,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
   const { user } = useDataContext();
-  
+
   const recordPath = `roomRecord/${data.id}`;
   const roomPath = data ? `hotel/${data.location}/rooms/${data.room}` : null;
   const clientPath = data ? `clientRecord/${data.customerId}` : null;
@@ -34,16 +34,12 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
 
   const { reloadData } = useDataContext();
 
-  
-
   const handleCheckout = async () => {
     try {
-     
-        await updateRoomRecord({
-          active: false,
-          currentGuest: null,
-        });
-    
+      await updateRoomRecord({
+        active: false,
+        currentGuest: null,
+      });
 
       await updateRecordData({
         checkedOutBy: auth.currentUser?.uid,
@@ -51,18 +47,17 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
         status: "Checked Out",
       });
 
-     
-        await updateClientData({
-          checkedOutBy: auth.currentUser?.uid,
-          lastSeen: new Date(),
-          active: "false",
-        });
-        await addDoc(collection(db, activityPath), {
-          details: `${data.customerName} checked out`,
-          hostId: auth.currentUser?.uid,
-          createdAt: serverTimestamp(),
-        });
-        await reloadData();
+      await updateClientData({
+        checkedOutBy: auth.currentUser?.uid,
+        lastSeen: new Date(),
+        active: "false",
+      });
+      await addDoc(collection(db, activityPath), {
+        details: `${data.customerName} checked out`,
+        hostId: auth.currentUser?.uid,
+        createdAt: serverTimestamp(),
+      });
+      await reloadData();
       setModal(false);
     } catch (err) {
       console.error("Error updating room status:", err);
@@ -140,19 +135,23 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
 
       <div className="border-b border-dashed"></div>
 
-      {user && user.role !== 'admin' &&
-
-      <div className="grid grid-cols-1 gap-2">
-        {data.status === "Active" && (
-          <Button text="Check Out" className="w-full" onClick={handleCheckout} />
-        )}
-        <Button text="Report Transaction" className="w-full" />
-        <Button
-          text="Close"
-          className="w-full !bg-black"
-          onClick={() => setModal(false)}
-        />
-      </div>}
+      {user && user.role !== "admin" && (
+        <div className="grid grid-cols-1 gap-2">
+          {data.status === "Active" && (
+            <Button
+              text="Check Out"
+              className="w-full"
+              onClick={handleCheckout}
+            />
+          )}
+          <Button text="Report Transaction" className="w-full" />
+          <Button
+            text="Close"
+            className="w-full !bg-black"
+            onClick={() => setModal(false)}
+          />
+        </div>
+      )}
     </div>
   );
 };

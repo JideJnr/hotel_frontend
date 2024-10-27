@@ -138,43 +138,30 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         fetchData(roomPath, setRoom);
       }
 
-      if (user.role === 'admin') {
-        fetchData(recordPath, setRecord, [
-          where("date", "==", todayDate),
-        ]);
-  
+      if (user.role === "admin") {
+        fetchData(recordPath, setRecord, [where("date", "==", todayDate)]);
       } else {
         fetchData(recordPath, setRecord, [
           where("hostID", "==", user.id),
           where("date", "==", todayDate),
         ]);
-  
       }
 
-      if (user.role === 'admin') {
-        fetchData(expensesPath, setExpenses, [
-          where("date", "==", todayDate),
-        ]);
-  
+      if (user.role === "admin") {
+        fetchData(expensesPath, setExpenses, [where("date", "==", todayDate)]);
       } else {
         fetchData(expensesPath, setExpenses, [
           where("hostID", "==", user.id),
           where("date", "==", todayDate),
         ]);
-  
       }
-
-
-
-
-
     }
   }, [uid, user, roomPath, todayDate]);
 
   const reloadData = async () => {
     if (uid && user) {
       setLoading(true); // Optional: Indicate loading state
-      setError(null);   // Reset any previous errors
+      setError(null); // Reset any previous errors
 
       if (user.id) {
         await fetchData(clientsPath, setClients);
@@ -208,7 +195,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         user,
         loading,
         error,
-        reloadData, 
+        reloadData,
       }}
     >
       {children}

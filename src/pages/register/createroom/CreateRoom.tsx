@@ -6,30 +6,29 @@ import { useDataContext } from "../../../context/dataContext";
 import { FormProps } from "../customer/StepOne";
 import useRoomScudOperation from "../../../services/useRoomScudOperation";
 
-
-
 interface FormData {
-    location: string;        // Location of the hotel
-    roomNumber: string;      // Room number
-    shortRestPrice?: number; // Optional short rest price
-    lodgePrice?: number;     // Optional lodge price
-    id?: string;             // Optional ID for updates and deletions
-  }
+  location: string; // Location of the hotel
+  roomNumber: string; // Room number
+  shortRestPrice?: number; // Optional short rest price
+  lodgePrice?: number; // Optional lodge price
+  id?: string; // Optional ID for updates and deletions
+}
 
-
-const CreateRoom = ({ setFormData: setModal }: FormProps) => {
+const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
-    location: "",           // Initialize with empty string
-    roomNumber: "",         // Initialize with empty string
+    location: "", // Initialize with empty string
+    roomNumber: "", // Initialize with empty string
     shortRestPrice: undefined, // Optional field
-    lodgePrice: undefined,      // Optional field
+    lodgePrice: undefined, // Optional field
   });
 
   const { reloadData } = useDataContext();
-  const { createRoomProfile, loading, error } = useRoomScudOperation({ formData });
- 
+  const { createRoomProfile, loading, error } = useRoomScudOperation({
+    formData,
+  });
+
   const handleSubmit = async () => {
     try {
       const success = await createRoomProfile(); // Wait for success response
@@ -48,7 +47,6 @@ const CreateRoom = ({ setFormData: setModal }: FormProps) => {
       ) : (
         <StepOne formData={formData} setFormData={setFormData} />
       )}
-
       <div className="flex ml-auto gap-4 mt-4">
         {isModalVisible ? (
           <Button
@@ -79,8 +77,8 @@ const CreateRoom = ({ setFormData: setModal }: FormProps) => {
           />
         )}
       </div>
-
-      {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
+      {error && <p className="text-red-500">{error}</p>}{" "}
+      {/* Display error message */}
     </div>
   );
 };

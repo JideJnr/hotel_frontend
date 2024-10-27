@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Button from "../../../components/button/button";
 import StepOne from "./StepOne";
@@ -10,9 +9,6 @@ import { getCurrentDate, getYearMonth } from "../../../function/getCurrentDate";
 import { FormProps } from "../customer/StepOne";
 
 const Room = ({ setFormData: setModal }: FormProps) => {
-  
-  
-
   const [isModalVisible, setModalVisible] = useState(false);
 
   const [formData, setFormData] = useState<{
@@ -47,7 +43,6 @@ const Room = ({ setFormData: setModal }: FormProps) => {
   const clientPath = `clientRecord/${formData.customer?.value}/lodgeHistory`;
   const { reloadData } = useDataContext();
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -101,7 +96,6 @@ const Room = ({ setFormData: setModal }: FormProps) => {
       setError(error.message || "Error submitting data. Please try again.");
     } finally {
       setLoading(false);
-      
     }
   };
 

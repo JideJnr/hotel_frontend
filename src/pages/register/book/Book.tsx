@@ -30,7 +30,8 @@ const Book = ({ setFormData: setModal }: FormProps) => {
   const month = getYearMonth();
 
   const handleNextClick = () => setCurrentStepIndex((prevStep) => prevStep + 1);
-  const handleBackClick = () => currentStepIndex > 1 && setCurrentStepIndex((prevStep) => prevStep - 1);
+  const handleBackClick = () =>
+    currentStepIndex > 1 && setCurrentStepIndex((prevStep) => prevStep - 1);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -39,8 +40,10 @@ const Book = ({ setFormData: setModal }: FormProps) => {
     try {
       if (!formData.customer) throw new Error("Please select a client!");
       if (!formData.roomNumber) throw new Error("Please select a room!");
-      if (!formData.orderMethod) throw new Error("Please select an order type!");
-      if (!formData.paymentMethod) throw new Error("Please select a payment method!");
+      if (!formData.orderMethod)
+        throw new Error("Please select an order type!");
+      if (!formData.paymentMethod)
+        throw new Error("Please select a payment method!");
 
       setLoading(true);
 
@@ -67,13 +70,15 @@ const Book = ({ setFormData: setModal }: FormProps) => {
       await addDoc(collection(db, clientPath), salesData);
       await addDoc(collection(db, activityPath), salesData);
 
-      const roomDocRef = doc(db, `hotel/${user?.location}/rooms/${formData.roomNumber?.value}`);
+      const roomDocRef = doc(
+        db,
+        `hotel/${user?.location}/rooms/${formData.roomNumber?.value}`,
+      );
       const clientDocRef = doc(db, `clientRecord/${formData.customer?.value}`);
-      
+
       // You can update documents if necessary here
       // await updateDoc(roomDocRef, { /* your data */ });
       // await updateDoc(clientDocRef, { /* your data */ });
-
     } catch (error: any) {
       setError(error.message || "An error occurred during booking.");
     } finally {
@@ -84,21 +89,40 @@ const Book = ({ setFormData: setModal }: FormProps) => {
 
   return (
     <div className="p-4 gap-4 flex flex-col">
-      {currentStepIndex === 1 && <StepOne formData={formData} setFormData={setFormData} />}
-      {currentStepIndex === 2 && <StepTwo formData={formData} setFormData={setFormData} />}
-      {currentStepIndex === 3 && <StepThree formData={formData} setFormData={setFormData} />}
+      {currentStepIndex === 1 && (
+        <StepOne formData={formData} setFormData={setFormData} />
+      )}
+      {currentStepIndex === 2 && (
+        <StepTwo formData={formData} setFormData={setFormData} />
+      )}
+      {currentStepIndex === 3 && (
+        <StepThree formData={formData} setFormData={setFormData} />
+      )}
 
       {error && <p className="text-red-500">{error}</p>}
-      
+
       <div className="flex ml-auto gap-4 mt-4">
         {currentStepIndex !== 1 ? (
-          <Button text="Previous" className="!bg-gray-400" onClick={handleBackClick} />
+          <Button
+            text="Previous"
+            className="!bg-gray-400"
+            onClick={handleBackClick}
+          />
         ) : (
-          <Button text="Close" className="!bg-gray-400" onClick={() => setModal(false)} />
+          <Button
+            text="Close"
+            className="!bg-gray-400"
+            onClick={() => setModal(false)}
+          />
         )}
 
         {currentStepIndex === 3 ? (
-          <Button text="Submit" className="" onClick={handleSubmit} loading={loading} />
+          <Button
+            text="Submit"
+            className=""
+            onClick={handleSubmit}
+            loading={loading}
+          />
         ) : (
           <Button text="Next" className="" onClick={handleNextClick} />
         )}

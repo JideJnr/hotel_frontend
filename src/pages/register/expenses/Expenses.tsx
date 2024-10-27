@@ -9,7 +9,6 @@ const Expenses = ({ setFormData: setModal }: FormProps) => {
 
   const [formData, setFormData] = useState(false);
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -63,7 +62,6 @@ const Expenses = ({ setFormData: setModal }: FormProps) => {
       setError(error.message || "Error submitting data. Please try again.");
     } finally {
       setLoading(false);
-      
     }
   };
 
@@ -93,18 +91,17 @@ const Expenses = ({ setFormData: setModal }: FormProps) => {
             }}
           />
         )}
- {isModalVisible ? (
-        <Button
-          text="Next"
-          className=""
-          onClick={() => {
-            setModalVisible(true);
-          }}
-        />):( <Button
-          text="Submit"
-          className=""
-          onClick={handleSubmit}
-        />)}
+        {isModalVisible ? (
+          <Button
+            text="Next"
+            className=""
+            onClick={() => {
+              setModalVisible(true);
+            }}
+          />
+        ) : (
+          <Button text="Submit" className="" onClick={handleSubmit} />
+        )}
       </div>
     </div>
   );
