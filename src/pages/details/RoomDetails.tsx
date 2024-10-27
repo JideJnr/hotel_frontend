@@ -140,6 +140,8 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
 
       <div className="border-b border-dashed"></div>
 
+      {user && user.role !== 'admin' &&
+
       <div className="grid grid-cols-1 gap-2">
         {data.status === "Active" && (
           <Button text="Check Out" className="w-full" onClick={handleCheckout} />
@@ -150,7 +152,7 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
           className="w-full !bg-black"
           onClick={() => setModal(false)}
         />
-      </div>
+      </div>}
     </div>
   );
 };

@@ -2,8 +2,9 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { Link } from "react-router-dom";
 import { useDataContext } from "../../context/dataContext";
+import { FormProps } from "../register/customer/StepOne";
 
-const Setting = () => {
+const Setting = ({setFormData:setModal}:FormProps) => {
   const handleSignout = async () => {
     await signOut(auth);
   };
@@ -35,6 +36,16 @@ const Setting = () => {
               <p>Support</p>
             </div>
           </Link>
+
+          {user && user.role ==='admin'
+          &&
+          <div   onClick={() => {
+            setModal(false);
+            
+          }}className="flex w-full items-center justify-between border-y rounded-lg py-4 px-6 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+            <p>Switch Hotel</p>
+          </div>
+          }
 
           <Link to="/support">
             <div className="flex w-full items-center justify-between border-y rounded-lg py-4 px-6 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">

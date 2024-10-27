@@ -5,6 +5,7 @@ import { useDataContext } from "../../context/dataContext";
 import Table, { Column } from "../../components/table/table";
 import { IonContent, IonIcon } from "@ionic/react";
 import RoomDetails from "../details/RoomDetails";
+import CreateRoom from "../register/createroom/CreateRoom";
 
 const Room: React.FC = () => {
   const { room, loading, error } = useDataContext();
@@ -56,6 +57,7 @@ const Room: React.FC = () => {
   );
 
   const [roomModal, setRoomModal] = useState(false);
+  const [createModal, setCreateModal] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
 
 
@@ -63,8 +65,9 @@ const Room: React.FC = () => {
     <IonContent>
 
       {roomModal && <RoomDetails formData={selectedData} setFormData={setRoomModal} />}
+      {createModal && <CreateRoom />}
 
-      {!roomModal && (
+      {!roomModal && !createModal && (
     <div className="flex flex-col gap-4 px-4 py-8">
       
       <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit ">
@@ -98,6 +101,11 @@ const Room: React.FC = () => {
       </div>
 
       <div>
+        <div>
+        <button onClick={() => setCreateModal(true)}>
+          Add New
+        </button>
+        </div>
         <Table columns={columns} data={room} />
       </div>
       

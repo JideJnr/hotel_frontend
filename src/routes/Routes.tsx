@@ -9,8 +9,7 @@ import Login from "../pages/auth/sign-in/Login";
 import RecoverPassword from "../pages/auth/onboarding/RecoverPassword";
 import CreatePassword from "../pages/auth/onboarding/CreatePassword";
 import CreateEmail from "../pages/auth/onboarding/CreateEmail";
-import RoomDetails from "../pages/details/RoomDetails";
-import Start from "../pages/start/Home";
+import Landing from "../pages/start/Landing";
 
 const Routes: React.FC = () => (
   <IonRouterOutlet>
@@ -40,12 +39,10 @@ const Routes: React.FC = () => (
       <Login />
     </Route>
 
-    <Route path="/roomdetails/:id" exact={true}>
-      <RoomDetails />
-    </Route>
+
 
     <Route path="/home" exact={true}>
-      <Start />
+      <Landing />
     </Route>
     <Route path="/password" exact={true}>
       <CreatePassword />

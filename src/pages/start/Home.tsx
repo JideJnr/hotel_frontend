@@ -20,12 +20,20 @@ import Header from "../home/Header";
 import Home from "../home/HomePage";
 import Setting from "../settings/Settings";
 
-function Start() {
+import { FormProps } from "../register/customer/StepOne";
+import { useDataContext } from "../../context/dataContext";
+import Users from "../users/Users";
+
+function Start({formData:data, setFormData:setModal}:FormProps) {
+ 
   const refresh = (e: CustomEvent) => {
     setTimeout(() => {
       e.detail.complete();
     }, 3000);
   };
+
+
+  const {user} = useDataContext();
 
   return (
     <IonPage id="home-page">
@@ -33,6 +41,9 @@ function Start() {
         <IonRefresher slot="fixed" onIonRefresh={refresh}>
           <IonRefresherContent />
         </IonRefresher>
+
+
+
         <Header>
           <IonReactRouter>
             <IonTabs>
@@ -41,12 +52,13 @@ function Start() {
 
               <IonRouterOutlet>
                 <Redirect exact path="/" to="/home" />
-                <Route path="/home" render={() => <Home />} exact />
+                <Route path="/home" render={() => <Home formData={data} />} exact />
                 <Route path="/room" render={() => <Room />} exact />
+                {user && user.role=== 'admin' && <Route path="/user" render={() => <Users />} exact />
+                }
                 <Route path="/activity" render={() => <Activity />} exact />
-                <Route path="/settings" render={() => <Setting />} exact />
+                <Route path="/settings" render={() => <Setting setFormData={setModal} />} exact />
               </IonRouterOutlet>
-
               <IonTabBar slot="bottom">
                 <IonTabButton tab="home" href="/home">
                   <IonIcon icon={playCircle} />
@@ -57,6 +69,14 @@ function Start() {
                   <IonIcon icon={radio} />
                   <IonLabel>Room</IonLabel>
                 </IonTabButton>
+
+                {user && user.role=== 'admin' &&
+
+<IonTabButton tab="user" href="/user">
+<IonIcon icon={radio} />
+<IonLabel>Users</IonLabel>
+</IonTabButton>
+}
 
                 <IonTabButton tab="activity" href="/activity">
                   <IonIcon icon={search} />
@@ -75,6 +95,8 @@ function Start() {
             </IonTabs>
           </IonReactRouter>
         </Header>
+
+
       </IonContent>
     </IonPage>
   );

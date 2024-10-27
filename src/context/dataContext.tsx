@@ -138,19 +138,36 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         fetchData(roomPath, setRoom);
       }
 
-      fetchData(recordPath, setRecord, [
-        where("hostID", "==", user.id),
-        where("date", "==", todayDate),
-      ]);
+      if (user.role === 'admin') {
+        fetchData(recordPath, setRecord, [
+          where("date", "==", todayDate),
+        ]);
+  
+      } else {
+        fetchData(recordPath, setRecord, [
+          where("hostID", "==", user.id),
+          where("date", "==", todayDate),
+        ]);
+  
+      }
 
-      console.log(todayDate);
-      console.log(record);
-      console.log(user.id);
+      if (user.role === 'admin') {
+        fetchData(expensesPath, setExpenses, [
+          where("date", "==", todayDate),
+        ]);
+  
+      } else {
+        fetchData(expensesPath, setExpenses, [
+          where("hostID", "==", user.id),
+          where("date", "==", todayDate),
+        ]);
+  
+      }
 
-      fetchData(expensesPath, setExpenses, [
-        where("hostID", "==", user.id),
-        where("date", "==", todayDate),
-      ]);
+
+
+
+
     }
   }, [uid, user, roomPath, todayDate]);
 

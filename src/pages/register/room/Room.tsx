@@ -1,13 +1,5 @@
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonRefresher,
-  IonRefresherContent,
-  useIonRouter,
-} from "@ionic/react";
+
 import { useState } from "react";
-import { useHistory } from "react-router";
 import Button from "../../../components/button/button";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";

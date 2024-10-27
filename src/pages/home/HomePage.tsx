@@ -14,7 +14,12 @@ import Customer from "../register/customer/Customer";
 import Book from "../register/book/Book";
 import RoomDetails from "../details/RoomDetails";
 
-const Home: React.FC = () => {
+
+interface FormProps {
+  formData?: any;
+}
+
+const Home = ({formData}:FormProps) => {
   const { user, loading, error, record, expenses } = useDataContext();
 
   if (loading) return <div>Loading...</div>;
@@ -120,6 +125,9 @@ const Home: React.FC = () => {
             <DashboardTile label="Room Sold" unit={record.length} />
           </div>
 
+          {user && user.role !== 'admin'
+          &&     
+
           <div className="grid grid-cols-4 gap-2 w-full ">
             <div
               className="flex flex-col items-center justify-center gap-1.5 text-center"
@@ -181,7 +189,7 @@ const Home: React.FC = () => {
                 Book
               </span>
             </div>
-          </div>
+          </div>}
 
           {expenses && expenses.length === 0 && (
             <div className="flex items-center gap-3 p-3  rounded-lg bg-[#f4f5f8]">
@@ -189,7 +197,7 @@ const Home: React.FC = () => {
               <div className="overflow-hidden whitespace-nowrap flex-1">
                 <div className="animate-marquee">
                   <p className="text-sm font-medium text-dark">
-                    You have not registered any expense today
+                    {user?.role !== 'admin' ?('You'):('Your team')} have not registered any expense today
                   </p>
                 </div>
               </div>

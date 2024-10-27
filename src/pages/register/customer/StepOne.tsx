@@ -3,6 +3,15 @@ import React from "react";
 export interface FormProps {
   formData?: any;
   setFormData: (updatedFormData: any) => void;
+ 
+}
+
+interface FormData {
+  location: string;        // Location of the hotel
+  roomNumber: string;      // Room number
+  shortRestPrice?: number; // Optional short rest price
+  lodgePrice?: number;     // Optional lodge price
+  id?: string;             // Optional ID for updates and deletions
 }
 
 const StepOne = ({ formData, setFormData }: FormProps) => {
