@@ -43,6 +43,8 @@ const Room = ({ setFormData: setModal }: FormProps) => {
   const clientPath = `clientRecord/${formData.customer?.value}/lodgeHistory`;
   const { reloadData } = useDataContext();
 
+  console.log(user)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -66,12 +68,14 @@ const Room = ({ setFormData: setModal }: FormProps) => {
         method: formData.orderMethod.value,
         date: todayDate,
         month: month,
-        status: "Active",
+        status: "active",
         details: "Sold Room",
-        price: formData.price,
+        price: parseInt(formData.price || '0', 10), 
       };
+      const docRef = await addDoc(collection(db, recordPath), salesData);
 
-      await addDoc(collection(db, recordPath), salesData);
+      const docId = docRef.id;
+
       await addDoc(collection(db, roomPath), salesData);
       await addDoc(collection(db, clientPath), salesData);
       await addDoc(collection(db, activityPath), salesData);
@@ -83,10 +87,11 @@ const Room = ({ setFormData: setModal }: FormProps) => {
       const clientDocRef = doc(db, `clientRecord/${formData.customer.value}`);
 
       await updateDoc(roomDocRef, {
-        active: true,
+        status: 'active',
         currentGuest: {
           name: formData.customer.label,
           id: formData.customer.value,
+          docId: docId
         },
       });
       await updateDoc(clientDocRef, { status: "Active" });

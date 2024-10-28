@@ -52,7 +52,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
     });
   };
 
-  const activeRooms = room.filter((item) => !item.active);
+  const activeRooms = room.filter((item) => item.status = 'available');
 
   return (
     <div className="flex flex-col gap-4 bg-white h-fit p-4 ">

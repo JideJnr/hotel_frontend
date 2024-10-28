@@ -25,13 +25,13 @@ import { useDataContext } from "../../context/dataContext";
 import Users from "../users/Users";
 
 function Start({ formData: data, setFormData: setModal }: FormProps) {
-  const refresh = (e: CustomEvent) => {
-    setTimeout(() => {
-      e.detail.complete();
-    }, 3000);
-  };
+ 
+  const { reloadData , user } = useDataContext();
 
-  const { user } = useDataContext();
+  const refresh = (e: CustomEvent) => {
+    reloadData();
+    e.detail.complete();
+  };
 
   return (
     <IonPage id="home-page">

@@ -84,6 +84,28 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
     }
   };
 
+
+  const handleNext = () => {
+    
+    const errors = [];
+
+    if (!formData.fullName) {
+      errors.push('Full Name is required.');
+    }
+    if (!formData.phone) {
+      errors.push('Phone is required.');
+    }
+    if (!formData.address) {
+      errors.push('Address is required.');
+    }
+    
+
+    if (errors.length > 0) {
+      console.log(errors.join(', ')); 
+    } else {
+      setModalVisible(true);
+    }
+  };
   return (
     <div className=" p-4 gap-4 flex flex-col">
       {isModalVisible ? (
@@ -117,9 +139,7 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
           <Button
             text="Next"
             className=""
-            onClick={() => {
-              setModalVisible(true);
-            }}
+            onClick={handleNext}
           />
         )}
       </div>

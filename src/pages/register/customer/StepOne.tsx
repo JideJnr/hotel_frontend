@@ -29,7 +29,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
         autoComplete="given-name"
         value={formData.fullName}
         onChange={handleChange}
-        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-md sm:leading-6"
       />
 
       <p>Phone Number</p>
@@ -39,7 +39,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
         id="phone"
         value={formData.phone}
         onChange={handleChange}
-        className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+        className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-md sm:leading-6"
         placeholder="8123456789"
       />
 
@@ -51,7 +51,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
         autoComplete="street-address"
         value={formData.address}
         onChange={handleChange}
-        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-md sm:leading-6"
       />
 
       <p>Note</p>

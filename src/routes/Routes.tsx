@@ -10,6 +10,7 @@ import RecoverPassword from "../pages/auth/onboarding/RecoverPassword";
 import CreatePassword from "../pages/auth/onboarding/CreatePassword";
 import CreateEmail from "../pages/auth/onboarding/CreateEmail";
 import Landing from "../pages/landing/Landing";
+import Analytics from "../pages/analytics/Analytics";
 
 const Routes: React.FC = () => (
   <IonRouterOutlet>
@@ -19,6 +20,9 @@ const Routes: React.FC = () => (
 
     <Route path="/login" exact={true}>
       <Login />
+    </Route>
+    <Route path="/analytics" exact={true}>
+      <Analytics />
     </Route>
     <Route path="/recover-password" exact={true}>
       <RecoverPassword />

@@ -58,7 +58,7 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
         lodge: formData.lodgePrice || null,
         details: "Created Room Data",
         by: auth.currentUser?.uid,
-        status: "Available",
+        status: "available",
       };
 
       await addDoc(collection(db, activityPath), roomData);
