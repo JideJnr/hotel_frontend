@@ -1,9 +1,12 @@
 import { useActivities } from "../../context/activityContext";
+import { DataProps } from "../home/Home";
 
-const Activity = () => {
+const Activity = ({formData}:DataProps) => {
+
   const { activities, dataLoading, loadMoreActivities, setFilter } =
     useActivities();
   console.log(activities);
+  
   return (
     <div className="p-4 bg-white">
       <div>

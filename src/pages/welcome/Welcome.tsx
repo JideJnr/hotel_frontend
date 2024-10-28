@@ -4,6 +4,7 @@ import { useDataContext } from "../../context/dataContext";
 
 const Welcome: React.FC = () => {
   const { user } = useDataContext();
+
   return (
     <IonPage>
       <IonContent fullscreen className="bg-cover bg-center">

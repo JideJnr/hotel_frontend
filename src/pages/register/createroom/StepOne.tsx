@@ -39,10 +39,10 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
     <div className="flex flex-col gap-4 bg-white h-fit p-4">
       <p>Select Hotel</p>
       <CustomSelect
-        name="hotel"
+        name="location"
         options={hotelOptions}
-        onChange={(option) => handleSelectChange("hotel", option)}
-        value={formData.hotel?.value || null}
+        onChange={(option) => handleSelectChange("location", option)}
+        value={formData.location?.value || null}
         placeholder="Select the hotel"
       />
 

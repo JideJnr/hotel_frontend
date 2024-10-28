@@ -6,13 +6,22 @@ import Table, { Column } from "../../components/table/table";
 import { IonContent, IonIcon } from "@ionic/react";
 import RoomDetails from "../details/RoomDetails";
 import CreateRoom from "../register/createroom/CreateRoom";
+import { DataProps } from "../home/Home";
+import { filterData } from "../../utils/filterData";
 
-const Room: React.FC = () => {
+const Room= ({formData}:DataProps) => {
   const { room, loading, error } = useDataContext();
 
-  const activeRoom = room.filter((record) => record.status === "Active");
-  const availableRoom = room.filter((room) => room.status === "Available");
-  const bookedRoom = room.filter((room) => room.status !== "Available");
+  console.log(room)
+const filteredRoom = room && formData?.value 
+? filterData(room, formData.value) 
+: room;
+
+
+
+  const activeRoom = filteredRoom.filter((record) => record.status === "Active");
+  const availableRoom = filteredRoom.filter((room) => room.status === "Available");
+  const bookedRoom = filteredRoom.filter((room) => room.status !== "Available");
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -103,7 +112,7 @@ const Room: React.FC = () => {
             <div>
               <button onClick={() => setCreateModal(true)}>Add New</button>
             </div>
-            <Table columns={columns} data={room} />
+            <Table columns={columns} data={filteredRoom} />
           </div>
         </div>
       )}

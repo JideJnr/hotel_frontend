@@ -16,8 +16,8 @@ import { playCircle, radio, search, settings } from "ionicons/icons"; // Use dif
 
 import Room from "../room/Room";
 import Activity from "../activity/Activity";
-import Header from "../home/Header";
-import Home from "../home/HomePage";
+import Header from "../../components/layout/Header";
+import Home from "../home/Home";
 import Setting from "../settings/Settings";
 
 import { FormProps } from "../register/customer/StepOne";
@@ -45,16 +45,18 @@ function Start({ formData: data, setFormData: setModal }: FormProps) {
             <IonTabs>
               <IonRouterOutlet>
                 <Redirect exact path="/" to="/home" />
+                
                 <Route
                   path="/home"
                   render={() => <Home formData={data} />}
                   exact
                 />
-                <Route path="/room" render={() => <Room />} exact />
-                {user && user.role === "admin" && (
-                  <Route path="/user" render={() => <Users />} exact />
-                )}
-                <Route path="/activity" render={() => <Activity />} exact />
+
+                <Route path="/room" render={() => <Room formData={data}  />} exact />
+               
+                  <Route path="/user" render={() => <Users formData={data} />} exact />
+           
+                <Route path="/activity" render={() => <Activity formData={data}  />} exact />
                 <Route
                   path="/settings"
                   render={() => <Setting setFormData={setModal} />}
@@ -72,7 +74,7 @@ function Start({ formData: data, setFormData: setModal }: FormProps) {
                   <IonLabel>Room</IonLabel>
                 </IonTabButton>
 
-                {user && user.role === "admin" && (
+                {user && user?.role === "admin" && (
                   <IonTabButton tab="user" href="/user">
                     <IonIcon icon={radio} />
                     <IonLabel>Users</IonLabel>

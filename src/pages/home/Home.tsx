@@ -10,12 +10,13 @@ import Expenses from "../register/expenses/Expenses";
 import Customer from "../register/customer/Customer";
 import Book from "../register/book/Book";
 import RoomDetails from "../details/RoomDetails";
+import { filterData } from "../../utils/filterData";
 
-interface FormProps {
+export interface DataProps {
   formData?: any;
 }
 
-const Home = ({ formData }: FormProps) => {
+const Home = ({ formData }: DataProps) => {
   const { user, loading, error, record, expenses } = useDataContext();
 
   if (loading) return <div>Loading...</div>;
@@ -24,21 +25,7 @@ const Home = ({ formData }: FormProps) => {
   const [totalEarning, setTotalEarning] = useState<number>(0);
   const [totalExpenses, setTotalExpenses] = useState<number>(0);
 
-  useEffect(() => {
-    const sum = record.reduce((accumulator, item) => {
-      return accumulator + item.price;
-    }, 0);
-
-    setTotalEarning(sum);
-  }, [record, user]);
-
-  useEffect(() => {
-    const sum = expenses.reduce((accumulator, item) => {
-      return accumulator + item.amount;
-    }, 0);
-
-    setTotalExpenses(sum);
-  }, [expenses, user]);
+  
 
   function displayPrice(amount: number): string {
     const formattedPrice = formatNaira(amount);
@@ -100,6 +87,38 @@ const Home = ({ formData }: FormProps) => {
   const [selectedData, setSelectedData] = useState(null);
   const [recordModal, setRecordModal] = useState(false);
 
+
+
+
+
+
+const filteredRecord = record && formData?.value 
+  ? filterData(record, formData.value) 
+  : record;
+
+  const filteredExpenses = expenses && formData?.value 
+  ? filterData(expenses, formData.value) 
+  : expenses;
+
+  
+
+
+  useEffect(() => {
+    const sum = filteredRecord.reduce((accumulator, item) => {
+      return accumulator + item.price;
+    }, 0);
+
+    setTotalEarning(sum);
+  }, [filteredRecord, user]);
+
+  useEffect(() => {
+    const sum = filteredExpenses.reduce((accumulator, item) => {
+      return accumulator + item.amount;
+    }, 0);
+
+    setTotalExpenses(sum);
+  }, [filteredExpenses, user]);
+
   return (
     <IonContent>
       <div className="flex flex-col gap-6 px-4 py-8">
@@ -126,10 +145,10 @@ const Home = ({ formData }: FormProps) => {
                   label="Expenses"
                   unit={displayPrice(totalExpenses)}
                 />
-                <DashboardTile label="Room Sold" unit={record.length} />
+                <DashboardTile label="Room Sold" unit={filteredRecord?.length} />
               </div>
 
-              {user && user.role !== "admin" && (
+              {user && user?.role !== "admin" && (
                 <div className="grid grid-cols-4 gap-2 w-full ">
                   <div
                     className="flex flex-col items-center justify-center gap-1.5 text-center"
@@ -194,7 +213,7 @@ const Home = ({ formData }: FormProps) => {
                 </div>
               )}
 
-              {expenses && expenses.length === 0 && (
+              {filteredExpenses && filteredExpenses.length === 0 && (
                 <div className="flex items-center gap-3 p-3  rounded-lg bg-[#f4f5f8]">
                   <IonIcon src="assets/svgs/announce.svg"></IonIcon>
                   <div className="overflow-hidden whitespace-nowrap flex-1">
@@ -211,7 +230,7 @@ const Home = ({ formData }: FormProps) => {
               <div>
                 <Table
                   columns={columns}
-                  data={record}
+                  data={filteredRecord}
                   onClick={(row) => {
                     setSelectedData(row);
                     setRecordModal(true);

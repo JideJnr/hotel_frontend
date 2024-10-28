@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface FormData {
-  location: string;
+  location: any;
   roomNumber: string;
   shortRestPrice?: number;
   lodgePrice?: number;
@@ -27,7 +27,7 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const path = `hotel/${formData.location}/rooms/${formData.roomNumber}`;
+  const path = `hotel/${formData.location.value}/rooms/${formData.roomNumber}`;
   const activityPath = "activitiesRecord";
 
   const resetRoom = () => {
@@ -53,9 +53,9 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
       setLoading(true);
       const roomData = {
         roomNumber: formData.roomNumber,
-        location: formData.location,
-        shortRest: formData.shortRestPrice || 0,
-        lodge: formData.lodgePrice || 0,
+        location: formData.location.value,
+        shortRest: formData.shortRestPrice || null,
+        lodge: formData.lodgePrice || null,
         details: "Created Room Data",
         by: auth.currentUser?.uid,
         status: "Available",

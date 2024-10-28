@@ -9,7 +9,7 @@ import Login from "../pages/auth/sign-in/Login";
 import RecoverPassword from "../pages/auth/onboarding/RecoverPassword";
 import CreatePassword from "../pages/auth/onboarding/CreatePassword";
 import CreateEmail from "../pages/auth/onboarding/CreateEmail";
-import Landing from "../pages/start/Landing";
+import Landing from "../pages/landing/Landing";
 
 const Routes: React.FC = () => (
   <IonRouterOutlet>

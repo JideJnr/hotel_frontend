@@ -3,7 +3,7 @@ import { IonPage, IonContent } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useDataContext } from "../../context/dataContext";
 import Admin from "../admin/admin";
-import Start from "./Home";
+import Start from "../start/Home";
 
 function Landing() {
   const { user } = useDataContext();
@@ -15,7 +15,6 @@ function Landing() {
       setWelcomeModal(true);
     }
   }, [user]);
-  console.log(formData);
 
   return (
     <IonPage id="home-page">

@@ -4,8 +4,7 @@ import { FormProps } from "../customer/StepOne";
 
 const StepTwo = ({ formData, setFormData }: FormProps) => {
   const { room } = useDataContext();
-  console.log(room);
-
+  console.log(formData);
   return (
     <div className="flex flex-col gap-4 bg-white h-fit">
       <p>Hotel</p>

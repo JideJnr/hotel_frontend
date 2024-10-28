@@ -1,6 +1,7 @@
 import React from "react";
+import { DataProps } from "../home/Home";
 
-const Users = () => {
+const Users = ({formData}:DataProps) => {
   return <div>Users</div>;
 };
 

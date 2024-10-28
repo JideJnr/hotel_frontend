@@ -5,6 +5,7 @@ import { useDataContext } from "../../context/dataContext";
 import { FormProps } from "../register/customer/StepOne";
 
 const Setting = ({ setFormData: setModal }: FormProps) => {
+  
   const handleSignout = async () => {
     await signOut(auth);
   };

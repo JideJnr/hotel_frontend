@@ -28,24 +28,32 @@ const StepTwo = ({ formData, setFormData }: FormProps) => {
     }
   }, [formData.roomNumber, formData.orderMethod]);
 
-  console.log(formData.roomNumber, formData.orderMethod);
 
   return (
-    <div className="flex flex-col gap-4 bg-white h-fit">
-      <p>Customer</p>
-      <p>{formData.customer?.label || "- "}</p>{" "}
-      {/* Optional chaining to prevent errors */}
-      <p>Room</p>
+    <div className="flex flex-col gap-4 bg-white h-fit p-4">
+      
+      <>
+        <p>Customer</p>
+        <p>{formData.customer?.label || "- "}</p>{" "}
+      </>
+    <><p>Room</p>
       <p>{formData.roomNumber?.label || "- "}</p>
+      </>
+      <>
+      
       <p>Order Type</p>
       <p>{formData.orderMethod?.label || "- "}</p>
+      </>
+      <>
       <p>Select Payment Method</p>
       <p>{formData.paymentMethod?.label || "- "}</p>
+      </><>
       <p>price</p>
       <p>{formData.price || "- "}</p>
+      </><>
       <p>Note</p>
       <p>{formData.bookingInstruction || "- "}</p>{" "}
-      {/* Display the note or a dash */}
+      </>
     </div>
   );
 };
