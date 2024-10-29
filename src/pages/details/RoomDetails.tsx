@@ -9,9 +9,11 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
   const { user } = useDataContext();
 
-  const recordPath = `roomRecord/${data.id}`;
-  const roomPath = data ? `hotel/${data.location}/rooms/${data.room}` : null;
-  const clientPath = data ? `clientRecord/${data.customerId}` : null;
+  const recordPath = `roomRecord/${data.currentGuest?.docId}`;
+  const roomPath = data
+    ? `hotel/${data.location}/rooms/${data.roomNumber}`
+    : null;
+  const clientPath = data ? `clientRecord/${data.currentGuest?.id}` : null;
   const activityPath = "activitiesRecord";
 
   const {
@@ -37,8 +39,9 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
   const handleCheckout = async () => {
     try {
       await updateRoomRecord({
-        active: false,
         currentGuest: null,
+        docId: null,
+        status: "available",
       });
 
       await updateRecordData({
@@ -81,78 +84,77 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
     );
   }
 
+  console.log(data);
+
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <div className="flex flex-col gap-3 border-b py-6 text-xs">
-        <p className="flex justify-between">
-          <span className="text-gray-400">Receipt No.:</span>
-          <span>{data?.id}</span>
-        </p>
-        <p className="flex justify-between">
-          <span className="text-gray-400">Customer:</span>
-          <span>{data.clientName}</span>
-        </p>
-        <p className="flex justify-between">
-          <span className="text-gray-400">Host:</span>
-          <span>{data.host}</span>
-        </p>
-        <p className="flex justify-between">
-          <span className="text-gray-400">Date:</span>
-          <span>{data.date}</span>
-        </p>
-        <p className="flex justify-between">
-          <span className="text-gray-400">Time:</span>
-          <span>{data.date}</span>
-        </p>
-        <p className="flex justify-between">
-          <span className="text-gray-400">Order Type:</span>
-          <span>{data.method}</span>
-        </p>
-        <p className="flex justify-between">
-          <span className="text-gray-400">Payment Method:</span>
-          <span>{data.order}</span>
-        </p>
-        <p className="flex justify-between">
-          <span className="text-gray-400">Status:</span>
-          <span>{data.status}</span>
+    <>
+      <div className="flex w-full">
+        <p
+          className="flex ml-auto mr-4 text-gray-400"
+          onClick={() => setModal(false)}
+        >
+          X
         </p>
       </div>
-
-      <table className="w-full text-left">
-        <thead>
-          <tr className="flex">
-            <th className="w-full py-2">Product</th>
-            <th className="min-w-[44px] py-2">Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="flex">
-            <td className="flex-1 py-1">Room {data.room}</td>
-            <td className="min-w-[44px]"></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div className="border-b border-dashed"></div>
-
-      {user && user.role !== "admin" && (
-        <div className="grid grid-cols-1 gap-2">
-          {data.status === "Active" && (
-            <Button
-              text="Check Out"
-              className="w-full"
-              onClick={handleCheckout}
-            />
-          )}
-          <Button text="Report Transaction" className="w-full" />
-          <Button
-            text="Close"
-            className="w-full !bg-black"
-            onClick={() => setModal(false)}
-          />
+      <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-3 border-b py-6 text-xs">
+          <p className="flex justify-between">
+            <span className="text-gray-400">Room No.:</span>
+            <span>Room {data?.id}</span>
+          </p>
+          <p className="flex justify-between">
+            <span className="text-gray-400">Status:</span>
+            <span>{data.status}</span>
+          </p>
+          <p className="flex justify-between">
+            <span className="text-gray-400">Short Rest Price:</span>
+            <span>{data.shortRest}</span>
+          </p>
+          <p className="flex justify-between">
+            <span className="text-gray-400">Lodge Price:</span>
+            <span>{data.lodge}</span>
+          </p>
         </div>
-      )}
-    </div>
+
+        {data && data.currentGuest && (
+          <>
+            <table className="w-full text-left">
+              <thead>
+                <tr className="flex">
+                  <th className="w-full py-2">Current Guest</th>
+                </tr>
+              </thead>
+              <div>
+                <img />
+                <p>{data.currentGuest.name}</p>
+              </div>
+            </table>
+
+            <div className="border-b border-dashed"></div>
+          </>
+        )}
+
+        <div className="grid grid-cols-1 gap-2">
+          {data.status === "active" && (
+            <>
+              {user && user.role !== "admin" ? (
+                <Button
+                  text="Check Out"
+                  className="w-full"
+                  onClick={handleCheckout}
+                />
+              ) : (
+                <Button
+                  text="Ask To Check Out"
+                  className="w-full"
+                  onClick={handleCheckout}
+                />
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 

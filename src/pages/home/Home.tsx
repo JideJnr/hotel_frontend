@@ -1,6 +1,5 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IonContent, IonIcon } from "@ionic/react";
-import "../../style.css";
 import DashboardTile from "../../components/dashboardtiles/DashboardTiles";
 import { formatNaira } from "../../function/formatNaira";
 import { useDataContext } from "../../context/dataContext";
@@ -9,8 +8,8 @@ import Room from "../register/room/Room";
 import Expenses from "../register/expenses/Expenses";
 import Customer from "../register/customer/Customer";
 import Book from "../register/book/Book";
-import RoomDetails from "../details/RoomDetails";
 import { filterData } from "../../utils/filterData";
+import RecordDetails from "../details/RecordDetails";
 
 export interface DataProps {
   formData?: any;
@@ -24,8 +23,6 @@ const Home = ({ formData }: DataProps) => {
 
   const [totalEarning, setTotalEarning] = useState<number>(0);
   const [totalExpenses, setTotalExpenses] = useState<number>(0);
-
-  
 
   function displayPrice(amount: number): string {
     const formattedPrice = formatNaira(amount);
@@ -87,21 +84,13 @@ const Home = ({ formData }: DataProps) => {
   const [selectedData, setSelectedData] = useState(null);
   const [recordModal, setRecordModal] = useState(false);
 
+  const filteredRecord =
+    record && formData?.value ? filterData(record, formData.value) : record;
 
-
-
-
-
-const filteredRecord = record && formData?.value 
-  ? filterData(record, formData.value) 
-  : record;
-
-  const filteredExpenses = expenses && formData?.value 
-  ? filterData(expenses, formData.value) 
-  : expenses;
-
-  
-
+  const filteredExpenses =
+    expenses && formData?.value
+      ? filterData(expenses, formData.value)
+      : expenses;
 
   useEffect(() => {
     const sum = filteredRecord.reduce((accumulator, item) => {
@@ -127,7 +116,7 @@ const filteredRecord = record && formData?.value
         {customerModal && <Customer setFormData={setCustomerModal} />}
         {bookModal && <Book setFormData={setBookModal} />}
         {recordModal && (
-          <RoomDetails formData={selectedData} setFormData={setRecordModal} />
+          <RecordDetails formData={selectedData} setFormData={setRecordModal} />
         )}
 
         {!roomModal &&
@@ -145,7 +134,10 @@ const filteredRecord = record && formData?.value
                   label="Expenses"
                   unit={displayPrice(totalExpenses)}
                 />
-                <DashboardTile label="Room Sold" unit={filteredRecord?.length} />
+                <DashboardTile
+                  label="Room Sold"
+                  unit={filteredRecord?.length}
+                />
               </div>
 
               {user && user?.role !== "admin" && (

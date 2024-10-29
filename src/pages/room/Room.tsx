@@ -9,17 +9,18 @@ import CreateRoom from "../register/createroom/CreateRoom";
 import { DataProps } from "../home/Home";
 import { filterData } from "../../utils/filterData";
 
-const Room= ({formData}:DataProps) => {
+const Room = ({ formData }: DataProps) => {
   const { room, loading, error } = useDataContext();
 
-const filteredRoom = room && formData?.value 
-? filterData(room, formData.value) 
-: room;
+  const filteredRoom =
+    room && formData?.value ? filterData(room, formData.value) : room;
 
-
-
-  const activeRoom = filteredRoom.filter((record) => record.status === "active");
-  const availableRoom = filteredRoom.filter((room) => room.status === "available");
+  const activeRoom = filteredRoom.filter(
+    (record) => record.status === "active",
+  );
+  const availableRoom = filteredRoom.filter(
+    (room) => room.status === "available",
+  );
   const bookedRoom = filteredRoom.filter((room) => room.status !== "available");
 
   if (loading) return <div>Loading...</div>;
@@ -66,7 +67,7 @@ const filteredRoom = room && formData?.value
   const [createModal, setCreateModal] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
 
-  console.log(room)
+  console.log(room);
   return (
     <IonContent>
       {roomModal && (
@@ -112,8 +113,8 @@ const filteredRoom = room && formData?.value
             <div>
               <button onClick={() => setCreateModal(true)}>Add New</button>
             </div>
-            <Table 
-              columns={columns} 
+            <Table
+              columns={columns}
               data={filteredRoom}
               onClick={(row) => {
                 setSelectedData(row);

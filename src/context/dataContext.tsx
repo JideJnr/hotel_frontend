@@ -15,7 +15,7 @@ import {
   QueryConstraint,
 } from "firebase/firestore";
 import { auth, db } from "../../firebase"; // Adjust the import according to your project structure
-import { getCurrentDate } from "../function/getCurrentDate";
+import { getTodayDate } from "../utils/getTodaysDate";
 
 // Define interfaces for your state
 interface Client {
@@ -75,7 +75,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const clientsPath = "clientRecord";
   const recordPath = "roomRecord";
   const roomPath = user ? `hotel/${user.location}/rooms` : null;
-  const todayDate = getCurrentDate();
+  const todayDate = getTodayDate();
+
+  console.log(todayDate);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -140,6 +142,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
       if (user.role === "admin") {
         fetchData(recordPath, setRecord, [where("date", "==", todayDate)]);
+
       } else {
         fetchData(recordPath, setRecord, [
           where("hostID", "==", user.id),
@@ -157,6 +160,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
       }
     }
   }, [uid, user, roomPath, todayDate]);
+
+  console.log(record);
+  console.log(user?.role)
 
   const reloadData = async () => {
     if (uid && user) {

@@ -12,22 +12,18 @@ import {
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Route, Redirect } from "react-router";
-import { playCircle, radio, search, settings } from "ionicons/icons"; // Use different icons
-
+import { playCircle, radio, search, settings } from "ionicons/icons";
 import Room from "../room/Room";
 import Activity from "../activity/Activity";
 import Header from "../../components/layout/Header";
 import Home from "../home/Home";
 import Setting from "../settings/Settings";
-
 import { FormProps } from "../register/customer/StepOne";
 import { useDataContext } from "../../context/dataContext";
 import Users from "../users/Users";
 
 function Start({ formData: data, setFormData: setModal }: FormProps) {
- 
-  const { reloadData , user } = useDataContext();
-
+  const { reloadData, user } = useDataContext();
   const refresh = (e: CustomEvent) => {
     reloadData();
     e.detail.complete();
@@ -45,18 +41,30 @@ function Start({ formData: data, setFormData: setModal }: FormProps) {
             <IonTabs>
               <IonRouterOutlet>
                 <Redirect exact path="/" to="/home" />
-                
+
                 <Route
                   path="/home"
                   render={() => <Home formData={data} />}
                   exact
                 />
 
-                <Route path="/room" render={() => <Room formData={data}  />} exact />
-               
-                  <Route path="/user" render={() => <Users formData={data} />} exact />
-           
-                <Route path="/activity" render={() => <Activity formData={data}  />} exact />
+                <Route
+                  path="/room"
+                  render={() => <Room formData={data} />}
+                  exact
+                />
+
+                <Route
+                  path="/user"
+                  render={() => <Users formData={data} />}
+                  exact
+                />
+
+                <Route
+                  path="/activity"
+                  render={() => <Activity formData={data} />}
+                  exact
+                />
                 <Route
                   path="/settings"
                   render={() => <Setting setFormData={setModal} />}
@@ -87,7 +95,7 @@ function Start({ formData: data, setFormData: setModal }: FormProps) {
                 </IonTabButton>
 
                 <IonTabButton tab="settings" href="/settings">
-                  <IonIcon icon={settings} /> {/* Changed to settings icon */}
+                  <IonIcon icon={settings} />
                   <IonLabel>Settings</IonLabel>
                 </IonTabButton>
               </IonTabBar>

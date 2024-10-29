@@ -1,9 +1,5 @@
 import React, { ReactNode } from "react";
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-} from "@ionic/react";
+import { IonContent, IonHeader, IonPage } from "@ionic/react";
 interface HeaderProps {
   children: ReactNode; // Allows dynamic content to be passed as children
 }
@@ -22,9 +18,7 @@ const Header: React.FC<HeaderProps> = ({ children }) => {
           </div>
         </IonHeader>
 
-        <IonContent className="ion-padding">
-          {children} 
-        </IonContent>
+        <IonContent className="ion-padding">{children}</IonContent>
       </IonPage>
     </>
   );

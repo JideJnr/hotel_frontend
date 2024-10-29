@@ -10,21 +10,16 @@ const Setting = ({ setFormData: setModal }: FormProps) => {
 
   const handleSignout = async () => {
     await signOut(auth);
-    router.push('/login'); 
+    router.push("/login");
     window.location.reload();
   };
 
   const { user } = useDataContext();
 
-  
-
-  const handleClick = (route:string) => {
-    router.push(route); 
+  const handleClick = (route: string) => {
+    router.push(route);
     window.location.reload();
-  }
-
-
-
+  };
 
   return (
     <div className="w-full h-full   gap-5 flex flex-col overflow-x-none overflow-y-auto text-sm">
@@ -41,12 +36,12 @@ const Setting = ({ setFormData: setModal }: FormProps) => {
       </div>
 
       <div className="w-full flex flex-col  px-4 2xl:px-8">
-        
-          <div className="flex w-full items-center justify-between border-y rounded-lg p-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-          onClick={() => handleClick('/analytics')} >
-            <p>Analytics</p>
-          </div>
-
+        <div
+          className="flex w-full items-center justify-between border-y rounded-lg p-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+          onClick={() => handleClick("/analytics")}
+        >
+          <p>Analytics</p>
+        </div>
 
         <Link to="/offer">
           <div className="flex w-full items-center justify-between border-y rounded-lg p-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50">

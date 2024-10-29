@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/button/button";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../../../firebase";
 import { useDataContext } from "../../../context/dataContext";
 import { getCurrentDate, getYearMonth } from "../../../function/getCurrentDate";
 import { FormProps } from "../customer/StepOne";
+import { toast } from "react-toastify";
+import { getTodayDate } from "../../../utils/getTodaysDate";
 
 const Room = ({ setFormData: setModal }: FormProps) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -34,20 +42,13 @@ const Room = ({ setFormData: setModal }: FormProps) => {
   const { user } = useDataContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const todayDate = getCurrentDate();
-  const month = getYearMonth();
   const recordPath = "roomRecord";
   const roomPath = `hotel/${user?.location}/rooms/${formData.roomNumber?.value}/roomHistory`;
   const activityPath = "activitiesRecord";
   const clientPath = `clientRecord/${formData.customer?.value}/lodgeHistory`;
   const { reloadData } = useDataContext();
 
-  console.log(user)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     try {
       if (!formData.customer) throw new Error("Please select a client!");
       if (!formData.roomNumber) throw new Error("Please select a room!");
@@ -57,20 +58,23 @@ const Room = ({ setFormData: setModal }: FormProps) => {
         throw new Error("Please select a payment method!");
 
       setLoading(true);
+      const todayDate = getTodayDate();
 
       const salesData = {
         customerId: formData.customer.value,
         customerName: formData.customer.label,
         room: formData.roomNumber.value,
-        order: formData.orderMethod.value,
+        orderMethod: formData.orderMethod.value,
         hostID: user?.id,
+        hostName: user?.name,
         location: user?.location,
-        method: formData.orderMethod.value,
+        paymentMethod: formData.paymentMethod.value,
+        time: serverTimestamp(),
         date: todayDate,
-        month: month,
+
         status: "active",
         details: "Sold Room",
-        price: parseInt(formData.price || '0', 10), 
+        price: parseInt(formData.price || "0", 10),
       };
       const docRef = await addDoc(collection(db, recordPath), salesData);
 
@@ -87,11 +91,11 @@ const Room = ({ setFormData: setModal }: FormProps) => {
       const clientDocRef = doc(db, `clientRecord/${formData.customer.value}`);
 
       await updateDoc(roomDocRef, {
-        status: 'active',
+        status: "active",
         currentGuest: {
           name: formData.customer.label,
           id: formData.customer.value,
-          docId: docId
+          docId: docId,
         },
       });
       await updateDoc(clientDocRef, { status: "Active" });
@@ -103,6 +107,21 @@ const Room = ({ setFormData: setModal }: FormProps) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      // Display the error message
+      toast.error(error);
+
+      // Clear the error after a delay (optional)
+      const timer = setTimeout(() => {
+        setError("");
+      }, 5000); // Adjust the duration as needed (5000 ms = 5 seconds)
+
+      // Cleanup timer on component unmount or when error changes
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   return (
     <div className=" p-4 gap-4 flex flex-col">
@@ -132,7 +151,12 @@ const Room = ({ setFormData: setModal }: FormProps) => {
         )}
 
         {isModalVisible ? (
-          <Button text="Submit" className="" onClick={handleSubmit} />
+          <Button
+            text="Submit"
+            className=""
+            onClick={handleSubmit}
+            loading={loading}
+          />
         ) : (
           <Button
             text="Next"

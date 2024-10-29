@@ -37,6 +37,7 @@
     "react-select": "^5.8.1",
     "react-spring": "^9.7.4",
     "react-toastify": "^10.0.6",
+    "remixicon": "^4.4.0",
     "swiper": "^11.1.14"
   },
   "devDependencies": {

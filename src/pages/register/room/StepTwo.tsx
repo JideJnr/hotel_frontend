@@ -27,32 +27,33 @@ const StepTwo = ({ formData, setFormData }: FormProps) => {
       }
     }
   }, [formData.roomNumber, formData.orderMethod]);
-  console.log(formData)
+  console.log(formData);
 
   return (
     <div className="flex flex-col gap-4 bg-white h-fit p-4">
-      
       <>
         <p>Customer</p>
         <p>{formData.customer?.label || "- "}</p>{" "}
       </>
-    <><p>Room</p>
-      <p>{formData.roomNumber?.label || "- "}</p>
+      <>
+        <p>Room</p>
+        <p>{formData.roomNumber?.label || "- "}</p>
       </>
       <>
-      
-      <p>Order Type</p>
-      <p>{formData.orderMethod?.label || "- "}</p>
+        <p>Order Type</p>
+        <p>{formData.orderMethod?.label || "- "}</p>
       </>
       <>
-      <p>Select Payment Method</p>
-      <p>{formData.paymentMethod?.label || "- "}</p>
-      </><>
-      <p>price</p>
-      <p>{formData.price || "- "}</p>
-      </><>
-      <p>Note</p>
-      <p>{formData.bookingInstruction || "- "}</p>{" "}
+        <p>Select Payment Method</p>
+        <p>{formData.paymentMethod?.label || "- "}</p>
+      </>
+      <>
+        <p>price</p>
+        <p>{formData.price || "- "}</p>
+      </>
+      <>
+        <p>Note</p>
+        <p>{formData.bookingInstruction || "- "}</p>{" "}
       </>
     </div>
   );

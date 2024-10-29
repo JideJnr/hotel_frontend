@@ -3,59 +3,60 @@ import Button from "../../../components/button/button";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import { FormProps } from "../customer/StepOne";
+import { useDataContext } from "../../../context/dataContext";
+import { getTodayDate } from "../../../utils/getTodaysDate";
+import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
+import { db } from "../../../../firebase";
 
 const Expenses = ({ setFormData: setModal }: FormProps) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const [formData, setFormData] = useState(false);
+  const [formData, setFormData] = useState<{
+    expenseType:
+      | { value: string | number | null; label: string | null }
+      | undefined;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    bookingInstruction: string | undefined;
+    amount: string | undefined;
+  }>({
+    expenseType: undefined,
+    bookingInstruction: undefined,
+    amount: undefined,
+  });
 
+  const { user } = useDataContext();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const expensesPath = "roomRecord";
+  const activityPath = "activitiesRecord";
+
+  const { reloadData } = useDataContext();
+  const todayDate = getTodayDate();
+
+  const handleSubmit = async () => {
     try {
-      if (!formData.customer) throw new Error("Please select a client!");
-      if (!formData.roomNumber) throw new Error("Please select a room!");
-      if (!formData.orderMethod)
-        throw new Error("Please select an order type!");
-      if (!formData.paymentMethod)
-        throw new Error("Please select a payment method!");
+      if (!formData.expenseType) throw new Error("Please select a client!");
+      if (!formData.bookingInstruction)
+        throw new Error("Please select a room!");
+      if (!formData.amount) throw new Error("Please select an order type!");
 
       setLoading(true);
 
-      const expensesData = {
-        customerId: formData.customer.value,
-        customerName: formData.customer.label,
-        room: formData.roomNumber.value,
-        order: formData.orderMethod.value,
+      const salesData = {
+        expenseType: formData.expenseType.value,
         hostID: user?.id,
+        hostName: user?.name,
         location: user?.location,
-        method: formData.orderMethod.value,
+        time: serverTimestamp(),
         date: todayDate,
-        month: month,
-        status: "Active",
-        details: "Sold Room",
-        price: formData.price,
+        details: "Ran Expenses",
+        price: parseInt(formData.amount || "0", 10),
       };
 
-      await addDoc(collection(db, recordPath), salesData);
-      await addDoc(collection(db, roomPath), salesData);
-      await addDoc(collection(db, clientPath), salesData);
+      await addDoc(collection(db, expensesPath), salesData);
+
       await addDoc(collection(db, activityPath), salesData);
 
-      const roomDocRef = doc(
-        db,
-        `hotel/${user?.location}/rooms/${formData.roomNumber.value}`,
-      );
-      const clientDocRef = doc(db, `clientRecord/${formData.customer.value}`);
-
-      await updateDoc(roomDocRef, {
-        active: true,
-        currentGuest: {
-          name: formData.customer.label,
-          id: formData.customer.value,
-        },
-      });
-      await updateDoc(clientDocRef, { status: "Active" });
       await reloadData();
     } catch (error) {
       console.error("Error submitting data: ", error.message);

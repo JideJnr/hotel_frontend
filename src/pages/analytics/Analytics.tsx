@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import Header from '../../components/layout/Header';
-import CustomSelect from '../../components/select/Select';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import Button from '../../components/button/button';
+import React, { useState } from "react";
+import Header from "../../components/layout/Header";
+import CustomSelect from "../../components/select/Select";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Button from "../../components/button/button";
 
 const Analytics: React.FC = () => {
   const recordOptions = [
-    { value: 'all', label: 'All' },
-    { value: 'room', label: 'Room' },
-    { value: 'expenses', label: 'Expenses' },
+    { value: "all", label: "All" },
+    { value: "room", label: "Room" },
+    { value: "expenses", label: "Expenses" },
   ];
 
   const [formData, setFormData] = useState<{
@@ -20,7 +20,6 @@ const Analytics: React.FC = () => {
     dateRange: [null, null], // Initialize start and end date as null
   });
 
-  
   const handleSelectChange = (name: string, option: any) => {
     // Store both value and label in formData
     setFormData({
@@ -46,8 +45,8 @@ const Analytics: React.FC = () => {
         <DatePicker
           selected={formData.dateRange[0]}
           onChange={handleDateRangeChange}
-          startDate={formData.dateRange[0]||undefined}
-          endDate={formData.dateRange[1]||undefined}
+          startDate={formData.dateRange[0] || undefined}
+          endDate={formData.dateRange[1] || undefined}
           selectsRange
           isClearable
           placeholderText="Select Date Range"
@@ -55,28 +54,27 @@ const Analytics: React.FC = () => {
         />
         <p>Selected Dates:</p>
         <p>
-          {formData.dateRange[0] 
-            ? formData.dateRange[0].toDateString() 
-            : "Start Date"} - 
-          {formData.dateRange[1] 
-            ? formData.dateRange[1].toDateString() 
+          {formData.dateRange[0]
+            ? formData.dateRange[0].toDateString()
+            : "Start Date"}{" "}
+          -
+          {formData.dateRange[1]
+            ? formData.dateRange[1].toDateString()
             : "End Date"}
         </p>
 
         <p>Record</p>
 
-<CustomSelect
-        name="record"
-        options={recordOptions}
-        onChange={(option) => handleSelectChange("record", option)}
-        value={formData.record?.value || null}
-        placeholder="Select the record"
-      />
+        <CustomSelect
+          name="record"
+          options={recordOptions}
+          onChange={(option) => handleSelectChange("record", option)}
+          value={formData.record?.value || null}
+          placeholder="Select the record"
+        />
 
-<Button text='Generate'/>
+        <Button text="Generate" />
       </div>
-
-      
     </Header>
   );
 };

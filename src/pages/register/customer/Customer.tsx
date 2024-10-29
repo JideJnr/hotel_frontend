@@ -84,24 +84,21 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
     }
   };
 
-
   const handleNext = () => {
-    
     const errors = [];
 
     if (!formData.fullName) {
-      errors.push('Full Name is required.');
+      errors.push("Full Name is required.");
     }
     if (!formData.phone) {
-      errors.push('Phone is required.');
+      errors.push("Phone is required.");
     }
     if (!formData.address) {
-      errors.push('Address is required.');
+      errors.push("Address is required.");
     }
-    
 
     if (errors.length > 0) {
-      console.log(errors.join(', ')); 
+      console.log(errors.join(", "));
     } else {
       setModalVisible(true);
     }
@@ -136,11 +133,7 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
         {isModalVisible ? (
           <Button text="Submit" className="" onClick={handleSubmit} />
         ) : (
-          <Button
-            text="Next"
-            className=""
-            onClick={handleNext}
-          />
+          <Button text="Next" className="" onClick={handleNext} />
         )}
       </div>
     </div>

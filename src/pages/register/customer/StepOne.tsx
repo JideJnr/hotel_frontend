@@ -3,10 +3,7 @@ import React from "react";
 export interface FormProps {
   formData?: any;
   setFormData: (updatedFormData: any) => void;
- 
 }
-
-
 
 const StepOne = ({ formData, setFormData }: FormProps) => {
   const handleChange = (

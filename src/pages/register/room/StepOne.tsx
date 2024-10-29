@@ -52,8 +52,8 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
     });
   };
 
-  const activeRooms = room.filter((item) => item.status = 'available');
-
+  const activeRooms = room.filter((item) => item.status === "available");
+  console.log(activeRooms);
   return (
     <div className="flex flex-col gap-4 bg-white h-fit p-4 ">
       <p>Select Customer</p>
