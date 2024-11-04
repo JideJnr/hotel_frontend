@@ -1,9 +1,9 @@
 import { useParams } from "react-router";
-import { useDataContext } from "../../context/dataContext";
-import Button from "../../components/button/button";
-import { FormProps } from "../register/customer/StepOne";
-import useUpdateFunction from "../../function/useUpdateFunction";
-import { auth, db } from "../../../firebase";
+import { useDataContext } from "../../../context/dataContext";
+import Button from "../../../components/button/button";
+import { FormProps } from "../../register/customer/StepOne";
+import useUpdateFunction from "../../../function/useUpdateFunction";
+import { auth, db } from "../../../../firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useState } from "react";
 

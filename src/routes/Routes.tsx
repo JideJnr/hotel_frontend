@@ -3,44 +3,35 @@ import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonRouterOutlet } from "@ionic/react";
 import Welcome from "../pages/welcome/Welcome";
-import CreateInfo from "../pages/auth/onboarding/CreateInfo";
-import ForgotPassword from "../pages/auth/onboarding/ForgotPassword";
-import Login from "../pages/auth/sign-in/Login";
-import RecoverPassword from "../pages/auth/onboarding/RecoverPassword";
 import CreatePassword from "../pages/auth/onboarding/CreatePassword";
 import CreateEmail from "../pages/auth/onboarding/CreateEmail";
-import Landing from "../pages/landing/Landing";
+import Landing from "../pages/home/landing/Landing";
 import Analytics from "../pages/analytics/Analytics";
+import Support from "../pages/support/Support";
+import SignIn from "../pages/auth/signin/signin";
+import SignUp from "../pages/auth/signup/signup";
+import Funding from "../pages/funding/Funding";
 
 const Routes: React.FC = () => (
   <IonRouterOutlet>
     <Route path="/" exact={true}>
       <Redirect to="/welcome" />
     </Route>
-
-    <Route path="/login" exact={true}>
-      <Login />
+    <Route path="/support" exact={true}>
+      <Support />
     </Route>
+
     <Route path="/analytics" exact={true}>
       <Analytics />
-    </Route>
-    <Route path="/recover-password" exact={true}>
-      <RecoverPassword />
-    </Route>
-    <Route path="/create-password" exact={true}>
-      <CreatePassword />
-    </Route>
-    <Route path="/create-info" exact={true}>
-      <CreateInfo />
-    </Route>
-    <Route path="/forgot-password" exact={true}>
-      <ForgotPassword />
     </Route>
     <Route path="/welcome" exact={true}>
       <Welcome />
     </Route>
-    <Route path="/sign-in" exact={true}>
-      <Login />
+    <Route path="/signin" exact={true}>
+      <SignIn />
+    </Route>
+    <Route path="/funding" exact={true}>
+      <Funding />
     </Route>
 
     <Route path="/home" exact={true}>

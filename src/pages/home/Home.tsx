@@ -9,7 +9,9 @@ import Expenses from "../register/expenses/Expenses";
 import Customer from "../register/customer/Customer";
 import Book from "../register/book/Book";
 import { filterData } from "../../utils/filterData";
-import RecordDetails from "../details/RecordDetails";
+import RecordDetails from "./details/RecordDetails";
+import Suspence from "../../components/suspense/Suspence";
+import { toast } from "react-toastify";
 
 export interface DataProps {
   formData?: any;
@@ -18,8 +20,8 @@ export interface DataProps {
 const Home = ({ formData }: DataProps) => {
   const { user, loading, error, record, expenses } = useDataContext();
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (loading) return <Suspence/>;
+  if (error) return   toast.error("Room Number is required." );;
 
   const [totalEarning, setTotalEarning] = useState<number>(0);
   const [totalExpenses, setTotalExpenses] = useState<number>(0);
@@ -77,6 +79,33 @@ const Home = ({ formData }: DataProps) => {
     [],
   );
 
+  
+  const expensesColumns: Column[] = useMemo(
+    () => [
+      
+      {
+        Header: "Expenses",
+        accessor: "room",
+        
+      },
+      {
+        Header: "Amount",
+        accessor: "amount",
+
+        Cell: ({ value }: { value: string }) => (
+         
+            <p className="text-xs leading-5 text-gray-500 hidden lg:flex">
+              <>{value}</>
+            </p>
+
+           
+         
+        ),
+      },
+    ],
+    [],
+  );
+
   const [roomModal, setRoomModal] = useState(false);
   const [bookModal, setBookModal] = useState(false);
   const [expensesModal, setExpensesModal] = useState(false);
@@ -108,6 +137,8 @@ const Home = ({ formData }: DataProps) => {
     setTotalExpenses(sum);
   }, [filteredExpenses, user]);
 
+  console.log(user);
+
   return (
     <IonContent>
       <div className="flex flex-col gap-6 px-4 py-8">
@@ -124,7 +155,7 @@ const Home = ({ formData }: DataProps) => {
           !customerModal &&
           !bookModal &&
           !recordModal && (
-            <>
+            <div className="flex flex-col gap-4">
               <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit ">
                 <DashboardTile
                   label="Revenue"
@@ -138,10 +169,10 @@ const Home = ({ formData }: DataProps) => {
                   label="Room Sold"
                   unit={filteredRecord?.length}
                 />
-              </div>
+              </div>  
 
               {user && user?.role !== "admin" && (
-                <div className="grid grid-cols-4 gap-2 w-full ">
+                <div className="grid grid-cols-4 gap-2 w-full  ">
                   <div
                     className="flex flex-col items-center justify-center gap-1.5 text-center"
                     onClick={() => {
@@ -150,7 +181,7 @@ const Home = ({ formData }: DataProps) => {
                   >
                     <IonIcon
                       src="assets/svgs/users.svg"
-                      className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
+                      className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-emerald-500"
                     ></IonIcon>
                     <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
                       Room
@@ -232,11 +263,11 @@ const Home = ({ formData }: DataProps) => {
               <>
                 {expenses && expenses.length > 0 && (
                   <div>
-                    <Table columns={columns} data={record} />
+                    <Table columns={expensesColumns} data={record} />
                   </div>
                 )}
               </>
-            </>
+            </div>
           )}
       </div>
     </IonContent>

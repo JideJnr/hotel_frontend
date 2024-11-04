@@ -4,13 +4,13 @@ import DashboardTile from "../../components/dashboardtiles/DashboardTiles";
 import { useDataContext } from "../../context/dataContext";
 import Table, { Column } from "../../components/table/table";
 import { IonContent, IonIcon } from "@ionic/react";
-import RoomDetails from "../details/RoomDetails";
+import RoomDetails from "../home/details/RoomDetails";
 import CreateRoom from "../register/createroom/CreateRoom";
 import { DataProps } from "../home/Home";
 import { filterData } from "../../utils/filterData";
 
 const Room = ({ formData }: DataProps) => {
-  const { room, loading, error } = useDataContext();
+  const { user, room, loading, error } = useDataContext();
 
   const filteredRoom =
     room && formData?.value ? filterData(room, formData.value) : room;
@@ -67,52 +67,65 @@ const Room = ({ formData }: DataProps) => {
   const [createModal, setCreateModal] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
 
-  console.log(room);
+  console.log(user?.role);
   return (
     <IonContent>
       {roomModal && (
         <RoomDetails formData={selectedData} setFormData={setRoomModal} />
       )}
       {createModal && (
-        <CreateRoom formData={selectedData} setFormData={setRoomModal} />
+        <CreateRoom formData={selectedData} setFormData={setCreateModal} />
       )}
 
       {!roomModal && !createModal && (
         <div className="flex flex-col gap-4 px-4 py-8">
           <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit ">
-            <DashboardTile label="Room Active" unit={activeRoom.length} />
             <DashboardTile label="Room Available" unit={availableRoom.length} />
-            <DashboardTile label="Room Unavailable" unit={bookedRoom.length} />
+            {user && user.role !== "costumer" && (
+              <>
+                <DashboardTile label="Room Active" unit={activeRoom.length} />
+                <DashboardTile
+                  label="Room Unavailable"
+                  unit={bookedRoom.length}
+                />
+              </>
+            )}
           </div>
 
-          <div className="flex flex-col gap-4">
-            <p>Active Rooms</p>
-            <div className="grid grid-cols-4 gap-2 w-full">
-              {activeRoom.map((room) => (
-                <div
-                  key={room.id}
-                  className="flex flex-col items-center justify-center gap-1.5 text-center"
-                  onClick={() => {
-                    setSelectedData(room);
-                    setRoomModal(true);
-                  }}
-                >
-                  <IonIcon
-                    src="assets/svgs/users.svg"
-                    className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
-                  ></IonIcon>
-                  <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                    Room {room.id}
-                  </span>
-                </div>
-              ))}
+          {activeRoom && activeRoom.length !== 0 &&
+            <div className="flex flex-col gap-4">
+              <p>Active Rooms</p>
+              <div className="grid grid-cols-4 gap-2 w-full">
+                {activeRoom.map((room) => (
+                  <div
+                    key={room.id}
+                    className="flex flex-col items-center justify-center gap-1.5 text-center"
+                    onClick={() => {
+                      setSelectedData(room);
+                      setRoomModal(true);
+                    }}
+                  >
+                    <IonIcon
+                      src="assets/svgs/users.svg"
+                      className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
+                    ></IonIcon>
+                    <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
+                      Room {room.id}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          }
 
           <div>
-            <div>
-              <button onClick={() => setCreateModal(true)}>Add New</button>
+
+            {user && user.role !== "costumer" &&
+            
+            <div className="w-full flex ">
+              <button onClick={() => setCreateModal(true)} className="ml-auto mr-2">Add New</button>
             </div>
+            }
             <Table
               columns={columns}
               data={filteredRoom}
@@ -122,6 +135,7 @@ const Room = ({ formData }: DataProps) => {
               }}
             />
           </div>
+
         </div>
       )}
     </IonContent>

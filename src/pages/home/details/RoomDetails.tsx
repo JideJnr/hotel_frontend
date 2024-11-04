@@ -1,10 +1,11 @@
 import { useParams } from "react-router";
-import { useDataContext } from "../../context/dataContext";
-import Button from "../../components/button/button";
-import { FormProps } from "../register/customer/StepOne";
-import useUpdateFunction from "../../function/useUpdateFunction";
-import { auth, db } from "../../../firebase";
+import { useDataContext } from "../../../context/dataContext";
+import Button from "../../../components/button/button";
+import { FormProps } from "../../register/customer/StepOne";
+import useUpdateFunction from "../../../function/useUpdateFunction";
+import { auth, db } from "../../../../firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import DashboardTile from "../../../components/dashboardtiles/DashboardTiles";
 
 const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
   const { user } = useDataContext();
@@ -84,8 +85,7 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
     );
   }
 
-  console.log(data);
-
+  
   return (
     <>
       <div className="flex w-full">
@@ -116,23 +116,43 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
           </p>
         </div>
 
+        <div className="flex flex-col gap-4 px-4 py-8">
+      
+
         {data && data.currentGuest && (
           <>
-            <table className="w-full text-left">
-              <thead>
-                <tr className="flex">
-                  <th className="w-full py-2">Current Guest</th>
-                </tr>
-              </thead>
-              <div>
+          <p>
+            Current Guest
+          </p>
+            <div className="w-full text-left">
+            
+             
                 <img />
                 <p>{data.currentGuest.name}</p>
-              </div>
-            </table>
+            
+            </div>
 
             <div className="border-b border-dashed"></div>
+
+            <p>
+              Code Status : Available for cleaning
+            </p> 
+
+            <div className="border border-black px-4 py-2 rounded-md text-md font-semibold">
+
+<p className="text-center">
+Access Codes :
+  <span>
+    {' '}
+Agsgsba
+  </span>
+</p>
+
+</div>
           </>
         )}
+
+ 
 
         <div className="grid grid-cols-1 gap-2">
           {data.status === "active" && (
@@ -152,6 +172,8 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
               )}
             </>
           )}
+        </div>
+
         </div>
       </div>
     </>

@@ -3,7 +3,7 @@ import { useDataContext } from "../../../context/dataContext";
 import { FormProps } from "../customer/StepOne";
 
 const StepOne = ({ formData, setFormData }: FormProps) => {
-  const { clients, room } = useDataContext();
+  const { clients, room, user } = useDataContext();
 
   const handleSelectChange = (name: string, option: any) => {
     // Store both value and label in formData
@@ -53,20 +53,24 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
   };
 
   const activeRooms = room.filter((item) => item.status === "available");
-  console.log(activeRooms);
+
   return (
     <div className="flex flex-col gap-4 bg-white h-fit p-4 ">
-      <p>Select Customer</p>
-      <CustomSelect
-        name="customer"
-        options={clients.map((client) => ({
-          value: client.id,
-          label: client.name,
-        }))}
-        onChange={(option) => handleSelectChange("customer", option)}
-        value={formData.customer?.value || null}
-        placeholder="Select a member"
-      />
+      {user && user.role !== "customer" && (
+        <>
+          <p>Select Customer</p>
+          <CustomSelect
+            name="customer"
+            options={clients.map((client) => ({
+              value: client.id,
+              label: client.name,
+            }))}
+            onChange={(option) => handleSelectChange("customer", option)}
+            value={formData.customer?.value || null}
+            placeholder="Select a member"
+          />
+        </>
+      )}
 
       <p>Select Room</p>
       <CustomSelect

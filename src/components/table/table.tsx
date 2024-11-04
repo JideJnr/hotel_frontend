@@ -1,4 +1,5 @@
 import React from "react";
+import NoTask from "../empty/NoTask";
 
 interface TableProps {
   title?: string;
@@ -8,6 +9,7 @@ interface TableProps {
   onClick?: (row: any) => void;
   loading?: boolean;
   children?: any;
+  text?: string;
 }
 
 export interface Column {
@@ -16,7 +18,7 @@ export interface Column {
   Cell?: (props: { value: any; row: any }) => JSX.Element | string;
 }
 
-const Table: React.FC<TableProps> = ({ columns, data, onClick, loading }) => {
+const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const totalPages = Math.ceil((data?.length || 0) / 5);
@@ -92,20 +94,11 @@ const Table: React.FC<TableProps> = ({ columns, data, onClick, loading }) => {
                   </tr>
                 ))
               ) : (
-                <>
-                  {data && data?.length === 0 && (
-                    <tr className="border-none text-center cursor-pointer py-4">
-                      <td
-                        colSpan={columns?.length}
-                        className="mx-auto text-center w-full"
-                      >
-                        <div className="flex justify-center items-center">
-                          No Data Found
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </>
+              <tr>
+                <td colSpan={1000} className="text-center py-4">
+                  <NoTask  text={ text||'empty'}/>
+                </td>
+              </tr>
               )}
             </>
           )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/button/button";
 import StepOne, { FormProps } from "./StepOne";
 import StepTwo from "./StepTwo";
@@ -6,6 +6,7 @@ import { useDataContext } from "../../../context/dataContext";
 import { getCurrentDate, getYearMonth } from "../../../function/getCurrentDate";
 import { addDoc, collection, doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../../../firebase";
+import { toast } from "react-toastify";
 
 const Customer = ({ setFormData: setModal }: FormProps) => {
   const { user } = useDataContext();
@@ -31,7 +32,6 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
   ) => {
     e.preventDefault();
 
-    // Validate required fields
     if (!formData.fullName || !formData.address || !formData.phone) {
       setError("Input all fields!!!");
       return;
@@ -103,6 +103,19 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
       setModalVisible(true);
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   return (
     <div className=" p-4 gap-4 flex flex-col">
       {isModalVisible ? (

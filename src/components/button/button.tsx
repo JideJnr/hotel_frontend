@@ -22,7 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type="button"
-      className={` bg-blue-500 text-white  !font-medium !mb-0 !text-[0.85rem] !rounded-[0.35rem] !py-2 !px-3 shadow-none w-fit min-w-20 flex ${loading ? "ti-btn-disabled" : ""} ${className}`}
+      className={` bg-emerald-500 text-white  !font-medium !mb-0 !text-[0.85rem] !rounded-[0.35rem] !py-2 !px-3 shadow-none w-fit min-w-20 flex ${loading ? "bg-green-500/50" : ""}  ${className}`}
       onClick={onClick}
       disabled={loading || disabled}
     >

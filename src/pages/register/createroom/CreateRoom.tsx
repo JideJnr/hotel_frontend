@@ -7,21 +7,21 @@ import { FormProps } from "../customer/StepOne";
 import useRoomScudOperation from "../../../services/useRoomScudOperation";
 
 interface FormData {
-  location: string; // Location of the hotel
-  roomNumber: string; // Room number
-  shortRestPrice?: number; // Optional short rest price
-  lodgePrice?: number; // Optional lodge price
-  id?: string; // Optional ID for updates and deletions
+  location: string;
+  roomNumber: string;
+  shortRestPrice?: number;
+  lodgePrice?: number;
+  id?: string;
 }
 
 const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
-    location: "", // Initialize with empty string
-    roomNumber: "", // Initialize with empty string
-    shortRestPrice: undefined, // Optional field
-    lodgePrice: undefined, // Optional field
+    location: "",
+    roomNumber: "",
+    shortRestPrice: undefined,
+    lodgePrice: undefined,
   });
 
   const { reloadData } = useDataContext();
@@ -31,15 +31,36 @@ const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
 
   const handleSubmit = async () => {
     try {
-      const success = await createRoomProfile(); // Wait for success response
+      const success = await createRoomProfile();
       if (success) {
         reloadData();
-        setModal(false); // Close modal only if successful
+        setModal(false);
       }
     } catch (err) {
       console.error("Error creating room:", err);
     }
   };
+
+  const handleNext = () => {
+    const errors = [];
+
+    if (!formData.location) {
+      errors.push("Hotel Location is required.");
+    }
+    if (!formData.roomNumber) {
+      errors.push("Room Number is required.");
+    }
+    if (!formData.shortRestPrice || !formData.lodgePrice) {
+      errors.push("Price is required.");
+    }
+
+    if (errors.length > 0) {
+      console.log(errors.join(", "));
+    } else {
+      setModalVisible(true);
+    }
+  };
+
   return (
     <div className="p-4 gap-4 flex flex-col">
       {isModalVisible ? (
@@ -65,20 +86,14 @@ const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
         {isModalVisible ? (
           <Button
             text="Submit"
-            className="!bg-blue-600" // Optional styling
+            loadingText="Loading..."
             onClick={handleSubmit}
-            loading={loading} // Disable while loading
+            loading={loading}
           />
         ) : (
-          <Button
-            text="Next"
-            className=""
-            onClick={() => setModalVisible(true)}
-          />
+          <Button text="Next" onClick={handleNext} />
         )}
       </div>
-      {error && <p className="text-red-500">{error}</p>}{" "}
-      {/* Display error message */}
     </div>
   );
 };

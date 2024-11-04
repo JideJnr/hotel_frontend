@@ -6,19 +6,15 @@ interface RccgPageHeaderProp {
   titleTwo?: string;
 }
 
-const RccgPageHeader = ({ titleOne, titleTwo }: RccgPageHeaderProp) => {
+const RccgPageHeader = ({ titleOne }: RccgPageHeaderProp) => {
   return (
     <div className="flex justify-center flex-col gap-2 items-center mt-2 mb-10">
-      <div className="">
-        <div>
-          <IonImg src="/assets/images/rccg-logo.png" alt="logo" />
-        </div>
+      <div>
+        <IonImg src="assets/images/bjimage.png" alt="logo" />
       </div>
+
       <div className="mt-2 text-center">
-        <h2 className="onboard-title font-inter">
-          {titleOne}
-          <div className="onboard-title">{titleTwo}</div>
-        </h2>
+        <p className=" text-xl">{titleOne}</p>
       </div>
     </div>
   );

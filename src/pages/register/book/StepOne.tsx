@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 import dayjs from "dayjs";
 
 const StepOne = ({ formData, setFormData }: FormProps) => {
-  const { clients, room } = useDataContext();
+  const { clients, room, user } = useDataContext();
 
   const handleSelectChange = (
     name: string,
@@ -56,17 +56,21 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
 
   return (
     <div className="flex flex-col gap-4 bg-white h-fit p-4">
-      <p>Select Customer</p>
-      <CustomSelect
-        name="customer"
-        options={clients.map((client) => ({
-          value: client.id,
-          label: client.name,
-        }))}
-        onChange={(option) => handleSelectChange("customer", option)}
-        value={formData.customer?.value || null}
-        placeholder="Select a customer"
-      />
+      {user && user.role !== "customer" && (
+        <>
+          <p>Select Customer</p>
+          <CustomSelect
+            name="customer"
+            options={clients.map((client) => ({
+              value: client.id,
+              label: client.name,
+            }))}
+            onChange={(option) => handleSelectChange("customer", option)}
+            value={formData.customer?.value || null}
+            placeholder="Select a customer"
+          />
+        </>
+      )}
 
       <p>Select Room</p>
       <CustomSelect
@@ -112,15 +116,6 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
           </div>
         </div>
       ) : null}
-
-      <p>Select Payment Method</p>
-      <CustomSelect
-        name="paymentMethod"
-        options={paymentOptions}
-        onChange={(option) => handleSelectChange("paymentMethod", option)}
-        value={formData.paymentMethod?.value || null}
-        placeholder="Select a payment method"
-      />
 
       <p>Note</p>
       <textarea

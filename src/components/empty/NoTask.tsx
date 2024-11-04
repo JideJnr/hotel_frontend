@@ -1,6 +1,6 @@
 import { CheckIcon } from "@heroicons/react/16/solid";
 
-const NoTask = () => {
+const NoTask = ({text}) => {
   return (
     <div className="flex items-center  text-center h-full w-full ">
       <div className="flex flex-col gap-2 w-full h-fit  p-4 m-auto">
@@ -8,10 +8,10 @@ const NoTask = () => {
           <CheckIcon className="size-6" />
         </div>
         <h1 className="mt-3 text-lg font-semibold text-gray-800 dark:text-white">
-          No Task
+          empty
         </h1>
         <h1 className="mt-3 text-md text-gray-800 dark:text-white">
-          You dont have any task assigned to you
+          {text}
         </h1>
       </div>
     </div>

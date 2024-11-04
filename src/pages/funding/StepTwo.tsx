@@ -1,4 +1,4 @@
-import { SimpleFormProps } from "../customer/StepTwo";
+import { SimpleFormProps } from "../register/customer/StepTwo";
 
 const StepTwo = ({ formData }: SimpleFormProps) => {
   return (

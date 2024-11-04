@@ -72,19 +72,18 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
   const uid = auth.currentUser?.uid;
   const expensesPath = "expensesRecord";
-  const clientsPath = "clientRecord";
+  const clientsPath = "userRecord";
   const recordPath = "roomRecord";
   const roomPath = user ? `hotel/${user.location}/rooms` : null;
   const todayDate = getTodayDate();
 
-  console.log(todayDate);
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (uid) {
         try {
           setLoading(true);
-          const docSnap = await getDoc(doc(db, `staff/${uid}`));
+          const docSnap = await getDoc(doc(db, `userRecord/${uid}`));
           if (docSnap.exists()) {
             setUser(docSnap.data() as User);
           } else {
@@ -130,7 +129,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (uid && user) {
-      if (user.id) {
+      if (user.id || user.role !== ' costumer') {
         fetchData(clientsPath, setClients);
       } else {
         console.log("User ID is not defined.");
@@ -142,27 +141,31 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
       if (user.role === "admin") {
         fetchData(recordPath, setRecord, [where("date", "==", todayDate)]);
-
-      } else {
+      } else if (user.role === "manager") {
         fetchData(recordPath, setRecord, [
           where("hostID", "==", user.id),
           where("date", "==", todayDate),
         ]);
+      } else if (user.role === "customer") {
+        setRecord([]); // Set an empty record if the user role is "customer"
       }
+
 
       if (user.role === "admin") {
         fetchData(expensesPath, setExpenses, [where("date", "==", todayDate)]);
-      } else {
+      } else if (user.role === "manager") {
         fetchData(expensesPath, setExpenses, [
           where("hostID", "==", user.id),
           where("date", "==", todayDate),
         ]);
+      } else if (user.role === "customer") {
+        setExpenses([]); // Set an empty record if the user role is "customer"
       }
     }
   }, [uid, user, roomPath, todayDate]);
 
   console.log(record);
-  console.log(user?.role)
+  console.log(user?.role);
 
   const reloadData = async () => {
     if (uid && user) {

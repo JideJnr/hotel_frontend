@@ -29,6 +29,7 @@ const CreatePassword = () => {
             <IonLabel>Create Password</IonLabel>
             <RccgPasswordInput placeholder="Create password" />
           </div>
+
           <div className="form-field">
             <IonLabel>Confirm Password</IonLabel>
             <RccgPasswordInput placeholder="Confirm password" />

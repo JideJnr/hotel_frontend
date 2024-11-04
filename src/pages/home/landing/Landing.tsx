@@ -1,7 +1,7 @@
 import { IonPage, IonContent } from "@ionic/react";
 
 import { useEffect, useState } from "react";
-import { useDataContext } from "../../context/dataContext";
+import { useDataContext } from "../../../context/dataContext";
 import Admin from "../admin/admin";
 import Start from "../start/Home";
 

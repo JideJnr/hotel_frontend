@@ -1,20 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../../../components/button/button";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../../../../firebase";
-import { useDataContext } from "../../../context/dataContext";
-import { getCurrentDate, getYearMonth } from "../../../function/getCurrentDate";
 import { FormProps } from "../customer/StepOne";
+import useSalesForm from "../../../services/UseSalesForm";
 import { toast } from "react-toastify";
-import { getTodayDate } from "../../../utils/getTodaysDate";
 
 const Room = ({ setFormData: setModal }: FormProps) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -39,89 +29,45 @@ const Room = ({ setFormData: setModal }: FormProps) => {
     price: undefined,
   });
 
-  const { user } = useDataContext();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const recordPath = "roomRecord";
-  const roomPath = `hotel/${user?.location}/rooms/${formData.roomNumber?.value}/roomHistory`;
-  const activityPath = "activitiesRecord";
-  const clientPath = `clientRecord/${formData.customer?.value}/lodgeHistory`;
-  const { reloadData } = useDataContext();
+  const handleNext = () => {
+    const errors = [];
 
-  const handleSubmit = async () => {
-    try {
-      if (!formData.customer) throw new Error("Please select a client!");
-      if (!formData.roomNumber) throw new Error("Please select a room!");
-      if (!formData.orderMethod)
-        throw new Error("Please select an order type!");
-      if (!formData.paymentMethod)
-        throw new Error("Please select a payment method!");
+    if (!formData.customer) {
 
-      setLoading(true);
-      const todayDate = getTodayDate();
+      toast.error("Full Name is required." );
+    }
+    if (!formData.roomNumber) {
 
-      const salesData = {
-        customerId: formData.customer.value,
-        customerName: formData.customer.label,
-        room: formData.roomNumber.value,
-        orderMethod: formData.orderMethod.value,
-        hostID: user?.id,
-        hostName: user?.name,
-        location: user?.location,
-        paymentMethod: formData.paymentMethod.value,
-        time: serverTimestamp(),
-        date: todayDate,
+      toast.error("Room Number is required." );
+    }
+    if (!formData.orderMethod) {
 
-        status: "active",
-        details: "Sold Room",
-        price: parseInt(formData.price || "0", 10),
-      };
-      const docRef = await addDoc(collection(db, recordPath), salesData);
+      toast.error("Address is required." );
+    }
+    if (!formData.paymentMethod) {
+      
+      toast.error("Payment Method is required." );
+    }
 
-      const docId = docRef.id;
-
-      await addDoc(collection(db, roomPath), salesData);
-      await addDoc(collection(db, clientPath), salesData);
-      await addDoc(collection(db, activityPath), salesData);
-
-      const roomDocRef = doc(
-        db,
-        `hotel/${user?.location}/rooms/${formData.roomNumber.value}`,
-      );
-      const clientDocRef = doc(db, `clientRecord/${formData.customer.value}`);
-
-      await updateDoc(roomDocRef, {
-        status: "active",
-        currentGuest: {
-          name: formData.customer.label,
-          id: formData.customer.value,
-          docId: docId,
-        },
-      });
-      await updateDoc(clientDocRef, { status: "Active" });
-      await reloadData();
-    } catch (error) {
-      console.error("Error submitting data: ", error.message);
-      setError(error.message || "Error submitting data. Please try again.");
-    } finally {
-      setLoading(false);
+     else {
+      setModalVisible(true);
     }
   };
 
-  useEffect(() => {
-    if (error) {
-      // Display the error message
-      toast.error(error);
+  const { handleSubmit, loading } = useSalesForm({
+    formData,
+  });
 
-      // Clear the error after a delay (optional)
-      const timer = setTimeout(() => {
-        setError("");
-      }, 5000); // Adjust the duration as needed (5000 ms = 5 seconds)
-
-      // Cleanup timer on component unmount or when error changes
-      return () => clearTimeout(timer);
+  const submit = async () => {
+    try {
+      const success = await handleSubmit();
+      if (success) {
+        setModal(false);
+      }
+    } catch (err) {
+      console.error("Error creating room:", err);
     }
-  }, [error]);
+  };
 
   return (
     <div className=" p-4 gap-4 flex flex-col">
@@ -154,17 +100,11 @@ const Room = ({ setFormData: setModal }: FormProps) => {
           <Button
             text="Submit"
             className=""
-            onClick={handleSubmit}
+            onClick={submit}
             loading={loading}
           />
         ) : (
-          <Button
-            text="Next"
-            className=""
-            onClick={() => {
-              setModalVisible(true);
-            }}
-          />
+          <Button text="Next" className="" onClick={handleNext} />
         )}
       </div>
     </div>

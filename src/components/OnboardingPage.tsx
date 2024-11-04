@@ -20,8 +20,7 @@ const OnboardingPage = ({
     <IonPage className="!overflow-hidden">
       <IonContent fullscreen>
         <PageWrapper>
-          <RccgBackArrow />
-          <RccgPageHeader titleOne={titleOne} titleTwo={titleTwo} />
+          <RccgPageHeader titleOne={titleOne} />
 
           {children}
         </PageWrapper>

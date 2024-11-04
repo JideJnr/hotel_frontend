@@ -1,9 +1,11 @@
 import React from "react";
-import { IonContent, IonButton, IonPage } from "@ionic/react";
+import { IonContent, IonButton, IonPage, useIonRouter } from "@ionic/react";
 import { useDataContext } from "../../context/dataContext";
+import Button from "../../components/button/button";
 
 const Welcome: React.FC = () => {
   const { user } = useDataContext();
+  const router = useIonRouter();
 
   return (
     <IonPage>
@@ -17,12 +19,11 @@ const Welcome: React.FC = () => {
           className="h-screen flex flex-col justify-between overflow-hidden"
         >
           <div className="h-fit mt-auto flex flex-col gap-4 mb-8 p-4">
-            <IonButton
-              className="w-full !rounded-3xl"
-              routerLink={`${!user ? "/sign-in" : "/home"}`}
-            >
-              Continue
-            </IonButton>
+            <Button
+              className="!w-full !rounded-3xl !bg-emerald-500"
+              onClick={() => router.push(!user ? "/signin" : "/home")}
+              text="Continue"
+            />
           </div>
         </div>
       </IonContent>

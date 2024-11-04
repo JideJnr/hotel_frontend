@@ -30,6 +30,7 @@ const Book = ({ setFormData: setModal }: FormProps) => {
   const month = getYearMonth();
 
   const handleNextClick = () => setCurrentStepIndex((prevStep) => prevStep + 1);
+
   const handleBackClick = () =>
     currentStepIndex > 1 && setCurrentStepIndex((prevStep) => prevStep - 1);
 
@@ -75,10 +76,6 @@ const Book = ({ setFormData: setModal }: FormProps) => {
         `hotel/${user?.location}/rooms/${formData.roomNumber?.value}`,
       );
       const clientDocRef = doc(db, `clientRecord/${formData.customer?.value}`);
-
-      // You can update documents if necessary here
-      // await updateDoc(roomDocRef, { /* your data */ });
-      // await updateDoc(clientDocRef, { /* your data */ });
     } catch (error: any) {
       setError(error.message || "An error occurred during booking.");
     } finally {

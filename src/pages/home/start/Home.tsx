@@ -13,14 +13,15 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { Route, Redirect } from "react-router";
 import { playCircle, radio, search, settings } from "ionicons/icons";
-import Room from "../room/Room";
-import Activity from "../activity/Activity";
-import Header from "../../components/layout/Header";
-import Home from "../home/Home";
-import Setting from "../settings/Settings";
-import { FormProps } from "../register/customer/StepOne";
-import { useDataContext } from "../../context/dataContext";
-import Users from "../users/Users";
+import Room from "../../room/Room";
+import Activity from "../../activity/Activity";
+import Header from "../../../components/layout/header/Header";
+import Home from "../Home";
+import Setting from "../../settings/Settings";
+import { FormProps } from "../../register/customer/StepOne";
+import { useDataContext } from "../../../context/dataContext";
+import Users from "../../users/Users";
+import Customer from "../customer/customer";
 
 function Start({ formData: data, setFormData: setModal }: FormProps) {
   const { reloadData, user } = useDataContext();
@@ -44,7 +45,17 @@ function Start({ formData: data, setFormData: setModal }: FormProps) {
 
                 <Route
                   path="/home"
-                  render={() => <Home formData={data} />}
+                  render={() => (
+                    <>
+                      {user && user?.role === "customer" ? (
+                        <Customer />
+                      ) : (
+                        <Home formData={data} />
+                        
+                      
+                      )}
+                    </>
+                  )}
                   exact
                 />
 

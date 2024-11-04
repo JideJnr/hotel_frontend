@@ -50,6 +50,23 @@ const StepTwo = ({ formData, setFormData }: FormProps) => {
       label: "Part Partment",
     },
   ];
+
+  const paymentOptions = [
+    { value: "cash", label: "Cash" },
+    { value: "transfer", label: "Transfer" },
+    { value: "pos", label: "POS" },
+  ];
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4 bg-white h-fit">
       <p>price</p>
@@ -63,7 +80,7 @@ const StepTwo = ({ formData, setFormData }: FormProps) => {
         placeholder="Select Payment Type"
       />
 
-      {formData.paymentType.value === "partPayment" && (
+      {formData.paymentType?.value === "partPayment" && (
         <>
           <p>Amount</p>
 
@@ -74,6 +91,15 @@ const StepTwo = ({ formData, setFormData }: FormProps) => {
           ></textarea>
         </>
       )}
+
+      <p>Select Payment Method</p>
+      <CustomSelect
+        name="paymentMethod"
+        options={paymentOptions}
+        onChange={(option) => handleSelectChange("paymentMethod", option)}
+        value={formData.paymentMethod?.value || null}
+        placeholder="Select a payment method"
+      />
     </div>
   );
 };

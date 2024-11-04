@@ -3,10 +3,8 @@ import Button from "../../../components/button/button";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import { FormProps } from "../customer/StepOne";
-import { useDataContext } from "../../../context/dataContext";
-import { getTodayDate } from "../../../utils/getTodaysDate";
-import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
-import { db } from "../../../../firebase";
+import useExpensesFormSubmit from "../../../services/UseExpensesFormSubmit";
+import { toast } from "react-toastify";
 
 const Expenses = ({ setFormData: setModal }: FormProps) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -16,53 +14,37 @@ const Expenses = ({ setFormData: setModal }: FormProps) => {
       | { value: string | number | null; label: string | null }
       | undefined;
 
-    bookingInstruction: string | undefined;
+    note: string | undefined;
     amount: string | undefined;
   }>({
     expenseType: undefined,
-    bookingInstruction: undefined,
+    note: undefined,
     amount: undefined,
   });
 
-  const { user } = useDataContext();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const expensesPath = "roomRecord";
-  const activityPath = "activitiesRecord";
+  const { handleSubmit, loading } = useExpensesFormSubmit({
+    formData,
+  });
 
-  const { reloadData } = useDataContext();
-  const todayDate = getTodayDate();
-
-  const handleSubmit = async () => {
+  const submit = async () => {
     try {
-      if (!formData.expenseType) throw new Error("Please select a client!");
-      if (!formData.bookingInstruction)
-        throw new Error("Please select a room!");
-      if (!formData.amount) throw new Error("Please select an order type!");
+      const success = await handleSubmit();
+      if (success) {
+        setModal(false);
+      }
+    } catch (err) {
+      console.error("Error creating room:", err);
+    }
+  };
 
-      setLoading(true);
+  const handleNext = () => {
 
-      const salesData = {
-        expenseType: formData.expenseType.value,
-        hostID: user?.id,
-        hostName: user?.name,
-        location: user?.location,
-        time: serverTimestamp(),
-        date: todayDate,
-        details: "Ran Expenses",
-        price: parseInt(formData.amount || "0", 10),
-      };
-
-      await addDoc(collection(db, expensesPath), salesData);
-
-      await addDoc(collection(db, activityPath), salesData);
-
-      await reloadData();
-    } catch (error) {
-      console.error("Error submitting data: ", error.message);
-      setError(error.message || "Error submitting data. Please try again.");
-    } finally {
-      setLoading(false);
+    if (!formData.expenseType||!formData.amount) {
+      toast.error("Please fill in all required fields.");
+    }
+ 
+   else {
+      setModalVisible(true);
     }
   };
 
@@ -92,16 +74,15 @@ const Expenses = ({ setFormData: setModal }: FormProps) => {
             }}
           />
         )}
-        {isModalVisible ? (
-          <Button
-            text="Next"
-            className=""
-            onClick={() => {
-              setModalVisible(true);
-            }}
-          />
+        {!isModalVisible ? (
+          <Button text="Next" className="" onClick={handleNext} />
         ) : (
-          <Button text="Submit" className="" onClick={handleSubmit} />
+          <Button
+            text="Submit"
+            className=""
+            onClick={submit}
+            loading={loading}
+          />
         )}
       </div>
     </div>
