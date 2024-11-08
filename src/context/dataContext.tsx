@@ -159,8 +159,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
           where("date", "==", todayDate),
         ]);
       } else if (user.role === "customer") {
-        setExpenses([]); // Set an empty record if the user role is "customer"
-      }
+        setExpenses([]);       }
     }
   }, [uid, user, roomPath, todayDate]);
 

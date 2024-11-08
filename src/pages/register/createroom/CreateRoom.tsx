@@ -29,6 +29,7 @@ const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
     formData,
   });
 
+  console.log(formData)
   const handleSubmit = async () => {
     try {
       const success = await createRoomProfile();
@@ -50,7 +51,7 @@ const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
     if (!formData.roomNumber) {
       errors.push("Room Number is required.");
     }
-    if (!formData.shortRestPrice || !formData.lodgePrice) {
+    if (!(formData.shortRestPrice || formData.lodgePrice)) {
       errors.push("Price is required.");
     }
 

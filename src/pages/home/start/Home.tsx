@@ -29,13 +29,14 @@ function Start({ formData: data, setFormData: setModal }: FormProps) {
     reloadData();
     e.detail.complete();
   };
-
+  console.log(user)
   return (
     <IonPage id="home-page">
       <IonContent fullscreen>
         <IonRefresher slot="fixed" onIonRefresh={refresh}>
           <IonRefresherContent />
         </IonRefresher>
+
 
         <Header>
           <IonReactRouter>
@@ -47,7 +48,7 @@ function Start({ formData: data, setFormData: setModal }: FormProps) {
                   path="/home"
                   render={() => (
                     <>
-                      {user && user?.role === "customer" ? (
+                      {user && user?.role === "costumer" ? (
                         <Customer />
                       ) : (
                         <Home formData={data} />

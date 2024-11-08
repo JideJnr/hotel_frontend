@@ -17,6 +17,7 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { auth, db } from "../../firebase";
+import { useDataContext } from "./dataContext";
 
 interface Activity {
   id: string;
@@ -45,9 +46,9 @@ interface ActivityProviderProps {
   children: ReactNode;
 }
 
-export const ActivityProvider: React.FC<ActivityProviderProps> = ({
-  children,
-}) => {
+
+export const ActivityProvider: React.FC<ActivityProviderProps> = ({ children }) => {
+  const { user } = useDataContext(); 
   const [activities, setActivities] = useState<Activity[]>([]);
   const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [perPage] = useState<number>(20);
@@ -63,8 +64,10 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({
         const ref = collection(db, "activitiesRecord");
         let q = query(ref);
 
-        // Apply filter if any
-        if (filter) {
+        // Role-based filtering
+        if (user?.role !== "admin") {
+          q = query(q, where("id", "==", user?.id));
+        } else if (filter) {
           q = query(q, where(filter.field, filter.operator, filter.value));
         }
 
@@ -80,17 +83,12 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({
         q = query(q, limit(perPage));
 
         const querySnapshot = await getDocs(q);
+        const activityData: Activity[] = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
-        let activityData: Activity[] = [];
-        querySnapshot.forEach((doc) => {
-          activityData.push({ id: doc.id, ...doc.data() });
-        });
-
-        // Update the last visible document
-        const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
-        setLastVisible(lastDoc);
-
-        // Update activities state with new data
+        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
         setActivities((prevActivities) => [...prevActivities, ...activityData]);
       } catch (error) {
         console.error("Error fetching activities:", error);
@@ -100,13 +98,12 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({
     };
 
     fetchActivities();
-  }, [page, filter]); // Trigger fetch when page or filter changes
+  }, [page, filter, user]); // Include user to update based on role changes
 
   const loadMoreActivities = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  // Reset activities when the filter is changed
   useEffect(() => {
     setActivities([]);
     setPage(1);
@@ -127,6 +124,7 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({
     </ActivitiesContext.Provider>
   );
 };
+
 
 export const useActivities = (): ActivitiesContextType => {
   const context = useContext(ActivitiesContext);

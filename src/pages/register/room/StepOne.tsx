@@ -42,6 +42,24 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
     },
   ];
 
+  const customerPayment = [
+    {
+      value: "inApp",
+      label: "In App",
+    },
+  
+    {
+      value: "pos",
+      label: "POS",
+    },
+
+    {
+      value: "cash",
+      label: "Cash",
+    },
+    
+  ];
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -56,7 +74,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
 
   return (
     <div className="flex flex-col gap-4 bg-white h-fit p-4 ">
-      {user && user.role !== "customer" && (
+      {user && user.role !== "costumer" && (
         <>
           <p>Select Customer</p>
           <CustomSelect
@@ -96,7 +114,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
       <p>Select Payment Method</p>
       <CustomSelect
         name="paymentMethod"
-        options={payment}
+        options={user && user.role === 'customer' ? payment : customerPayment}
         onChange={(option) => handleSelectChange("paymentMethod", option)}
         value={formData.paymentMethod?.value || null}
         placeholder="Select a Payment Method"

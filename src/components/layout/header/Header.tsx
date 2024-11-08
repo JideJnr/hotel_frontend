@@ -1,11 +1,13 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import { IonContent, IonHeader, IonPage } from "@ionic/react";
+import SearchBar from "../searchbar/SearchBar";
 interface HeaderProps {
   children: ReactNode;
   backAction?: any;
 }
 
 const Header: React.FC<HeaderProps> = ({ children, backAction }) => {
+  const [searchModal, setSearchModal] = useState(false);
   return (
     <>
       <IonPage id="main-content">
@@ -21,6 +23,8 @@ const Header: React.FC<HeaderProps> = ({ children, backAction }) => {
             </div>
           </div>
         </IonHeader>
+       
+
 
         <IonContent className="ion-padding">{children}</IonContent>
       </IonPage>

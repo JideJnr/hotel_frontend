@@ -42,7 +42,7 @@ const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text }) =
   const handleLastPage = () => setCurrentPage(totalPages);
 
   return (
-    <div className="  !rounded-xl border flex flex-col w-full ">
+    <div className="bg-[#f4f5f8]  !rounded-xl border flex flex-col w-full ">
       <table className=" whitespace-nowrap   min-w-full rounded-xl  border w-full bg-primary !p-0">
         {data !== null && !loading && data !== undefined && (
           <thead className="bg-[#f5f5f5] p-4 ">
@@ -60,7 +60,7 @@ const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text }) =
             </tr>
           </thead>
         )}
-        <tbody className="dark:bg-[#1A1C1E] bg-white !m-0 !rounded-none w-full h-full ">
+        <tbody className="dark:bg-[#1A1C1E] bg-[#f4f5f8] !m-0 !rounded-none w-full h-full ">
           {loading ? (
             <div className="h-full p-10 align-center w-fit mx-auto flex">
               <span className="loading mr-5">

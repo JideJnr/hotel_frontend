@@ -137,8 +137,6 @@ const Home = ({ formData }: DataProps) => {
     setTotalExpenses(sum);
   }, [filteredExpenses, user]);
 
-  console.log(user);
-
   return (
     <IonContent>
       <div className="flex flex-col gap-6 px-4 py-8">

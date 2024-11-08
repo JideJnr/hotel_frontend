@@ -53,12 +53,15 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
       const roomData = {
         roomNumber: formData.roomNumber,
         location: formData.location.value,
-        shortRest: formData.shortRestPrice || null,
-        lodge: formData.lodgePrice || null,
+        shortRest: formData.shortRestPrice || 0,
+        lodge: formData.lodgePrice || 0,
         details: "Created Room Data",
         by: auth.currentUser?.uid,
         status: "available",
       };
+
+      console.log(roomData)
+      console.log(path)
 
       await addDoc(collection(db, activityPath), roomData);
       await setDoc(doc(db, path), roomData);

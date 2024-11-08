@@ -122,8 +122,8 @@ const Room = ({ formData }: DataProps) => {
 
             {user && user.role !== "costumer" &&
             
-            <div className="w-full flex ">
-              <button onClick={() => setCreateModal(true)} className="ml-auto mr-2">Add New</button>
+            <div className="w-full flex  p-2 bg-[#f5f5f5] ">
+              <button onClick={() => setCreateModal(true)} className="ml-auto bg-orange-400 px-2 py-1 rounded-md text-white">Add New</button>
             </div>
             }
             <Table

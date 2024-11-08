@@ -1,5 +1,6 @@
 import { IonContent, IonCard, IonCardHeader, IonCardTitle } from "@ionic/react";
 import { useState } from "react";
+import Header from "../../../components/layout/header/Header";
 
 interface FormProps {
   formData?: any;
@@ -15,11 +16,11 @@ const Admin = ({ setFormData, setModal, formData }: FormProps) => {
   ]);
 
   return (
-    <>
-      <IonContent>
+    <Header>
+ 
         <div className="p-4 flex flex-col space-y-4">
           {groups.map((group, i) => (
-            <IonCard
+            <div
               key={i}
               onClick={() => {
                 setModal(false);
@@ -37,11 +38,11 @@ const Admin = ({ setFormData, setModal, formData }: FormProps) => {
                   {group.label}
                 </IonCardTitle>
               </IonCardHeader>
-            </IonCard>
+            </div>
           ))}
         </div>
-      </IonContent>
-    </>
+      
+    </Header>
   );
 };
 
