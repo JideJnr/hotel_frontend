@@ -20,28 +20,29 @@ import { getTodayDate } from "../utils/getTodaysDate";
 // Define interfaces for your state
 interface Client {
   id: string;
-  [key: string]: any; // More specific fields for clients can be defined here
+  [key: string]: any;
 }
 
 interface Expense {
   id: string;
-  [key: string]: any; // More specific fields for expenses can be defined here
+  [key: string]: any;
 }
 
 interface Room {
   id: string;
-  [key: string]: any; // More specific fields for room can be defined here
+  [key: string]: any;
 }
 
 interface Record {
   id: string;
-  [key: string]: any; // More specific fields for records can be defined here
+  [key: string]: any;
 }
 
 interface User {
   id: string;
   location: string;
-  [key: string]: any; // More specific fields for user can be defined here
+  role: string;
+  [key: string]: any;
 }
 
 interface DataContextProps {
@@ -52,7 +53,7 @@ interface DataContextProps {
   user: User | null;
   loading: boolean;
   error: Error | null;
-  reloadData: () => Promise<void>; // Add this line
+  reloadData: () => Promise<void>;
 }
 
 interface DataProviderProps {
@@ -70,24 +71,22 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
-  const uid = auth.currentUser?.uid;
   const expensesPath = "expensesRecord";
   const clientsPath = "userRecord";
   const recordPath = "roomRecord";
-  const roomPath = user ? `hotel/${user.location}/rooms` : null;
   const todayDate = getTodayDate();
 
-
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (uid) {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (currentUser) {
         try {
           setLoading(true);
-          const docSnap = await getDoc(doc(db, `userRecord/${uid}`));
-          if (docSnap.exists()) {
-            setUser(docSnap.data() as User);
+          const userDoc = await getDoc(doc(db, `userRecord/${currentUser.uid}`));
+          if (userDoc.exists()) {
+            setUser({ id: currentUser.uid, ...userDoc.data() } as User);
+            await reloadData(); 
           } else {
-            console.log("No such user document!");
+            console.log("No user document found.");
           }
         } catch (error) {
           console.error("Error fetching user document:", error);
@@ -95,16 +94,18 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         } finally {
           setLoading(false);
         }
+      } else {
+        setUser(null);
       }
-    };
+    });
 
-    fetchUserData();
-  }, [uid]);
+    return () => unsubscribe();
+  }, []);
 
   const fetchData = async (
     path: string,
     setDataFunction: React.Dispatch<React.SetStateAction<any[]>>,
-    constraints: QueryConstraint[] = [],
+    constraints: QueryConstraint[] = []
   ) => {
     try {
       setLoading(true);
@@ -120,7 +121,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
       setDataFunction(data);
     } catch (error) {
-      console.error("Error getting documents: ", error);
+      console.error("Error getting documents:", error);
       setError(error as Error);
     } finally {
       setLoading(false);
@@ -128,56 +129,46 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    if (uid && user) {
-      if (user.id || user.role !== ' costumer') {
+    if (user) {
+      const roomPath = `hotel/${user.location}/rooms`;
+
+      if (user.role !== "customer") {
         fetchData(clientsPath, setClients);
-      } else {
-        console.log("User ID is not defined.");
-      }
-
-      if (roomPath) {
         fetchData(roomPath, setRoom);
+      } else {
+        setClients([]);
+        setRoom([]);
       }
-
       if (user.role === "admin") {
         fetchData(recordPath, setRecord, [where("date", "==", todayDate)]);
+        fetchData(expensesPath, setExpenses, [where("date", "==", todayDate)]);
       } else if (user.role === "manager") {
         fetchData(recordPath, setRecord, [
           where("hostID", "==", user.id),
           where("date", "==", todayDate),
         ]);
-      } else if (user.role === "customer") {
-        setRecord([]); // Set an empty record if the user role is "customer"
-      }
-
-
-      if (user.role === "admin") {
-        fetchData(expensesPath, setExpenses, [where("date", "==", todayDate)]);
-      } else if (user.role === "manager") {
         fetchData(expensesPath, setExpenses, [
           where("hostID", "==", user.id),
           where("date", "==", todayDate),
         ]);
       } else if (user.role === "customer") {
-        setExpenses([]);       }
+        setRecord([]);
+        setExpenses([]);
+      }
     }
-  }, [uid, user, roomPath, todayDate]);
-
-  console.log(record);
-  console.log(user?.role);
+  }, [user, todayDate]);
 
   const reloadData = async () => {
-    if (uid && user) {
-      setLoading(true); // Optional: Indicate loading state
-      setError(null); // Reset any previous errors
+    if (user) {
+      setLoading(true);
+      setError(null);
 
-      if (user.id) {
+      if (user.role !== "customer") {
         await fetchData(clientsPath, setClients);
       }
 
-      if (roomPath) {
-        await fetchData(roomPath, setRoom);
-      }
+      const roomPath = `hotel/${user.location}/rooms`;
+      await fetchData(roomPath, setRoom);
 
       await fetchData(recordPath, setRecord, [
         where("hostID", "==", user.id),
@@ -189,7 +180,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         where("date", "==", todayDate),
       ]);
 
-      setLoading(false); // Reset loading state after fetching data
+      setLoading(false);
     }
   };
 

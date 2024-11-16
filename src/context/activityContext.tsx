@@ -24,36 +24,29 @@ interface Activity {
   [key: string]: any;
 }
 
-interface Filter {
-  field: string;
-  operator: any;
-  value: any;
-}
-
 interface ActivitiesContextType {
   activities: Activity[];
   dataLoading: boolean;
   loadMoreActivities: () => void;
-  setFilter: React.Dispatch<React.SetStateAction<Filter | null>>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const ActivitiesContext = createContext<ActivitiesContextType | undefined>(
-  undefined,
+  undefined
 );
 
 interface ActivityProviderProps {
   children: ReactNode;
 }
 
-
-export const ActivityProvider: React.FC<ActivityProviderProps> = ({ children }) => {
-  const { user } = useDataContext(); 
+export const ActivityProvider: React.FC<ActivityProviderProps> = ({
+  children,
+}) => {
+  const { user } = useDataContext();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [perPage] = useState<number>(20);
   const [page, setPage] = useState<number>(1);
-  const [filter, setFilter] = useState<Filter | null>(null);
   const [lastVisible, setLastVisible] =
     useState<QueryDocumentSnapshot<DocumentData> | null>(null);
 
@@ -64,13 +57,10 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({ children }) 
         const ref = collection(db, "activitiesRecord");
         let q = query(ref);
 
-        // Role-based filtering
-        if (user?.role !== "admin") {
+        if (user && user?.role !== "admin") {
           q = query(q, where("id", "==", user?.id));
-        } else if (filter) {
-          q = query(q, where(filter.field, filter.operator, filter.value));
         }
-
+ 
         // Order by date
         q = query(q, orderBy("date", "desc"));
 
@@ -98,7 +88,7 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({ children }) 
     };
 
     fetchActivities();
-  }, [page, filter, user]); // Include user to update based on role changes
+  }, [page, user]); 
 
   const loadMoreActivities = () => {
     setPage((prevPage) => prevPage + 1);
@@ -108,7 +98,7 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({ children }) 
     setActivities([]);
     setPage(1);
     setLastVisible(null);
-  }, [filter]);
+  }, []); 
 
   return (
     <ActivitiesContext.Provider
@@ -116,7 +106,6 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({ children }) 
         activities,
         dataLoading,
         loadMoreActivities,
-        setFilter,
         setPage,
       }}
     >
@@ -124,7 +113,6 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({ children }) 
     </ActivitiesContext.Provider>
   );
 };
-
 
 export const useActivities = (): ActivitiesContextType => {
   const context = useContext(ActivitiesContext);

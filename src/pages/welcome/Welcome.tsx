@@ -1,11 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IonContent, IonButton, IonPage, useIonRouter } from "@ionic/react";
 import { useDataContext } from "../../context/dataContext";
 import Button from "../../components/button/button";
+import { PushNotifications } from "@capacitor/push-notifications";
 
 const Welcome: React.FC = () => {
   const { user } = useDataContext();
   const router = useIonRouter();
+
+  // Request Push Notification Permission
+  useEffect(() => {
+    const requestPushPermission = async () => {
+      try {
+        // Request permission for push notifications
+        const permission = await PushNotifications.requestPermissions();
+
+        if (permission.receive === "granted") {
+          console.log("Push notifications permission granted!");
+          // Optionally register for push notifications here
+          PushNotifications.register();
+        } else {
+          console.error("Push notifications permission denied");
+        }
+      } catch (error) {
+        console.error("Error requesting push notifications permission:", error);
+      }
+    };
+
+    requestPushPermission();
+  }, []);
 
   return (
     <IonPage>

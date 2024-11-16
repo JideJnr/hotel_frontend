@@ -6,16 +6,18 @@ import Admin from "../admin/admin";
 import Start from "../start/Home";
 
 function Landing() {
-  const { user } = useDataContext();
+  const { user, reloadData } = useDataContext();
   const [formData, setFormData] = useState({});
   const [welcomeModal, setWelcomeModal] = useState(false);
 
   useEffect(() => {
+    reloadData();
     if (user?.role === "admin") {
       setWelcomeModal(true);
     }
   }, [user]);
 
+  
   return (
     <IonPage id="home-page">
       <IonContent fullscreen>

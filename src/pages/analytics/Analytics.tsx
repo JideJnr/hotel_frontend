@@ -15,6 +15,7 @@ import { fetchData } from "../../utils/firebaseUtils";
 import { db } from "../../../firebase";
 import DashboardTile from "../../components/dashboardtiles/DashboardTiles";
 import { formatNaira } from "../../function/formatNaira";
+import { useDataContext } from "../../context/dataContext";
 
 const Analytics: React.FC = () => {
   const recordOptions = [
@@ -174,9 +175,11 @@ const Analytics: React.FC = () => {
     return formattedPrice;
   }
 
+  const {user} = useDataContext();
   return (
     <Header backAction={true}>
       <div className="mx-auto w-full divide-y">
+        {user?.email}
         <Disclosure as="div" className="p-4" defaultOpen={true}>
           {({ open }) => (
             <>

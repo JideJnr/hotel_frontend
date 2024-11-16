@@ -1,12 +1,12 @@
 import { IonLabel, useIonRouter } from "@ionic/react";
 import OnboardingPage from "../../../components/OnboardingPage";
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../../firebase";
 import SignUp from "../signup/signup";
 import ResetPassword from "../resetpassword/ResetPassword";
 import { formatDate } from "react-datepicker/dist/date_utils";
 import Button from "../../../components/button/button";
+import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "firebase/auth";
 
 const SignIn = () => {
   const router = useIonRouter();
@@ -14,25 +14,33 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useIonRouter();
-  const isInvalid = password === "" || email === "";
 
   const [formData, setFormData] = useState("");
 
   const handleSubmit = async () => {
     setError("");
-    if (email === "" || password === "") {
-      setError("Input All Fields!!!");
+    if (email.trim() === "" || password.trim() === "") {
+      setError("Please fill in all fields!");
       return;
     }
+
     setLoading(true); // Start loading
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      // Set Firebase persistence to browserLocalPersistence
+      await setPersistence(auth, browserLocalPersistence);
+
+      // Sign in the user
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("Signed in user:", userCredential.user);
+
+      // Navigate to the home page
       router.push("/home");
-    } catch (err) {
-      setError(err.message); // Update error state with error message
+    } catch (err: any) {
+      console.error("Sign-in error:", err.message); // Log error details
+      setError(err.message || "An unknown error occurred.");
+    } finally {
+      setLoading(false); // Stop loading
     }
-    setLoading(false); // Stop loading
   };
 
   const [signupModal, setSignupModal] = useState(false);

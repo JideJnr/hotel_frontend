@@ -1,4 +1,4 @@
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import React, {
   createContext,
   useContext,
@@ -10,7 +10,7 @@ import { auth } from "../../firebase";
 import Suspence from "../components/suspense/Suspence";
 
 interface AuthContextProps {
-  user: any; // Replace 'any' with the actual type
+  user: any;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -22,19 +22,42 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("Auth state changed:", user); // Debugging
       setUser(user);
       setLoading(false);
     });
+
+    return unsubscribe; // Cleanup listener
   }, []);
+
   if (loading) {
     return <Suspence />;
   }
 
-  const login = async (email: string, password: string) => {};
+  const login = async (email: string, password: string) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(userCredential.user);
+      console.log("User logged in:", userCredential.user);
+    } catch (error) {
+      console.error("Login error:", error.message);
+      throw error;
+    }
+  };
 
-  const logout = async () => {};
+  const logout = async () => {
+    try {
+      await auth.signOut();
+      setUser(null);
+      console.log("User logged out");
+    } catch (error) {
+      console.error("Logout error:", error.message);
+      throw error;
+    }
+  };
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

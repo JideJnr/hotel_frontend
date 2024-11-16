@@ -81,7 +81,7 @@ const useCreateClientProfile = ({formData}) => {
         details: " User Created",
         status: "inactive",
         id:formData.id,
-        role: 'costumer',
+        role: 'customer',
       };
 
       await setDoc(doc(db, path, formData.id), clientData);

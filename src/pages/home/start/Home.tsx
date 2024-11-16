@@ -29,7 +29,7 @@ function Start({ formData: data, setFormData: setModal }: FormProps) {
     reloadData();
     e.detail.complete();
   };
-  console.log(user)
+
   return (
     <IonPage id="home-page">
       <IonContent fullscreen>
