@@ -34,7 +34,7 @@ const SignIn = () => {
       console.log("Signed in user:", userCredential.user);
 
       // Navigate to the home page
-      router.push("/home");
+      router.push("/main");
     } catch (err: any) {
       console.error("Sign-in error:", err.message); // Log error details
       setError(err.message || "An unknown error occurred.");

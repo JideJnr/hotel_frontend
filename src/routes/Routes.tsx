@@ -34,7 +34,7 @@ const Routes: React.FC = () => (
       <Funding />
     </Route>
 
-    <Route path="/home" exact={true}>
+    <Route path="/main" exact={true}>
       <Landing />
     </Route>
     <Route path="/password" exact={true}>

@@ -30,7 +30,7 @@ const SignUp = ({ formData:data, setFormData:setModal }: FormProps) => {
     try {
       const success = await createClientProfile();
       if (success) {
-        router.push("/home");
+        router.push("/main");
       }
     } catch (err) {
       console.error("Error creating profile:", err);

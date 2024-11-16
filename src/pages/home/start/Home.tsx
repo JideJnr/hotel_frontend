@@ -42,6 +42,7 @@ function Start({ formData: data, setFormData: setModal }: FormProps) {
           <IonReactRouter>
             <IonTabs>
               <IonRouterOutlet>
+              <Redirect exact path="/main" to="/home" />
 
                 <Route
                   path="/home"

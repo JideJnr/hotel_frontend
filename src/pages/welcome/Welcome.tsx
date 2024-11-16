@@ -44,7 +44,7 @@ const Welcome: React.FC = () => {
           <div className="h-fit mt-auto flex flex-col gap-4 mb-8 p-4">
             <Button
               className="!w-full !rounded-3xl !bg-emerald-500"
-              onClick={() => router.push(!user ? "/signin" : "/home")}
+              onClick={() => router.push(!user ? "/signin" : "/main")}
               text="Continue"
             />
           </div>
