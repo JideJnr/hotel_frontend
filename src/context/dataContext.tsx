@@ -84,7 +84,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
           const userDoc = await getDoc(doc(db, `userRecord/${currentUser.uid}`));
           if (userDoc.exists()) {
             setUser({ id: currentUser.uid, ...userDoc.data() } as User);
-            await reloadData(); 
+            await reloadData();
           } else {
             console.log("No user document found.");
           }
@@ -98,9 +98,10 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         setUser(null);
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
+  
 
   const fetchData = async (
     path: string,
@@ -129,7 +130,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && user.id) {
       const roomPath = `hotel/${user.location}/rooms`;
 
       if (user.role !== "customer") {
