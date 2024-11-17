@@ -9,7 +9,7 @@ interface FormProps {
 }
 
 const Admin = ({ setFormData, setModal, formData }: FormProps) => {
-  const [groups, setGroups] = useState([
+  const [groups] = useState([
     { label: "All Hotel", value: "all", image: "/path/to/image1.jpg" },
     { label: "Ijebu", value: "ijebu", image: "/path/to/image2.jpg" },
     { label: "Lagos", value: "lagos", image: "/path/to/image2.jpg" },

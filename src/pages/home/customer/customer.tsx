@@ -19,6 +19,7 @@ const Home = ({ formData }: DataProps) => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
+  if (!user) return <div>Error: No User</div>;
 
 
   const [roomModal, setRoomModal] = useState(false);
@@ -32,6 +33,7 @@ const Home = ({ formData }: DataProps) => {
     const formattedPrice = formatNaira(amount);
     return formattedPrice;
   }
+
   return (
     <IonContent>
       <div className="flex flex-col gap-6 px-4 py-8">

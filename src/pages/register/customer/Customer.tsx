@@ -33,12 +33,12 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
     e.preventDefault();
 
     if (!formData.fullName || !formData.address || !formData.phone) {
-      setError("Input all fields!!!");
+      console.log("Input all fields!!!");
       return;
     }
 
     if (!user || !user.location) {
-      setError("User location is required.");
+     
       console.log("User location is undefined");
       return;
     }
@@ -78,7 +78,6 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
       window.location.reload(); // Only if you want a full reload
     } catch (err) {
       console.error("Error during form submission:", err);
-      setError("Error during form submission. Please try again.");
     } finally {
       setLoading(false);
     }

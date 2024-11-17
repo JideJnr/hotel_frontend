@@ -99,73 +99,6 @@ const Analytics: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const handleSubmit = async () => {
-    if (formData.dateRange[0] && formData.dateRange[1]) {
-      const [startDate, endDate] = formData.dateRange;
-      const { value: recordValue } = formData.record || {};
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        if (recordValue === "room") {
-          await fetchData(
-            db,
-            "roomRecord",
-            setData,
-            [],
-            setLoading,
-            setError,
-            startDate,
-            endDate,
-          );
-        } else if (recordValue === "expenses") {
-          await fetchData(
-            db,
-            "expensesRecord",
-            setData,
-            [],
-            setLoading,
-            setError,
-            startDate,
-            endDate,
-          );
-        } else if (recordValue === "all") {
-          const [roomData, expensesData] = await Promise.all([
-            fetchData(
-              db,
-              "roomRecord",
-              undefined,
-              [],
-              setLoading,
-              setError,
-              startDate,
-              endDate,
-            ),
-            fetchData(
-              db,
-              "expensesRecord",
-              undefined,
-              [],
-              setLoading,
-              setError,
-              startDate,
-              endDate,
-            ),
-          ]);
-
-          setData([...(roomData || []), ...(expensesData || [])]);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error as Error);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      console.warn("Please select a valid date range.");
-    }
-  };
 
   const [totalEarning, setTotalEarning] = useState<number>(0);
   const [totalExpenses, setTotalExpenses] = useState<number>(0);
@@ -218,7 +151,7 @@ const Analytics: React.FC = () => {
                     text="Generate"
                     loading={loading}
                     loadingText="Generating"
-                    onClick={handleSubmit}
+
                   />
                 </div>
               </DisclosurePanel>

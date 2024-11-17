@@ -1,6 +1,11 @@
 import { CheckIcon } from "@heroicons/react/16/solid";
 
-const NoTask = ({text}) => {
+interface NoTaskProps {
+  text: string;
+}
+
+
+const NoTask: React.FC<NoTaskProps> = ({ text }) => {
   return (
     <div className="flex items-center  text-center h-full w-full ">
       <div className="flex flex-col gap-2 w-full h-fit  p-4 m-auto">

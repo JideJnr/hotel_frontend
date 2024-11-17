@@ -5,17 +5,32 @@ import { IonRouterOutlet } from "@ionic/react";
 import Welcome from "../pages/welcome/Welcome";
 import CreatePassword from "../pages/auth/onboarding/CreatePassword";
 import CreateEmail from "../pages/auth/onboarding/CreateEmail";
-import Landing from "../pages/home/landing/Landing";
 import Analytics from "../pages/analytics/Analytics";
 import Support from "../pages/support/Support";
 import SignIn from "../pages/auth/signin/signin";
-import SignUp from "../pages/auth/signup/signup";
 import Funding from "../pages/funding/Funding";
+import Start from "../pages/home/start/Home";
+import Complete from "../pages/auth/signup/Complete";
 
 const Routes: React.FC = () => (
   <IonRouterOutlet>
     <Route path="/" exact={true}>
       <Redirect to="/welcome" />
+    </Route>
+    <Route path="/main/home" exact={true}>
+      <Redirect to="/main" />
+    </Route>
+    <Route path="/main/room" exact={true}>
+      <Redirect to="/main" />
+    </Route>
+    <Route path="/main/user" exact={true}>
+      <Redirect to="/main" />
+    </Route>
+    <Route path="/main/activity" exact={true}>
+      <Redirect to="/main" />
+    </Route>
+    <Route path="/main/settings" exact={true}>
+      <Redirect to="/main" />
     </Route>
     <Route path="/support" exact={true}>
       <Support />
@@ -33,9 +48,11 @@ const Routes: React.FC = () => (
     <Route path="/funding" exact={true}>
       <Funding />
     </Route>
-
+    <Route path="/signupcomplete" exact={true}>
+      <Complete  />
+    </Route>
     <Route path="/main" exact={true}>
-      <Landing />
+      <Start  />
     </Route>
     <Route path="/password" exact={true}>
       <CreatePassword />

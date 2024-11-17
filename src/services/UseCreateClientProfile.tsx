@@ -5,8 +5,9 @@ import { useDataContext } from "../context/dataContext";
 import { auth, db } from "../../firebase";
 import { toast } from "react-toastify";
 import { AuthError, createUserWithEmailAndPassword } from "firebase/auth";
+import { SimpleFormProps } from "../pages/register/customer/StepTwo";
 
-const useCreateClientProfile = ({formData}) => {
+const useCreateClientProfile = ({formData}:SimpleFormProps) => {
 
   const { user } = useDataContext();
   

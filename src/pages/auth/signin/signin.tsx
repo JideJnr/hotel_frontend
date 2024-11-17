@@ -115,7 +115,7 @@ const SignIn = () => {
 
         {signupModal && (
           <>
-            <SignUp formData={formData} setFormData={setSignupModal} />
+            <SignUp   />
           </>
         )}
 

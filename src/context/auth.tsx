@@ -43,10 +43,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setUser(userCredential.user);
       console.log("User logged in:", userCredential.user);
     } catch (error) {
-      console.error("Login error:", error.message);
+      if (error instanceof Error) {
+        console.error("Login error:", error.message);
+      } else {
+        console.error("An unexpected error occurred:", error);
+      }
       throw error;
     }
   };
+  
 
   const logout = async () => {
     try {
@@ -54,7 +59,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setUser(null);
       console.log("User logged out");
     } catch (error) {
-      console.error("Logout error:", error.message);
+      if (error instanceof Error) {
+        console.error("Login error:", error.message);
+      } else {
+        console.error("An unexpected error occurred:", error);
+      }
       throw error;
     }
   };

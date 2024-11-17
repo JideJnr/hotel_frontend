@@ -101,18 +101,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
             <div className="input-group-text text-gray-500">
               <i className="ri-calendar-line"></i>
             </div>
-            <DatePicker
-              className="border-inputborder dark:bg-bodybg dark:text-white/70 rounded-none focus:z-10 focus:outline-none ltr:rounded-r rtl:rounded-l px-2 border border-inputborder block w-full text-sm focus:border-gray-200 focus:shadow-sm dark:shadow-white/10 dark:bg-bodybg dark:border-white/10 dark:focus:border-white/10 dark:text-white/70"
-              placeholderText="Choose Date"
-              selectsRange={formData.duration?.value === "multipleDays"}
-              startDate={startDate}
-              endDate={endDate}
-              onChange={(update: [Date | null, Date | null]) =>
-                setDateRange(update)
-              }
-              isClearable={true}
-              popperPlacement="bottom"
-            />
+            
           </div>
         </div>
       ) : null}

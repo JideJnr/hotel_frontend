@@ -78,35 +78,8 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
     }
   };
 
-  const updateRoomProfile = async (updateData: FormData) => {
-    setError(null);
 
-    if (!updateData.location || !updateData.roomNumber || !updateData.id) {
-      handleError("Please fill in all required fields.");
-      return;
-    }
-
-    const updatePath = `hotel/${updateData.location}/rooms/${updateData.roomNumber}`;
-
-    try {
-      setLoading(true);
-      await updateDoc(doc(db, updatePath), updateData);
-      await addDoc(collection(db, activityPath), {
-        roomNumber: updateData.roomNumber,
-        location: updateData.location,
-        details: "Updated Room Data",
-        by: auth.currentUser?.uid,
-      });
-
-      toast.success("Room profile updated successfully!"); // Success toast
-      resetRoom();
-    } catch (err) {
-      console.error("Error during update operation:", err);
-      handleError("Error during room update. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   const deleteRoomProfile = async (deleteData: FormData) => {
     setError(null);
@@ -142,7 +115,7 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
     error,
     loading,
     createRoomProfile,
-    updateRoomProfile,
+ 
     deleteRoomProfile,
   };
 };

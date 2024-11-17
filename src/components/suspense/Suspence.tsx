@@ -8,6 +8,7 @@ function Suspence() {
             alt="logo"
             className="h-12 w-fit px-5 mx-auto"
           />
+          suspense
         </div>
       </div>
     </div>
