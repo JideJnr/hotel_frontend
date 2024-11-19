@@ -1,129 +1,98 @@
 import {
-  IonTabs,
-  IonTabBar,
-  IonTabButton,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
+
   IonPage,
   IonContent,
   IonRefresherContent,
   IonRefresher,
 } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
-import { Route, Redirect } from "react-router";
-import { playCircle, radio, search, settings } from "ionicons/icons";
 import Room from "../../room/Room";
 import Activity from "../../activity/Activity";
 import Header from "../../../components/layout/header/Header";
 import Home from "../Home";
 import Setting from "../../settings/Settings";
-import { FormProps } from "../../register/customer/StepOne";
 import { useDataContext } from "../../../context/dataContext";
 import Users from "../../users/Users";
 import Customer from "../customer/customer";
 import { useState } from "react";
+import { Tab, TabGroup } from "@headlessui/react";
+
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
 function Start() {
   const { reloadData, user } = useDataContext();
-  
-  const refresh = (e: CustomEvent) => {
-    reloadData();
-    e.detail.complete();
-  };
-
   const [data, setModal] = useState({});
 
+  const refresh = (e: CustomEvent) => {
+    try {
+      reloadData();
+      e.detail.complete();
+    } catch (err) {
+      console.error("Refresh error:", err);
+      e.detail.complete();
+    }
+  };
+
+  const renderTabs = () => (
+    <Tab.Panels className="h-full mx-auto flex flex-1 overflow-y-auto shadow-t-xl">
+      <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
+         <Home formData={data} />
+      </Tab.Panel>
+      <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
+        <Room formData={data} />
+      </Tab.Panel>
+      <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
+        <Users formData={data} />
+      </Tab.Panel>
+      <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
+        <Activity />
+      </Tab.Panel>
+      <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
+        <Setting setFormData={setModal} />
+      </Tab.Panel>
+    </Tab.Panels>
+  );
+
+  const renderTabList = () => (
+    <Tab.List className="h-16  px-5 py-3 grid grid-cols-auto grid-flow-col w-full mt-auto bg-gray-200">
+      {["HM", "RM", "CS", "AC", 'SS'].map((label) => (
+        <Tab
+          key={label}
+          className={({ selected }) =>
+            classNames(
+              "w-full text-sm font-medium rounded-lg mx-2 p-3",
+              "focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60",
+              selected ? "bg-white shadow-xl text-blue-700" : "hover:bg-white/[0.12] hover:text-white"
+            )
+          }
+        >
+          <div className="flex mx-auto my-auto w-fit">{label}</div>
+        </Tab>
+      ))}
+    </Tab.List>
+  );
+
   return (
-    <IonPage id="home-page">
-
-      
-          <IonContent fullscreen>
-            <IonRefresher slot="fixed" onIonRefresh={refresh}>
-              <IonRefresherContent />
-            </IonRefresher>
-    
-    
-            <Header>
-              <IonReactRouter>
-                <IonTabs>
-                  <IonRouterOutlet>
-                  <Redirect exact path="/main" to="/main/home" />
-    
-                    <Route
-                      path="/main/home"
-                      render={() => (
-                        <>
-                          {user && user?.role === "costumer" ? (
-                            <Customer />
-                          ) : (
-                            <Home formData={data} />
-                            
-                          
-                          )}
-                        </>
-                      )}
-                      exact
-                    />
-    
-                    <Route
-                      path="/main/room"
-                      render={() => <Room formData={data} />}
-                      exact
-                    />
-    
-                    <Route
-                      path="/main/user"
-                      render={() => <Users formData={data} />}
-                      exact
-                    />
-    
-                    <Route
-                      path="/main/activity"
-                      render={() => <Activity formData={data} />}
-                      exact
-                    />
-                    <Route
-                      path="/main/settings"
-                      render={() => <Setting setFormData={setModal} />}
-                      exact
-                    />
-                  </IonRouterOutlet>
-                  <IonTabBar slot="bottom">
-                    <IonTabButton tab="home" href="/main/home">
-                      <IonIcon icon={playCircle} />
-                      <IonLabel>Home</IonLabel>
-                    </IonTabButton>
-    
-                    <IonTabButton tab="room" href="/main/room">
-                      <IonIcon icon={radio} />
-                      <IonLabel>Room</IonLabel>
-                    </IonTabButton>
-    
-                    {user && user?.role === "admin" && (
-                      <IonTabButton tab="user" href="/main/user">
-                        <IonIcon icon={radio} />
-                        <IonLabel>Users</IonLabel>
-                      </IonTabButton>
-                    )}
-    
-                    <IonTabButton tab="activity" href="/main/activity">
-                      <IonIcon icon={search} />
-                      <IonLabel>Activities</IonLabel>
-                    </IonTabButton>
-    
-                    <IonTabButton tab="settings" href="/main/settings">
-                      <IonIcon icon={settings} />
-                      <IonLabel>Settings</IonLabel>
-                    </IonTabButton>
-                  </IonTabBar>
-                </IonTabs>
-              </IonReactRouter>
-            </Header>
-          </IonContent>
- 
-  
-
+    <IonPage >
+      <IonContent fullscreen>
+        <IonRefresher slot="fixed" onIonRefresh={refresh}>
+          <IonRefresherContent />
+        </IonRefresher>
+        <Header>
+          <TabGroup as='div' className=' grid grid-cols-1 grid-rows-12 h-full w-full '>
+            <div className="col-span-1 row-span-11">
+            {renderTabs()}
+            </div>
+            <div className="col-span-1 row-span-1">
+            {renderTabList()}
+</div>
+          
+          
+          </TabGroup>
+        </Header>
+      </IonContent>
     </IonPage>
   );
 }

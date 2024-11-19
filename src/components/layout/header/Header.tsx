@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ children, backAction }) => {
        
 
 
-        <IonContent className="ion-padding">{children}</IonContent>
+        <IonContent >{children}</IonContent>
       </IonPage>
     </>
   );

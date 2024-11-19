@@ -20,8 +20,6 @@ export interface DataProps {
 const Home = ({ formData }: DataProps) => {
   const { user, loading, error, record, expenses } = useDataContext();
 
-  if (loading) return <Suspence/>;
-  if (error) return   toast.error("Room Number is required." );;
 
   const [totalEarning, setTotalEarning] = useState<number>(0);
   const [totalExpenses, setTotalExpenses] = useState<number>(0);
@@ -140,20 +138,7 @@ const Home = ({ formData }: DataProps) => {
   return (
     <IonContent>
       <div className="flex flex-col gap-6 px-4 py-8">
-        {roomModal && <Room setFormData={setRoomModal} />}
-        {expensesModal && <Expenses setFormData={setExpensesModal} />}
-        {customerModal && <Customer setFormData={setCustomerModal} />}
-        {bookModal && <Book setFormData={setBookModal} />}
-        {recordModal && (
-          <RecordDetails formData={selectedData} setFormData={setRecordModal} />
-        )}
-
-        {!roomModal &&
-          !expensesModal &&
-          !customerModal &&
-          !bookModal &&
-          !recordModal && (
-            <div className="flex flex-col gap-4">
+           <div className="flex flex-col gap-4">
               <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit ">
                 <DashboardTile
                   label="Revenue"
@@ -266,7 +251,7 @@ const Home = ({ formData }: DataProps) => {
                 )}
               </>
             </div>
-          )}
+          
       </div>
     </IonContent>
   );

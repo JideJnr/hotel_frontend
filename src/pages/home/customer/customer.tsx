@@ -15,11 +15,6 @@ export interface DataProps {
 }
 
 const Home = ({ formData }: DataProps) => {
-  const { user, loading, error } = useDataContext();
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-  if (!user) return <div>Error: No User</div>;
 
 
   const [roomModal, setRoomModal] = useState(false);
@@ -37,15 +32,15 @@ const Home = ({ formData }: DataProps) => {
   return (
     <IonContent>
       <div className="flex flex-col gap-6 px-4 py-8">
-        {roomModal && <Room setFormData={setRoomModal} />}
-        {expensesModal && <Expenses setFormData={setExpensesModal} />}
-        {customerModal && <Customer setFormData={setCustomerModal} />}
-        {bookModal && <Book setFormData={setBookModal} />}
-        {recordModal && (
+        {roomModal === true && <Room setFormData={setRoomModal} />}
+        {expensesModal  === true && <Expenses setFormData={setExpensesModal} />}
+        {customerModal  === true && <Customer setFormData={setCustomerModal} />}
+        {bookModal  === true && <Book setFormData={setBookModal} />}
+        {recordModal  === true && (
           <RecordDetails formData={selectedData} setFormData={setRecordModal} />
         )}
 
-        {!roomModal && !bookModal && !recordModal && (
+        {roomModal === false  && bookModal === false && recordModal === false && (
           <>
             <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit ">
               <DashboardTile label="Balance" unit={displayPrice(20000)} />

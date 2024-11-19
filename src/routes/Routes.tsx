@@ -17,21 +17,7 @@ const Routes: React.FC = () => (
     <Route path="/" exact={true}>
       <Redirect to="/welcome" />
     </Route>
-    <Route path="/main/home" exact={true}>
-      <Redirect to="/main" />
-    </Route>
-    <Route path="/main/room" exact={true}>
-      <Redirect to="/main" />
-    </Route>
-    <Route path="/main/user" exact={true}>
-      <Redirect to="/main" />
-    </Route>
-    <Route path="/main/activity" exact={true}>
-      <Redirect to="/main" />
-    </Route>
-    <Route path="/main/settings" exact={true}>
-      <Redirect to="/main" />
-    </Route>
+    
     <Route path="/support" exact={true}>
       <Support />
     </Route>
