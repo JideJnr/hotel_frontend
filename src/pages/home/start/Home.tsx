@@ -4,6 +4,7 @@ import {
   IonContent,
   IonRefresherContent,
   IonRefresher,
+  IonHeader,
 } from "@ionic/react";
 import Room from "../../room/Room";
 import Activity from "../../activity/Activity";
@@ -56,7 +57,7 @@ function Start() {
   );
 
   const renderTabList = () => (
-    <Tab.List className="h-16  px-5 py-3 grid grid-cols-auto grid-flow-col w-full mt-auto bg-gray-200">
+    <Tab.List className="h-full  px-5 py-3 grid grid-cols-auto grid-flow-col w-full mt-auto bg-gray-200">
       {["HM", "RM", "CS", "AC", 'SS'].map((label) => (
         <Tab
           key={label}
@@ -80,9 +81,21 @@ function Start() {
         <IonRefresher slot="fixed" onIonRefresh={refresh}>
           <IonRefresherContent />
         </IonRefresher>
-        <Header>
+        
+        
           <TabGroup as='div' className=' grid grid-cols-1 grid-rows-12 h-full w-full '>
-            <div className="col-span-1 row-span-11">
+          <IonHeader className="!bg-white border-none  !shadow-none col-span-1 row-span-1">
+          <div className="!bg-white p-2 flex ">
+           
+                          <img
+                src="assets/images/bjimage.png"
+                alt="logo"
+                className="h-12 w-fit px-5 mx-auto"
+              />
+            
+          </div>
+        </IonHeader>
+            <div className="col-span-1 row-span-10">
             {renderTabs()}
             </div>
             <div className="col-span-1 row-span-1">
@@ -91,7 +104,7 @@ function Start() {
           
           
           </TabGroup>
-        </Header>
+        
       </IonContent>
     </IonPage>
   );
