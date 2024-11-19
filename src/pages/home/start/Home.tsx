@@ -39,7 +39,13 @@ function Start() {
   const renderTabs = () => (
     <Tab.Panels className="h-full mx-auto flex flex-1 overflow-y-auto shadow-t-xl">
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
-         <Home formData={data} />
+      <>
+                      {user && user?.role === "costumer" ? (
+                        <Customer />
+                      ) : (
+                        <Home formData={data} />
+                      )}
+                    </>
       </Tab.Panel>
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
         <Room formData={data} />
