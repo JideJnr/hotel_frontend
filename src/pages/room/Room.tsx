@@ -12,6 +12,7 @@ import { filterData } from "../../utils/filterData";
 const Room = ({ formData }: DataProps) => {
   const { user, room, loading, error } = useDataContext();
 
+  console.log(room);
   const filteredRoom =
     room && formData?.value ? filterData(room, formData.value) : room;
 
@@ -120,12 +121,7 @@ const Room = ({ formData }: DataProps) => {
 
           <div>
 
-            {user && user.role !== "costumer" &&
             
-            <div className="w-full flex  p-2 bg-[#f5f5f5] ">
-              <button onClick={() => setCreateModal(true)} className="ml-auto bg-orange-400 px-2 py-1 rounded-md text-white">Add New</button>
-            </div>
-            }
             <Table
               columns={columns}
               data={filteredRoom}
@@ -133,7 +129,14 @@ const Room = ({ formData }: DataProps) => {
                 setSelectedData(row);
                 setRoomModal(true);
               }}
-            />
+            >
+              {user && user.role === "admin" &&
+            
+            <div className="w-full flex  p-2 bg-[#f5f5f5] ">
+              <button onClick={() => setCreateModal(true)} className="ml-auto bg-orange-400 px-2 py-1 rounded-md text-white">Add New</button>
+            </div>
+            }
+            </Table>
           </div>
 
         </div>

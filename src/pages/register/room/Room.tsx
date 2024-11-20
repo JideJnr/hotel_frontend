@@ -61,13 +61,35 @@ const Room = ({ setFormData: setModal }: FormProps) => {
   const submit = async () => {
     try {
       const success = await handleSubmit();
+  
       if (success) {
         setModal(false);
+      } else {
+        // Handle case when `handleSubmit` returns a failure response
+        toast.error("Submission failed. Please try again.");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error creating room:", err);
+  
+      // Check for Firebase error codes or general error handling
+      if (err.code) {
+        switch (err.code) {
+          case "permission-denied":
+            toast.error("You don't have permission to perform this action.");
+            break;
+          case "already-exists":
+            toast.error("A room with this information already exists.");
+            break;
+          default:
+            toast.error(`An error occurred: ${err.message}`);
+        }
+      } else {
+        // Fallback for unexpected errors
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     }
   };
+  
 
   return (
     <div className=" p-4 gap-4 flex flex-col">

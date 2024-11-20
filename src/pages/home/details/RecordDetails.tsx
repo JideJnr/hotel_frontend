@@ -72,9 +72,7 @@ const RecordDetails = ({
     }
   };
 
-  if (!user || !user.location) {
-    return <div>Loading user...</div>;
-  }
+  
 
   if (!data) {
     return (

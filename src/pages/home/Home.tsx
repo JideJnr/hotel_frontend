@@ -36,7 +36,7 @@ const Home = ({ formData }: DataProps) => {
     const formattedPrice = formatNaira(amount);
     return formattedPrice;
   }
-
+ console.log(record)
   const columns: Column[] = useMemo(
     () => [
       {
@@ -57,7 +57,7 @@ const Home = ({ formData }: DataProps) => {
         Header: "Room",
         accessor: "room",
         Cell: ({ value }: { value: string }) => (
-          <p className="flex gap-4">
+          <p className="flex gap-1">
             Room
             <span>{value}</span>
           </p>
@@ -69,15 +69,20 @@ const Home = ({ formData }: DataProps) => {
 
         Cell: ({ value }: { value: string }) => (
           <div
-            className={`flex gap-x-1.5 h-fit w-fit mx-auto rounded-full p-1 lg:px-2 bg-yellow-400/20`}
+            className={`flex gap-x-1.5 h-fit w-fit mx-auto  rounded-full p-1 lg:px-2 bg-yellow-400/20`}
           >
             <p className="text-xs leading-5 text-gray-500 hidden lg:flex">
               <>{value}</>
             </p>
 
+            <div className="h-full flex w-fit">
+
+         
+
             <div
-              className={`  h-1.5 w-1.5 rounded-full bg-yellow-400 flex  `}
+              className={`  h-1.5 w-1.5 rounded-full bg-yellow-400 flex  my-auto  `}
             ></div>
+               </div>
           </div>
         ),
       },
@@ -91,16 +96,16 @@ const Home = ({ formData }: DataProps) => {
       
       {
         Header: "Expenses",
-        accessor: "room",
+        accessor: "expenseType",
         
       },
       {
         Header: "Amount",
-        accessor: "amount",
+        accessor: "price",
 
         Cell: ({ value }: { value: string }) => (
          
-            <p className="text-xs leading-5 text-gray-500 hidden lg:flex">
+            <p className="text-xs leading-5 text-gray-500">
               <>{value}</>
             </p>
 
@@ -137,15 +142,17 @@ const Home = ({ formData }: DataProps) => {
 
   useEffect(() => {
     const sum = filteredExpenses.reduce((accumulator, item) => {
-      return accumulator + item.amount;
+      return accumulator + item.price;
     }, 0);
 
     setTotalExpenses(sum);
   }, [filteredExpenses, user]);
 
+  console.log(totalExpenses)
+
   return (
     <IonContent>
-      <div className="flex flex-col gap-6 px-4 py-8">
+      <div className="flex flex-col gap-8 px-4 py-8">
         {roomModal && <Room setFormData={setRoomModal} />}
         {expensesModal && <Expenses setFormData={setExpensesModal} />}
         {customerModal && <Customer setFormData={setCustomerModal} />}
@@ -267,7 +274,7 @@ const Home = ({ formData }: DataProps) => {
               <>
                 {expenses && expenses.length > 0 && (
                   <div>
-                    <Table columns={expensesColumns} data={record} />
+                    <Table columns={expensesColumns} data={expenses} />
                   </div>
                 )}
               </>

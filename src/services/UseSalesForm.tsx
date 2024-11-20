@@ -30,7 +30,7 @@ const useSalesForm = ({ formData }: UseSalesOperationProps) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const recordPath = "roomRecord";
-  const roomPath = `hotel/${user?.location}/rooms/${formData.roomNumber?.value}/roomHistory`;
+  const roomPath = `hotelRooms/${formData.roomNumber?.value}/roomHistory`;
   const activityPath = "activitiesRecord";
   const clientPath = `clientRecord/${formData.customer?.value}/lodgeHistory`;
   const { reloadData } = useDataContext();
@@ -64,16 +64,16 @@ const useSalesForm = ({ formData }: UseSalesOperationProps) => {
         room: formData.roomNumber.value,
         orderMethod: formData.orderMethod.value,
         hostID: user?.id,
-        hostName: user?.name,
-        location: user?.location,
+        hostName: user?.fullName,
         paymentMethod: formData.paymentMethod.value,
         time: serverTimestamp(),
         date: todayDate,
-
         status: "active",
         details: "Sold Room",
         price: parseInt(formData.price || "0", 10),
       };
+
+
       const docRef = await addDoc(collection(db, recordPath), salesData);
 
       const docId = docRef.id;
@@ -84,10 +84,11 @@ const useSalesForm = ({ formData }: UseSalesOperationProps) => {
 
       const roomDocRef = doc(
         db,
-        `hotel/${user?.location}/rooms/${formData.roomNumber.value}`,
+        `hotelRooms/${formData.roomNumber.value}`,
       );
       const clientDocRef = doc(db, `clientRecord/${formData.customer.value}`);
 
+    
       await updateDoc(roomDocRef, {
         status: "active",
         currentGuest: {

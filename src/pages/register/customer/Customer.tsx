@@ -7,6 +7,7 @@ import { getCurrentDate, getYearMonth } from "../../../function/getCurrentDate";
 import { addDoc, collection, doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../../../firebase";
 import { toast } from "react-toastify";
+import { useIonRouter } from "@ionic/react";
 
 const Customer = ({ setFormData: setModal }: FormProps) => {
   const { user } = useDataContext();
@@ -23,7 +24,7 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
   const [loading, setLoading] = useState(false);
   const path = "clientRecord";
   const activityPath = "activitiesRecord";
-
+  const router = useIonRouter();
   const todayDate = getCurrentDate();
   const month = getYearMonth();
 
@@ -31,39 +32,32 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
-
+  
     if (!formData.fullName || !formData.address || !formData.phone) {
       console.log("Input all fields!!!");
       return;
     }
-
-    if (!user || !user.location) {
-     
-      console.log("User location is undefined");
-      return;
-    }
-
+  
     try {
       setLoading(true);
-
+  
       const clientData = {
         name: formData.fullName,
         phone: formData.phone,
         address: formData.address,
         createdAt: Timestamp.fromDate(new Date()),
-        location: user.location,
-        hostID: user.id,
-        host: `${user.firstName} ${user.lastName}`,
+        hostID: user?.id || undefined,
+        host: user?.fullName || undefined,
         date: todayDate,
         month: month,
         details: "Created User",
         status: "inactive",
       };
-
+  
       // Store the client data
       await setDoc(doc(db, path, formData.phone), clientData);
       await addDoc(collection(db, activityPath), clientData);
-
+  
       // Reset form data after submission
       setFormData({
         fullName: undefined,
@@ -71,17 +65,36 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
         address: undefined,
         note: undefined,
       });
-
+  
       // Clear error state and notify success
       setError(null);
-      window.alert("Profile created successfully!");
-      window.location.reload(); // Only if you want a full reload
-    } catch (err) {
+      toast.success("Profile created successfully!");
+    } catch (err: any) {
+      // Handle Firebase error
       console.error("Error during form submission:", err);
+  
+      if (err.code) {
+        // Handle specific Firebase error codes
+        switch (err.code) {
+          case "permission-denied":
+            toast.error("You don't have permission to perform this action.");
+            break;
+          case "already-exists":
+            toast.error("A profile with this phone number already exists.");
+            break;
+          default:
+            toast.error(`An error occurred: ${err.message}`);
+        }
+      } else {
+        // Handle unexpected errors
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     } finally {
       setLoading(false);
+      setModal(false);
     }
   };
+  
 
   const handleNext = () => {
     const errors = [];
@@ -97,7 +110,8 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
     }
 
     if (errors.length > 0) {
-      console.log(errors.join(", "));
+      toast.error(errors.join(", ") );
+
     } else {
       setModalVisible(true);
     }
@@ -128,6 +142,7 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
           <Button
             text="Previous"
             className=" !bg-gray-400"
+
             onClick={() => {
               setModalVisible(false);
             }}
@@ -143,7 +158,7 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
         )}
 
         {isModalVisible ? (
-          <Button text="Submit" className="" onClick={handleSubmit} />
+          <Button text="Submit" className="" onClick={handleSubmit}  loading={loading} loadingText="Submitting..."/>
         ) : (
           <Button text="Next" className="" onClick={handleNext} />
         )}

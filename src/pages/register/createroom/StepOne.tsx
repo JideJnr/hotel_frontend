@@ -57,17 +57,8 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
         required
       />
 
-      <p>Select Room Type</p>
-      <CustomSelect
-        name="roomType"
-        options={roomTypeOptions}
-        onChange={(option) => handleSelectChange("roomType", option)}
-        value={formData.roomType?.value || null}
-        placeholder="Select Room Type"
-      />
 
-      {(formData.roomType?.value === "shortRest" ||
-        formData.roomType?.value === "all") && (
+   
         <>
           <p>Short Rest Price</p>
           <InputBox
@@ -80,11 +71,9 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
             required
           />
         </>
-      )}
+      
 
-      {(formData.roomType?.value === "lodge" ||
-        formData.roomType?.value === "all") && (
-        <>
+      <>
           <p>Lodge Price</p>
           <InputBox
             id="lodgePrice"
@@ -96,7 +85,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
             required
           />
         </>
-      )}
+      
     </div>
   );
 };

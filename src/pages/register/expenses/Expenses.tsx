@@ -26,14 +26,22 @@ const Expenses = ({ setFormData: setModal }: FormProps) => {
     formData,
   });
 
+  console.log(formData)
   const submit = async () => {
     try {
       const success = await handleSubmit();
+  
       if (success) {
+        // Close the modal if submission is successful
         setModal(false);
+        
+      } else {
+     
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error creating room:", err);
+  
+      
     }
   };
 

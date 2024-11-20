@@ -8,12 +8,14 @@ const StepTwo = ({ formData, setFormData }: FormProps) => {
   return (
     <div className="flex flex-col gap-4 bg-white h-fit">
       <p>Hotel</p>
-      <p>{formData.hotel?.label || "- "}</p>{" "}
+      <p>{formData.location?.label || "- "}</p>{" "}
       {/* Optional chaining to prevent errors */}
       <p>Room Number</p>
       <p>{formData.roomNumber || "- "}</p>
-      <p>price</p>
-      <p>{formData.price || "- "}</p>
+      <p>Shortrest price</p>
+      <p>{formData.shortRestPrice || "- "}</p>
+      <p>Lodge price</p>
+      <p>{formData.lodgePrice || "- "}</p>
     </div>
   );
 };

@@ -1,17 +1,22 @@
 import { SimpleFormProps } from "../customer/StepTwo";
 
 const StepTwo = ({ formData }: SimpleFormProps) => {
+  console.log(formData)
   return (
     <div className="flex flex-col gap-4 bg-white h-fit  ">
-      <p>Select Member2</p>
+      <p>Expenses Type</p>
+      <p>
+        {formData.expenseType.label}
+      </p>
 
-      <p>Select Room</p>
+      <p>Amount</p>
 
-      <p>Select Order Method</p>
+      <p>15000</p>
 
-      <p>Select Payment Method</p>
+      
 
       <p>Note</p>
+      <p>{formData.note}</p>
     </div>
   );
 };

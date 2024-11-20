@@ -18,7 +18,7 @@ export interface Column {
   Cell?: (props: { value: any; row: any }) => JSX.Element | string;
 }
 
-const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text }) => {
+const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text, children }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const totalPages = Math.ceil((data?.length || 0) / 5);
@@ -42,17 +42,21 @@ const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text }) =
   const handleLastPage = () => setCurrentPage(totalPages);
 
   return (
-    <div className="bg-[#f4f5f8]  !rounded-xl border flex flex-col w-full ">
-      <table className=" whitespace-nowrap   min-w-full rounded-xl  border w-full bg-primary !p-0">
+      <table className="min-w-full flex flex-col w-full divide-y divide-gray-200 overflow-x-auto bg-gray-50 rounded-md">
+        {children &&
+          <div>
+            {children}
+          
+        </div>}
         {data !== null && !loading && data !== undefined && (
-          <thead className="bg-[#f5f5f5] p-4 ">
-            <tr className="border-b border-default p-2 ">
+          <thead className=" ">
+            <tr className="grid grid-flow-col w-full p-2">
               {columns &&
                 columns.map((column, index) => (
                   <th
                     key={index}
                     scope="col"
-                    className="   text-black text-left  p-2"
+                    className="   p-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     {column.Header}
                   </th>
@@ -60,7 +64,7 @@ const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text }) =
             </tr>
           </thead>
         )}
-        <tbody className="dark:bg-[#1A1C1E] bg-[#f4f5f8] !m-0 !rounded-none w-full h-full ">
+        <tbody className="dark:bg-[#1A1C1E] bg-white divide-y divide-gray-200 flex flex-col w-full min-w-full h-full ">
           {loading ? (
             <div className="h-full p-10 align-center w-fit mx-auto flex">
               <span className="loading mr-5">
@@ -74,12 +78,12 @@ const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text }) =
                 paginatedData.map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    className="border-b border-default border text-center cursor-pointer hover:bg-gray-100 p-2"
+                    className="border-b border-default border text-center cursor-pointer hover:bg-gray-100 py-2 grid grid-flow-col"
                     onClick={() => onClick && onClick(row)}
                   >
                     {columns &&
                       columns.map((column, colIndex) => (
-                        <td key={colIndex} className=" px-2 py-4  text-left ">
+                        <td key={colIndex} className=" p-2  text-left ">
                           {column.Cell
                             ? column.Cell({
                                 value: row[column.accessor],
@@ -103,10 +107,8 @@ const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text }) =
             </>
           )}
         </tbody>
-      </table>
-
-      {data && data?.length > 5 && !loading && (
-        <div className="block sm:flex items-center px-2 py-4 justify-between ">
+        {data && data?.length > 5 && !loading && (
+        <div className="flex w-full min-w-full items-center px-2 py-4 justify-between ">
           <div className="ml-2 mb-2 sm:mb-0">
             Page{" "}
             <strong>
@@ -147,7 +149,10 @@ const Table: React.FC<TableProps> = ({ columns, data, onClick, loading,text }) =
           </div>
         </div>
       )}
-    </div>
+      </table>
+
+   
+    
   );
 };
 

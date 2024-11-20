@@ -36,7 +36,7 @@ const useExpensesFormSubmit = ({ formData }: UseExpensesOperationProps) => {
   const handleSubmit = async (): Promise<boolean> => {
     setError(null);
 
-    if (!formData.expenseType || !formData.note || !formData.amount) {
+    if (!formData.expenseType  || !formData.amount) {
       handleError("Please fill in all required fields.");
       return false;
     }
@@ -46,9 +46,8 @@ const useExpensesFormSubmit = ({ formData }: UseExpensesOperationProps) => {
 
       const salesData = {
         expenseType: formData.expenseType.value,
-        hostID: user?.id,
-        hostName: user?.name,
-        location: user?.location,
+        hostID: user?.id||undefined,
+        hostName: user?.fullName||undefined,
         time: serverTimestamp(),
         date: todayDate,
         details: "Ran Expenses",
@@ -56,10 +55,10 @@ const useExpensesFormSubmit = ({ formData }: UseExpensesOperationProps) => {
       };
 
       await addDoc(collection(db, expensesPath), salesData);
-
       await addDoc(collection(db, activityPath), salesData);
 
       await reloadData();
+
       return true;
     } catch (error) {
       handleError("Error during expenses submit. Please try again.");

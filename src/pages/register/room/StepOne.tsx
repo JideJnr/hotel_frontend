@@ -72,6 +72,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
 
   const activeRooms = room.filter((item) => item.status === "available");
 
+
   return (
     <div className="flex flex-col gap-4 bg-white h-fit p-4 ">
       {user && user.role !== "costumer" && (
@@ -81,7 +82,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
             name="customer"
             options={clients.map((client) => ({
               value: client.id,
-              label: client.name,
+              label: client.fullName,
             }))}
             onChange={(option) => handleSelectChange("customer", option)}
             value={formData.customer?.value || null}
@@ -95,7 +96,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
         name="roomNumber"
         options={activeRooms.map((room) => ({
           value: room.id,
-          label: `Room ${room.id}`,
+          label: `Room ${room.roomNumber}`,
         }))}
         onChange={(option) => handleSelectChange("roomNumber", option)}
         value={formData.roomNumber?.value || null}

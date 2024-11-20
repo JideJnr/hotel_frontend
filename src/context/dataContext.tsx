@@ -131,7 +131,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (user && user.id) {
-      const roomPath = `hotel/${user.location}/rooms`;
+      const roomPath = `hotelRoom`;
 
       if (user.role !== "customer") {
         fetchData(clientsPath, setClients);
@@ -168,7 +168,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         await fetchData(clientsPath, setClients);
       }
 
-      const roomPath = `hotel/${user.location}/rooms`;
+      const roomPath = `hotelRooms`;
       await fetchData(roomPath, setRoom);
 
       await fetchData(recordPath, setRecord, [
