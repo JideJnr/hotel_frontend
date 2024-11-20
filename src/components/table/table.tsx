@@ -102,7 +102,7 @@ const Table: React.FC<TableProps> = ({
               ))
             ) : (
               <tr>
-                <td colSpan={1000} className="text-center py-4">
+                <td colSpan={1000} className="text-center py-4 w-full flex ">
                   <NoTask text={text || "empty"} />
                 </td>
               </tr>
@@ -118,7 +118,7 @@ const Table: React.FC<TableProps> = ({
               {currentPage} of {totalPages}
             </strong>
           </div>
-          <div className="sm:ms-auto float-right my-1 sm:my-0 flex">
+          <div className=" float-right my-1 sm:my-0 flex">
             <button
               className="btn-outline-light tablebutton me-2 mb-2 sm:mb-0"
               onClick={handleFirstPage}

@@ -67,7 +67,7 @@ const useCreateClientProfile = ({ formData }: SimpleFormProps) => {
 
     if (!formData.id) {
       setError("Error Please Sign Up Again");
-      
+
       return false;
     }
 
@@ -80,14 +80,14 @@ const useCreateClientProfile = ({ formData }: SimpleFormProps) => {
         phone: formData.phone,
         address: formData.address,
         access: formData.password,
-        location:formData.location.value,
+        location: formData.location.value,
         createdAt: Timestamp.fromDate(new Date()),
         date: todayDate,
         month: month,
         details: " User Created",
         status: "inactive",
         id: formData.id,
-        role: "customer",
+        role: "manager",
       };
 
       await setDoc(doc(db, path, formData.id), clientData);

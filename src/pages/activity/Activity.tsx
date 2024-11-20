@@ -9,7 +9,7 @@ const Activity = ({ formData }: DataProps) => {
   return (
     <ActivityProvider>
       <IonContent>
-        <div className="p-4 bg-white">
+        <div className="p-4  bg-gray-100 w-full h-full flexs  ">
           <div>
             {activities ? (
               <>

@@ -72,8 +72,10 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [error, setError] = useState<Error | null>(null);
 
   const expensesPath = "expensesRecord";
-  const clientsPath = "userRecord";
+  const clientsPath = "clientRecord";
   const recordPath = "roomRecord";
+  const roomPath = `hotelRooms`;
+
   const todayDate = getTodayDate();
 
   useEffect(() => {
@@ -132,15 +134,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (user && user.id) {
-      const roomPath = `hotelRoom`;
+      fetchData(clientsPath, setClients);
+      fetchData(roomPath, setRoom);
 
-      if (user.role !== "customer") {
-        fetchData(clientsPath, setClients);
-        fetchData(roomPath, setRoom);
-      } else {
-        setClients([]);
-        setRoom([]);
-      }
       if (user.role === "admin") {
         fetchData(recordPath, setRecord, [where("date", "==", todayDate)]);
         fetchData(expensesPath, setExpenses, [where("date", "==", todayDate)]);

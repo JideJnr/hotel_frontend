@@ -31,8 +31,8 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-white h-fit p-4">
-      <>
+    <div className="flex flex-col gap-4  w-full h-full p-4">
+      <div className="flex flex-col  gap-0">
         <p>Expenses Type</p>
         <CustomSelect
           name="expenseType"
@@ -41,9 +41,9 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
           value={formData.expenseType?.value || null}
           placeholder="Select an expense type"
         />
-      </>
+      </div>
 
-      <>
+      <div className="flex flex-col  gap-0">
         <p>Amount</p>
         <InputBox
           id="amount"
@@ -54,8 +54,8 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
           value={formData.amount || ""}
           required
         />
-      </>
-      <>
+      </div>
+      <div className="flex flex-col  gap-0">
         <p>Note</p>
         <textarea
           name="note"
@@ -63,7 +63,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
           placeholder="Enter the message"
           onChange={handleChange}
         ></textarea>
-      </>
+      </div>
     </div>
   );
 };

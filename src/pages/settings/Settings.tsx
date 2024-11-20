@@ -23,7 +23,7 @@ const Setting = ({ setFormData: setModal }: FormProps) => {
   };
 
   return (
-    <div className="w-full h-full max-w-screen max-h-screen flex ">
+    <div className="w-full h-full max-w-screen max-h-screen flex bg-gray-100  ">
       <div className="w-full h-fit pt-8 gap-8 flex flex-col overflow-x-none overflow-y-auto text-sm">
         <div className="flex-col flex gap-4  ">
           <div className="w-full flex ">

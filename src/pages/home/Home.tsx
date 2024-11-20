@@ -20,8 +20,8 @@ export interface DataProps {
 const Home = ({ formData }: DataProps) => {
   const { user, loading, error, record, expenses } = useDataContext();
 
-  if (loading) return <Suspence />;
-  if (error) return toast.error("Room Number is required.");
+  if (loading) return <p>loading...</p>;
+  if (error) return toast.error("error loading page.");
 
   const [totalEarning, setTotalEarning] = useState<number>(0);
   const [totalExpenses, setTotalExpenses] = useState<number>(0);
@@ -30,7 +30,7 @@ const Home = ({ formData }: DataProps) => {
     const formattedPrice = formatNaira(amount);
     return formattedPrice;
   }
-  console.log(record);
+
   const columns: Column[] = useMemo(
     () => [
       {
@@ -132,11 +132,11 @@ const Home = ({ formData }: DataProps) => {
     setTotalExpenses(sum);
   }, [filteredExpenses, user]);
 
-  console.log(totalExpenses);
+  console.log(record);
 
   return (
     <IonContent>
-      <div className="flex flex-col gap-8 px-4 py-8">
+      <div className="flex flex-col gap-12 px-4 py-8 bg-gray-100 w-full h-full">
         {roomModal && <Room setFormData={setRoomModal} />}
         {expensesModal && <Expenses setFormData={setExpensesModal} />}
         {customerModal && <Customer setFormData={setCustomerModal} />}
@@ -150,7 +150,7 @@ const Home = ({ formData }: DataProps) => {
           !customerModal &&
           !bookModal &&
           !recordModal && (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-6">
               <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit ">
                 <DashboardTile
                   label="Revenue"
@@ -169,70 +169,119 @@ const Home = ({ formData }: DataProps) => {
               {user && user?.role !== "admin" && (
                 <div className="grid grid-cols-4 gap-2 w-full  ">
                   <div
-                    className="flex flex-col items-center justify-center gap-1.5 text-center"
+                    className="flex flex-col gap-2"
                     onClick={() => {
                       setRoomModal(true);
                     }}
                   >
-                    <IonIcon
-                      src="assets/svgs/users.svg"
-                      className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-emerald-500"
-                    ></IonIcon>
-                    <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                      Room
-                    </span>
+                    <button
+                      type="button"
+                      className="text-white bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:focus:ring-emerald-800 shadow-lg shadow-emerald-500/50 dark:shadow-lg dark:shadow-emerald-800/80 font-medium  text-sm p-2 rounded-full text-center w-12 h-12 mx-auto "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 flex mx-auto"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819"
+                        />
+                      </svg>
+                    </button>
+                    <p className="mx-auto">Room</p>
                   </div>
 
                   <div
-                    className="flex flex-col items-center justify-center gap-1.5 text-center"
+                    className="flex flex-col gap-2"
                     onClick={() => {
                       setExpensesModal(true);
                     }}
                   >
-                    <IonIcon
-                      src="assets/svgs/users.svg"
-                      className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
-                    ></IonIcon>
-
-                    <span className="text-[12px] text-black font-medium leading-[20px] tracking-[-0.13px]">
-                      Expenses
-                    </span>
+                    <button
+                      type="button"
+                      className="text-white bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:focus:ring-emerald-800 shadow-lg shadow-emerald-500/50 dark:shadow-lg dark:shadow-emerald-800/80 font-medium  text-sm p-2 rounded-full text-center w-12 h-12 mx-auto "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 flex mx-auto"s
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819"
+                        />
+                      </svg>
+                    </button>
+                    <p className="mx-auto">Expenses</p>
                   </div>
-
                   <div
-                    className="flex flex-col items-center justify-center gap-1.5 text-center"
+                    className="flex flex-col gap-2"
                     onClick={() => {
                       setCustomerModal(true);
                     }}
                   >
-                    <IonIcon
-                      src="assets/svgs/credit-card.svg"
-                      className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
-                    ></IonIcon>
-                    <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                      Client
-                    </span>
+                    <button
+                      type="button"
+                      className="text-white bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:focus:ring-emerald-800 shadow-lg shadow-emerald-500/50 dark:shadow-lg dark:shadow-emerald-800/80 font-medium  text-sm p-2 rounded-full text-center w-12 h-12 mx-auto "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 flex mx-auto"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819"
+                        />
+                      </svg>
+                    </button>
+                    <p className="mx-auto">Customer</p>
                   </div>
-
                   <div
-                    className="flex flex-col items-center justify-center gap-1.5 text-center"
+                    className="flex flex-col gap-2"
                     onClick={() => {
                       setBookModal(true);
                     }}
                   >
-                    <IonIcon
-                      src="assets/svgs/user-plus.svg"
-                      className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
-                    ></IonIcon>
-                    <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                      Book
-                    </span>
+                    <button
+                      type="button"
+                      className="text-white bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:focus:ring-emerald-800 shadow-lg shadow-emerald-500/50 dark:shadow-lg dark:shadow-emerald-800/80 font-medium  text-sm p-2 rounded-full text-center w-12 h-12 mx-auto "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6 flex mx-auto"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819"
+                        />
+                      </svg>
+                    </button>
+                    <p className="mx-auto">Book</p>
                   </div>
                 </div>
               )}
 
               {filteredExpenses && filteredExpenses.length === 0 && (
-                <div className="flex items-center gap-3 p-3  rounded-lg bg-[#f4f5f8]">
+                <div className="flex items-center gap-3 p-3  rounded-lg bg-white">
                   <IonIcon src="assets/svgs/announce.svg"></IonIcon>
                   <div className="overflow-hidden whitespace-nowrap flex-1">
                     <div className="animate-marquee">

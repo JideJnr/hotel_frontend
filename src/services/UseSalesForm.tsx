@@ -61,7 +61,8 @@ const useSalesForm = ({ formData }: UseSalesOperationProps) => {
       const salesData = {
         customerId: formData.customer.value,
         customerName: formData.customer.label,
-        room: formData.roomNumber.value,
+        roomId: formData.roomNumber.value,
+        roomNumber: formData.roomNumber.label,
         orderMethod: formData.orderMethod.value,
         hostID: user?.id,
         hostName: user?.fullName,

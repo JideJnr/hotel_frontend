@@ -84,6 +84,8 @@ const Room = ({ setFormData: setModal }: FormProps) => {
     }
   };
 
+  console.log(formData);
+
   return (
     <div className=" p-4 gap-4 flex flex-col">
       {isModalVisible ? (

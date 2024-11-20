@@ -91,7 +91,6 @@ const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
     }
   };
 
-  
   return (
     <div className="p-4 gap-4 flex flex-col">
       {isModalVisible ? (

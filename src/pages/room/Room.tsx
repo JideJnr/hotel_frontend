@@ -12,7 +12,6 @@ import { filterData } from "../../utils/filterData";
 const Room = ({ formData }: DataProps) => {
   const { user, room, loading, error } = useDataContext();
 
-  console.log(room);
   const filteredRoom =
     room && formData?.value ? filterData(room, formData.value) : room;
 
@@ -68,7 +67,7 @@ const Room = ({ formData }: DataProps) => {
   const [createModal, setCreateModal] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
 
-  console.log(user?.role);
+  console.log(room);
   return (
     <IonContent>
       {roomModal && (
@@ -79,24 +78,18 @@ const Room = ({ formData }: DataProps) => {
       )}
 
       {!roomModal && !createModal && (
-        <div className="flex flex-col gap-4 px-4 py-8">
+        <div className="flex flex-col gap-4 px-4 py-8 bg-gray-100 w-full h-full">
           <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit ">
             <DashboardTile label="Room Available" unit={availableRoom.length} />
-            {user && user.role !== "costumer" && (
-              <>
-                <DashboardTile label="Room Active" unit={activeRoom.length} />
-                <DashboardTile
-                  label="Room Unavailable"
-                  unit={bookedRoom.length}
-                />
-              </>
-            )}
+
+            <DashboardTile label="Room Active" unit={activeRoom.length} />
+            <DashboardTile label="Room Unavailable" unit={bookedRoom.length} />
           </div>
 
           {activeRoom && activeRoom.length !== 0 && (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col ">
               <p>Active Rooms</p>
-              <div className="grid grid-cols-4 gap-2 w-full">
+              <div className="flex overflow-x-auto gap-2 w-full p-2">
                 {activeRoom.map((room) => (
                   <div
                     key={room.id}
@@ -106,14 +99,18 @@ const Room = ({ formData }: DataProps) => {
                       setRoomModal(true);
                     }}
                   >
-                    <IonIcon
-                      src="assets/svgs/users.svg"
-                      className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
-                    ></IonIcon>
-                    <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                      Room {room.id}
-                    </span>
+                    <button
+                      type="button"
+                      className="text-white bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:focus:ring-emerald-800 shadow-lg  dark:shadow-lg dark:shadow-emerald-800/80 font-medium  text-sm p-2 rounded-full text-center w-12 h-12 mx-auto "
+                    >
+                       <p className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
+                      {room.roomNumber}
+                    </p>
+                    </button>
+                   
                   </div>
+
+                  
                 ))}
               </div>
             </div>
