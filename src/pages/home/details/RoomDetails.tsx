@@ -68,7 +68,7 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
     }
   };
 
-  if (!user || !user.location) {
+  if (!user) {
     return <div>Loading user...</div>;
   }
 
@@ -85,7 +85,6 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
     );
   }
 
-  
   return (
     <>
       <div className="flex w-full">
@@ -117,63 +116,45 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
         </div>
 
         <div className="flex flex-col gap-4 px-4 py-8">
-      
-
-        {data && data.currentGuest && (
-          <>
-          <p>
-            Current Guest
-          </p>
-            <div className="w-full text-left">
-            
-             
+          {data && data.currentGuest && (
+            <>
+              <p>Current Guest</p>
+              <div className="w-full text-left">
                 <img />
                 <p>{data.currentGuest.name}</p>
-            
-            </div>
+              </div>
 
-            <div className="border-b border-dashed"></div>
+              <div className="border-b border-dashed"></div>
 
-            <p>
-              Code Status : Available for cleaning
-            </p> 
+              <p>Code Status : Available for cleaning</p>
 
-            <div className="border border-black px-4 py-2 rounded-md text-md font-semibold">
-
-<p className="text-center">
-Access Codes :
-  <span>
-    {' '}
-Agsgsba
-  </span>
-</p>
-
-</div>
-          </>
-        )}
-
- 
-
-        <div className="grid grid-cols-1 gap-2">
-          {data.status === "active" && (
-            <>
-              {user && user.role !== "admin" ? (
-                <Button
-                  text="Check Out"
-                  className="w-full"
-                  onClick={handleCheckout}
-                />
-              ) : (
-                <Button
-                  text="Ask To Check Out"
-                  className="w-full"
-                  onClick={handleCheckout}
-                />
-              )}
+              <div className="border border-black px-4 py-2 rounded-md text-md font-semibold">
+                <p className="text-center">
+                  Access Codes :<span> Agsgsba</span>
+                </p>
+              </div>
             </>
           )}
-        </div>
 
+          <div className="grid grid-cols-1 gap-2">
+            {data.status === "active" && (
+              <>
+                {user && user.role !== "admin" ? (
+                  <Button
+                    text="Check Out"
+                    className="w-full"
+                    onClick={handleCheckout}
+                  />
+                ) : (
+                  <Button
+                    text="Ask To Check Out"
+                    className="w-full"
+                    onClick={handleCheckout}
+                  />
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>

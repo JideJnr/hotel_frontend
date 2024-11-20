@@ -28,9 +28,9 @@ const App: React.FC = () => (
     <AuthProvider>
       <DataProvider>
         <ActivityProvider>
-        <IonReactRouter>
-          <Routes />
-        </IonReactRouter>
+          <IonReactRouter>
+            <Routes />
+          </IonReactRouter>
         </ActivityProvider>
       </DataProvider>
     </AuthProvider>

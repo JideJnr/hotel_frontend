@@ -4,15 +4,7 @@ import { auth } from "../../../../firebase";
 import Button from "../../../components/button/button";
 
 const Complete = () => {
-    
-  return (
-    
-    <div>
-        Profile Created Successfully
+  return <div>Profile Created Successfully</div>;
+};
 
-        
-    </div>
-  )
-}
-
-export default Complete
+export default Complete;

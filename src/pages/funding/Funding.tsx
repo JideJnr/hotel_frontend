@@ -45,7 +45,7 @@ const Funding = () => {
       await reloadData();
     } catch (error) {
       console.error("Error submitting data: ");
-      setError( "Error submitting data. Please try again.");
+      setError("Error submitting data. Please try again.");
     } finally {
       setLoading(false);
     }

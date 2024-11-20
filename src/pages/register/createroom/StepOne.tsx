@@ -29,12 +29,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
     });
   };
 
-  const roomTypeOptions = [
-    { value: "all", label: "All" },
-    { value: "shortRest", label: "Short Rest" },
-    { value: "lodge", label: "Lodge" },
-  ];
-
+ 
   return (
     <div className="flex flex-col gap-4 bg-white h-fit p-4">
       <p>Select Hotel</p>

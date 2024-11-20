@@ -24,7 +24,6 @@ const Book = ({ setFormData: setModal }: FormProps) => {
     bookingInstruction: "",
     price: 0,
   });
-  
 
   const { user } = useDataContext();
   const todayDate = getCurrentDate();
@@ -49,18 +48,18 @@ const Book = ({ setFormData: setModal }: FormProps) => {
 
       setLoading(true);
 
-        const salesData = {
-          customerId: formData.customer?.value,
-          customerName: formData.customer?.label,
-          room: formData.roomNumber?.value,
-          order: formData.orderMethod?.value,
-          hostID: user?.id,
-          location: user?.location,
-          method: formData.orderMethod?.value,
-          date: todayDate,
-          month: month,
-          price: formData.price,
-        };
+      const salesData = {
+        customerId: formData.customer?.value,
+        customerName: formData.customer?.label,
+        room: formData.roomNumber?.value,
+        order: formData.orderMethod?.value,
+        hostID: user?.id,
+        location: user?.location,
+        method: formData.orderMethod?.value,
+        date: todayDate,
+        month: month,
+        price: formData.price,
+      };
 
       const recordPath = "roomRecord";
       const roomPath = `hotel/${user?.location}/rooms/${formData.roomNumber?.value}/roomHistory`;

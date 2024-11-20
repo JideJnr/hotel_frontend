@@ -33,23 +33,17 @@ const Room = ({ setFormData: setModal }: FormProps) => {
     const errors = [];
 
     if (!formData.customer) {
-
-      toast.error("Full Name is required." );
+      toast.error("Full Name is required.");
     }
     if (!formData.roomNumber) {
-
-      toast.error("Room Number is required." );
+      toast.error("Room Number is required.");
     }
     if (!formData.orderMethod) {
-
-      toast.error("Address is required." );
+      toast.error("Address is required.");
     }
     if (!formData.paymentMethod) {
-      
-      toast.error("Payment Method is required." );
-    }
-
-     else {
+      toast.error("Payment Method is required.");
+    } else {
       setModalVisible(true);
     }
   };
@@ -61,7 +55,7 @@ const Room = ({ setFormData: setModal }: FormProps) => {
   const submit = async () => {
     try {
       const success = await handleSubmit();
-  
+
       if (success) {
         setModal(false);
       } else {
@@ -70,7 +64,7 @@ const Room = ({ setFormData: setModal }: FormProps) => {
       }
     } catch (err: any) {
       console.error("Error creating room:", err);
-  
+
       // Check for Firebase error codes or general error handling
       if (err.code) {
         switch (err.code) {
@@ -89,7 +83,6 @@ const Room = ({ setFormData: setModal }: FormProps) => {
       }
     }
   };
-  
 
   return (
     <div className=" p-4 gap-4 flex flex-col">

@@ -73,7 +73,6 @@ const useSalesForm = ({ formData }: UseSalesOperationProps) => {
         price: parseInt(formData.price || "0", 10),
       };
 
-
       const docRef = await addDoc(collection(db, recordPath), salesData);
 
       const docId = docRef.id;
@@ -82,13 +81,9 @@ const useSalesForm = ({ formData }: UseSalesOperationProps) => {
       await addDoc(collection(db, clientPath), salesData);
       await addDoc(collection(db, activityPath), salesData);
 
-      const roomDocRef = doc(
-        db,
-        `hotelRooms/${formData.roomNumber.value}`,
-      );
+      const roomDocRef = doc(db, `hotelRooms/${formData.roomNumber.value}`);
       const clientDocRef = doc(db, `clientRecord/${formData.customer.value}`);
 
-    
       await updateDoc(roomDocRef, {
         status: "active",
         currentGuest: {

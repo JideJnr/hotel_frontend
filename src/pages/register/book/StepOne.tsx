@@ -101,7 +101,6 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
             <div className="input-group-text text-gray-500">
               <i className="ri-calendar-line"></i>
             </div>
-            
           </div>
         </div>
       ) : null}

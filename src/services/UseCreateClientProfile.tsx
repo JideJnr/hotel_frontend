@@ -7,15 +7,12 @@ import { toast } from "react-toastify";
 import { AuthError, createUserWithEmailAndPassword } from "firebase/auth";
 import { SimpleFormProps } from "../pages/register/customer/StepTwo";
 
-const useCreateClientProfile = ({formData}:SimpleFormProps) => {
-
+const useCreateClientProfile = ({ formData }: SimpleFormProps) => {
   const { user } = useDataContext();
-  
+
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any>([]);
-
-  
 
   const todayDate = getCurrentDate();
   const month = getYearMonth();
@@ -30,40 +27,47 @@ const useCreateClientProfile = ({formData}:SimpleFormProps) => {
   };
 
   const handleSignup = async (): Promise<boolean> => {
-
     setError(null);
 
     const { email, password, confirmPassword } = formData;
 
-   
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return false;
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      setData(userCredential)
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      setData(userCredential);
       return true; // Indicate success
-   
     } catch (error: unknown) {
       const firebaseError = error as AuthError;
       handleError(firebaseError.message);
-      return false; 
+      return false;
     }
   };
 
   const createClientProfile = async (): Promise<boolean> => {
     setError(null);
 
-    if (!formData.fullName || !formData.email || !formData.address || !formData.phone) {
+    if (
+      !formData.fullName ||
+      !formData.email ||
+      !formData.address ||
+      !formData.phone ||
+      !formData.location
+    ) {
       handleError("Please fill in all required fields.");
       return false;
     }
 
-    if (!formData.id ) {
-      setError("User location is required.");
-      console.log("User location is undefined");
+    if (!formData.id) {
+      setError("Error Please Sign Up Again");
+      
       return false;
     }
 
@@ -73,16 +77,17 @@ const useCreateClientProfile = ({formData}:SimpleFormProps) => {
       const clientData = {
         fullName: formData.fullName,
         email: formData.email,
-        phone:formData.phone,
-        address:formData.address,
-        access:formData.password,
+        phone: formData.phone,
+        address: formData.address,
+        access: formData.password,
+        location:formData.location.value,
         createdAt: Timestamp.fromDate(new Date()),
         date: todayDate,
         month: month,
         details: " User Created",
         status: "inactive",
-        id:formData.id,
-        role: 'customer',
+        id: formData.id,
+        role: "customer",
       };
 
       await setDoc(doc(db, path, formData.id), clientData);
@@ -91,7 +96,6 @@ const useCreateClientProfile = ({formData}:SimpleFormProps) => {
       setError(null);
       toast.success("User profile created successfully!");
       return true; // Indicate success
-   
     } catch (err) {
       console.error("Error during form submission:", err);
       setError("Error during form submission. Please try again.");
@@ -102,12 +106,11 @@ const useCreateClientProfile = ({formData}:SimpleFormProps) => {
   };
 
   return {
-  
     error,
     loading,
     createClientProfile,
     handleSignup,
-    data
+    data,
   };
 };
 

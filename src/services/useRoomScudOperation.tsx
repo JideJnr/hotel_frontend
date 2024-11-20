@@ -60,15 +60,15 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
         status: "available",
       };
 
-      console.log(roomData)
-      console.log(path)
+      console.log(roomData);
+      console.log(path);
 
       await addDoc(collection(db, activityPath), roomData);
       await addDoc(collection(db, path), roomData);
 
       toast.success("Room profile created successfully!");
       resetRoom();
-      return true; 
+      return true;
     } catch (err) {
       console.error("Error during room creation:", err);
       handleError("Error during room creation. Please try again.");
@@ -77,9 +77,6 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
       setLoading(false);
     }
   };
-
-
-  
 
   const deleteRoomProfile = async (deleteData: FormData) => {
     setError(null);
@@ -115,7 +112,7 @@ const useRoomScudOperation = ({ formData }: UseRoomScudOperationProps) => {
     error,
     loading,
     createRoomProfile,
- 
+
     deleteRoomProfile,
   };
 };

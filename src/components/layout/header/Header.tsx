@@ -23,10 +23,8 @@ const Header: React.FC<HeaderProps> = ({ children, backAction }) => {
             </div>
           </div>
         </IonHeader>
-       
 
-
-        <IonContent >{children}</IonContent>
+        <IonContent>{children}</IonContent>
       </IonPage>
     </>
   );

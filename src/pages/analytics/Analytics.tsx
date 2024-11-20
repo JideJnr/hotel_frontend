@@ -99,7 +99,6 @@ const Analytics: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-
   const [totalEarning, setTotalEarning] = useState<number>(0);
   const [totalExpenses, setTotalExpenses] = useState<number>(0);
 
@@ -108,7 +107,7 @@ const Analytics: React.FC = () => {
     return formattedPrice;
   }
 
-  const {user} = useDataContext();
+  const { user } = useDataContext();
   return (
     <Header backAction={true}>
       <div className="mx-auto w-full divide-y">
@@ -151,7 +150,6 @@ const Analytics: React.FC = () => {
                     text="Generate"
                     loading={loading}
                     loadingText="Generating"
-
                   />
                 </div>
               </DisclosurePanel>

@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { useEffect, useMemo, useState } from "react";
 import { IonContent, IonIcon } from "@ionic/react";
 import DashboardTile from "../../components/dashboardtiles/DashboardTiles";
@@ -26,8 +20,8 @@ export interface DataProps {
 const Home = ({ formData }: DataProps) => {
   const { user, loading, error, record, expenses } = useDataContext();
 
-  if (loading) return <Suspence/>;
-  if (error) return   toast.error("Room Number is required." );;
+  if (loading) return <Suspence />;
+  if (error) return toast.error("Room Number is required.");
 
   const [totalEarning, setTotalEarning] = useState<number>(0);
   const [totalExpenses, setTotalExpenses] = useState<number>(0);
@@ -36,7 +30,7 @@ const Home = ({ formData }: DataProps) => {
     const formattedPrice = formatNaira(amount);
     return formattedPrice;
   }
- console.log(record)
+  console.log(record);
   const columns: Column[] = useMemo(
     () => [
       {
@@ -76,13 +70,10 @@ const Home = ({ formData }: DataProps) => {
             </p>
 
             <div className="h-full flex w-fit">
-
-         
-
-            <div
-              className={`  h-1.5 w-1.5 rounded-full bg-yellow-400 flex  my-auto  `}
-            ></div>
-               </div>
+              <div
+                className={`  h-1.5 w-1.5 rounded-full bg-yellow-400 flex  my-auto  `}
+              ></div>
+            </div>
           </div>
         ),
       },
@@ -90,27 +81,20 @@ const Home = ({ formData }: DataProps) => {
     [],
   );
 
-  
   const expensesColumns: Column[] = useMemo(
     () => [
-      
       {
         Header: "Expenses",
         accessor: "expenseType",
-        
       },
       {
         Header: "Amount",
         accessor: "price",
 
         Cell: ({ value }: { value: string }) => (
-         
-            <p className="text-xs leading-5 text-gray-500">
-              <>{value}</>
-            </p>
-
-           
-         
+          <p className="text-xs leading-5 text-gray-500">
+            <>{value}</>
+          </p>
         ),
       },
     ],
@@ -148,7 +132,7 @@ const Home = ({ formData }: DataProps) => {
     setTotalExpenses(sum);
   }, [filteredExpenses, user]);
 
-  console.log(totalExpenses)
+  console.log(totalExpenses);
 
   return (
     <IonContent>
@@ -180,7 +164,7 @@ const Home = ({ formData }: DataProps) => {
                   label="Room Sold"
                   unit={filteredRecord?.length}
                 />
-              </div>  
+              </div>
 
               {user && user?.role !== "admin" && (
                 <div className="grid grid-cols-4 gap-2 w-full  ">

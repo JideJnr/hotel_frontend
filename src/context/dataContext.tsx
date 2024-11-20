@@ -81,7 +81,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
       if (currentUser) {
         try {
           setLoading(true);
-          const userDoc = await getDoc(doc(db, `userRecord/${currentUser.uid}`));
+          const userDoc = await getDoc(
+            doc(db, `userRecord/${currentUser.uid}`),
+          );
           if (userDoc.exists()) {
             setUser({ id: currentUser.uid, ...userDoc.data() } as User);
             await reloadData();
@@ -98,15 +100,14 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         setUser(null);
       }
     });
-  
+
     return () => unsubscribe();
   }, []);
-  
 
   const fetchData = async (
     path: string,
     setDataFunction: React.Dispatch<React.SetStateAction<any[]>>,
-    constraints: QueryConstraint[] = []
+    constraints: QueryConstraint[] = [],
   ) => {
     try {
       setLoading(true);

@@ -48,7 +48,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 
   
   const [isLoading, setIsLoading] = useState(false);
-  console.log(currentStepIndex)
+  
 
   const handleNext = async () => {
     
@@ -86,7 +86,9 @@ const SignUp: React.FC<SignUpProps> = () => {
       window.location.reload();
     };
 
- 
+    
+
+ console.log(formData)
   return (
     <OnboardingPage titleOne={'enter your details to signup'}>
     <div className=" p-4 gap-4 flex flex-col">

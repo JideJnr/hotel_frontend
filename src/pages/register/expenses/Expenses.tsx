@@ -26,32 +26,25 @@ const Expenses = ({ setFormData: setModal }: FormProps) => {
     formData,
   });
 
-  console.log(formData)
+  console.log(formData);
   const submit = async () => {
     try {
       const success = await handleSubmit();
-  
+
       if (success) {
         // Close the modal if submission is successful
         setModal(false);
-        
       } else {
-     
       }
     } catch (err: any) {
       console.error("Error creating room:", err);
-  
-      
     }
   };
 
   const handleNext = () => {
-
-    if (!formData.expenseType||!formData.amount) {
+    if (!formData.expenseType || !formData.amount) {
       toast.error("Please fill in all required fields.");
-    }
- 
-   else {
+    } else {
       setModalVisible(true);
     }
   };

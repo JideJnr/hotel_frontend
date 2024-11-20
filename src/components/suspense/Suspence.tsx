@@ -8,9 +8,13 @@ function Suspence() {
             alt="logo"
             className="h-12 w-fit px-5 mx-auto"
           />
-          <div className="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-emerald-400 rounded-full dark:text-emerald-500 mx-auto" role="status" aria-label="loading">
-  <span className="sr-only">Loading...</span>
-</div>
+          <div
+            className="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-emerald-400 rounded-full dark:text-emerald-500 mx-auto"
+            role="status"
+            aria-label="loading"
+          >
+            <span className="sr-only">Loading...</span>
+          </div>
         </div>
       </div>
     </div>

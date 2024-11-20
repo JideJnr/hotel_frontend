@@ -32,7 +32,7 @@ interface ActivitiesContextType {
 }
 
 const ActivitiesContext = createContext<ActivitiesContextType | undefined>(
-  undefined
+  undefined,
 );
 
 interface ActivityProviderProps {
@@ -53,6 +53,9 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({
   useEffect(() => {
     const fetchActivities = async () => {
       try {
+        if (!user) {
+          return;
+        }
         setDataLoading(true);
         const ref = collection(db, "activitiesRecord");
         let q = query(ref);
@@ -60,7 +63,7 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({
         if (user && user?.role !== "admin") {
           q = query(q, where("id", "==", user?.id));
         }
- 
+
         // Order by date
         q = query(q, orderBy("date", "desc"));
 
@@ -88,7 +91,7 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({
     };
 
     fetchActivities();
-  }, [page, user]); 
+  }, [page, user]);
 
   const loadMoreActivities = () => {
     setPage((prevPage) => prevPage + 1);
@@ -98,7 +101,7 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({
     setActivities([]);
     setPage(1);
     setLastVisible(null);
-  }, []); 
+  }, []);
 
   return (
     <ActivitiesContext.Provider

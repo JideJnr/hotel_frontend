@@ -4,9 +4,12 @@ import { useState } from "react";
 import { auth } from "../../../../firebase";
 import SignUp from "../signup/signup";
 import ResetPassword from "../resetpassword/ResetPassword";
-import { formatDate } from "react-datepicker/dist/date_utils";
 import Button from "../../../components/button/button";
-import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+} from "firebase/auth";
 
 const SignIn = () => {
   const router = useIonRouter();
@@ -30,7 +33,11 @@ const SignIn = () => {
       await setPersistence(auth, browserLocalPersistence);
 
       // Sign in the user
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       console.log("Signed in user:", userCredential.user);
 
       // Navigate to the home page
@@ -115,7 +122,7 @@ const SignIn = () => {
 
         {signupModal && (
           <>
-            <SignUp   />
+            <SignUp />
           </>
         )}
 

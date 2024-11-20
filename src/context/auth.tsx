@@ -39,7 +39,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const login = async (email: string, password: string) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       setUser(userCredential.user);
       console.log("User logged in:", userCredential.user);
     } catch (error) {
@@ -51,7 +55,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       throw error;
     }
   };
-  
 
   const logout = async () => {
     try {

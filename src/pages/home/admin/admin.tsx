@@ -17,31 +17,29 @@ const Admin = ({ setFormData, setModal, formData }: FormProps) => {
 
   return (
     <Header>
- 
-        <div className="p-4 flex flex-col space-y-4">
-          {groups.map((group, i) => (
-            <div
-              key={i}
-              onClick={() => {
-                setModal(false);
-                setFormData(group);
-              }}
-              className="rounded-lg shadow-sm min-h-[162px] flex flex-col-reverse"
-              style={{
-                backgroundImage: `linear-gradient(0deg, rgba(41, 9, 202, 0.4), rgba(41, 9, 202, 0.4)), url(${group.image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            >
-              <IonCardHeader className="text-white">
-                <IonCardTitle className="text-2xl font-bold tracking-tight text-white">
-                  {group.label}
-                </IonCardTitle>
-              </IonCardHeader>
-            </div>
-          ))}
-        </div>
-      
+      <div className="p-4 flex flex-col space-y-4">
+        {groups.map((group, i) => (
+          <div
+            key={i}
+            onClick={() => {
+              setModal(false);
+              setFormData(group);
+            }}
+            className="rounded-lg shadow-sm min-h-[162px] flex flex-col-reverse"
+            style={{
+              backgroundImage: `linear-gradient(0deg, rgba(41, 9, 202, 0.4), rgba(41, 9, 202, 0.4)), url(${group.image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            <IonCardHeader className="text-white">
+              <IonCardTitle className="text-2xl font-bold tracking-tight text-white">
+                {group.label}
+              </IonCardTitle>
+            </IonCardHeader>
+          </div>
+        ))}
+      </div>
     </Header>
   );
 };

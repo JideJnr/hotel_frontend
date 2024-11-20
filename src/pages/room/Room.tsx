@@ -93,7 +93,7 @@ const Room = ({ formData }: DataProps) => {
             )}
           </div>
 
-          {activeRoom && activeRoom.length !== 0 &&
+          {activeRoom && activeRoom.length !== 0 && (
             <div className="flex flex-col gap-4">
               <p>Active Rooms</p>
               <div className="grid grid-cols-4 gap-2 w-full">
@@ -117,11 +117,9 @@ const Room = ({ formData }: DataProps) => {
                 ))}
               </div>
             </div>
-          }
+          )}
 
           <div>
-
-            
             <Table
               columns={columns}
               data={filteredRoom}
@@ -130,15 +128,18 @@ const Room = ({ formData }: DataProps) => {
                 setRoomModal(true);
               }}
             >
-              {user && user.role === "admin" &&
-            
-            <div className="w-full flex  p-2 bg-[#f5f5f5] ">
-              <button onClick={() => setCreateModal(true)} className="ml-auto bg-orange-400 px-2 py-1 rounded-md text-white">Add New</button>
-            </div>
-            }
+              {user && user.role === "admin" && (
+                <div className="w-full flex  p-2 bg-[#f5f5f5] ">
+                  <button
+                    onClick={() => setCreateModal(true)}
+                    className="ml-auto bg-orange-400 px-2 py-1 rounded-md text-white"
+                  >
+                    Add New
+                  </button>
+                </div>
+              )}
             </Table>
           </div>
-
         </div>
       )}
     </IonContent>

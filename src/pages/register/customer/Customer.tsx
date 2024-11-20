@@ -32,15 +32,15 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
-  
+
     if (!formData.fullName || !formData.address || !formData.phone) {
       console.log("Input all fields!!!");
       return;
     }
-  
+
     try {
       setLoading(true);
-  
+
       const clientData = {
         name: formData.fullName,
         phone: formData.phone,
@@ -53,11 +53,11 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
         details: "Created User",
         status: "inactive",
       };
-  
+
       // Store the client data
       await setDoc(doc(db, path, formData.phone), clientData);
       await addDoc(collection(db, activityPath), clientData);
-  
+
       // Reset form data after submission
       setFormData({
         fullName: undefined,
@@ -65,14 +65,14 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
         address: undefined,
         note: undefined,
       });
-  
+
       // Clear error state and notify success
       setError(null);
       toast.success("Profile created successfully!");
     } catch (err: any) {
       // Handle Firebase error
       console.error("Error during form submission:", err);
-  
+
       if (err.code) {
         // Handle specific Firebase error codes
         switch (err.code) {
@@ -94,7 +94,6 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
       setModal(false);
     }
   };
-  
 
   const handleNext = () => {
     const errors = [];
@@ -110,8 +109,7 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
     }
 
     if (errors.length > 0) {
-      toast.error(errors.join(", ") );
-
+      toast.error(errors.join(", "));
     } else {
       setModalVisible(true);
     }
@@ -142,7 +140,6 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
           <Button
             text="Previous"
             className=" !bg-gray-400"
-
             onClick={() => {
               setModalVisible(false);
             }}
@@ -158,7 +155,13 @@ const Customer = ({ setFormData: setModal }: FormProps) => {
         )}
 
         {isModalVisible ? (
-          <Button text="Submit" className="" onClick={handleSubmit}  loading={loading} loadingText="Submitting..."/>
+          <Button
+            text="Submit"
+            className=""
+            onClick={handleSubmit}
+            loading={loading}
+            loadingText="Submitting..."
+          />
         ) : (
           <Button text="Next" className="" onClick={handleNext} />
         )}

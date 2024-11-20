@@ -30,11 +30,10 @@ const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
     formData,
   });
 
-  
   const handleSubmit = async () => {
     try {
       const success = await createRoomProfile();
-  
+
       if (success) {
         // Perform actions on successful room creation
         reloadData();
@@ -43,14 +42,16 @@ const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
       } else if (error) {
         // Handle errors explicitly if `useRoomScudOperation` exposes an `error` state
         console.error("Error from createRoomProfile:", error);
-        toast.error(`Error: ${error.message || "Failed to create room profile."}`);
+        toast.error(
+          `Error: ${error.message || "Failed to create room profile."}`,
+        );
       } else {
         // Handle unexpected failure
         toast.error("Room profile creation failed. Please try again.");
       }
     } catch (err: any) {
       console.error("Unexpected error creating room:", err);
-  
+
       if (err.code) {
         // Handle specific Firebase or other backend error codes
         switch (err.code) {
@@ -69,7 +70,6 @@ const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
       }
     }
   };
-  
 
   const handleNext = () => {
     const errors = [];
@@ -91,6 +91,7 @@ const CreateRoom = ({ setFormData: setModal, formData: data }: FormProps) => {
     }
   };
 
+  
   return (
     <div className="p-4 gap-4 flex flex-col">
       {isModalVisible ? (

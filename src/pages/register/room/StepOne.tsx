@@ -47,7 +47,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
       value: "inApp",
       label: "In App",
     },
-  
+
     {
       value: "pos",
       label: "POS",
@@ -57,7 +57,6 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
       value: "cash",
       label: "Cash",
     },
-    
   ];
 
   const handleChange = (
@@ -71,7 +70,6 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
   };
 
   const activeRooms = room.filter((item) => item.status === "available");
-
 
   return (
     <div className="flex flex-col gap-4 bg-white h-fit p-4 ">
@@ -115,7 +113,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
       <p>Select Payment Method</p>
       <CustomSelect
         name="paymentMethod"
-        options={user && user.role === 'customer' ? payment : customerPayment}
+        options={user && user.role === "customer" ? payment : customerPayment}
         onChange={(option) => handleSelectChange("paymentMethod", option)}
         value={formData.paymentMethod?.value || null}
         placeholder="Select a Payment Method"
