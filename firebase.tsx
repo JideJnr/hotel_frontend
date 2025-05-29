@@ -8,17 +8,16 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAiQ4Os-Wooi-kF6ShLRgthJ_vOuXYL_j0",
-  authDomain: "bj-hotel-af728.firebaseapp.com",
-  projectId: "bj-hotel-af728",
-  storageBucket: "bj-hotel-af728.appspot.com",
-  messagingSenderId: "876917889390",
-  appId: "1:876917889390:android:135f43d4405b367dffc97f",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 
-// Firebase Auth with persistence
 export const auth = getAuth(app);
 setPersistence(auth, browserLocalPersistence).catch((error) => {
   console.error("Error setting persistence:", error);
@@ -26,3 +25,4 @@ setPersistence(auth, browserLocalPersistence).catch((error) => {
 
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export default app;

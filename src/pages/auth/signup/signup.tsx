@@ -12,10 +12,10 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../../firebase";
 
 interface SignUpProps {
-  setFormData?: Dispatch<SetStateAction<string>>;
+  toggleModal: any;
 }
 
-const SignUp: React.FC<SignUpProps> = () => {
+const SignUp: React.FC<SignUpProps> = ({toggleModal}) => {
   const router = useIonRouter();
 
   const [formData, setFormData] = useState({
@@ -86,7 +86,8 @@ const SignUp: React.FC<SignUpProps> = () => {
     window.location.reload();
   };
 
-  console.log(formData);
+
+  
   return (
     <OnboardingPage titleOne={"enter your details to signup"}>
       <div className=" p-4 gap-4 flex flex-col">
@@ -128,6 +129,21 @@ const SignUp: React.FC<SignUpProps> = () => {
               onClick={handleSignout}
               loading={loading}
             />
+          )}
+
+          {currentStepIndex === 1 && (
+            
+            <p className="w-fit mx-auto mt-4">
+            Already have an account?
+            <span
+              className="ml-1 text-emerald-400 font-semibold "
+              onClick={() => {
+                toggleModal(false);
+              }}
+            >
+              Sign In
+            </span>
+          </p>
           )}
         </div>
 

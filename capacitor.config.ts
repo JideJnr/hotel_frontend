@@ -8,6 +8,8 @@ const config: CapacitorConfig = {
   plugins: {
     PushNotifications: {
       enabled: true,
+      presentationOptions: ["badge", "sound", "alert"]
+
     },
   },
 };

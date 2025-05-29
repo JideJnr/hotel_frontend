@@ -70,7 +70,7 @@ const StepOne = ({ formData, setFormData }: FormProps) => {
   };
   const userRooms = room.filter((item) => item.location === user?.location);
   const activeRooms = userRooms.filter((item) => item.status === "available");
-  console.log(clients);
+  console.log(room);
   return (
     <div className="flex flex-col gap-4  h-full w-full p-4 ">
       {user && user.role !== "costumer" && (

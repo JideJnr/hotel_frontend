@@ -122,7 +122,7 @@ const SignIn = () => {
 
         {signupModal && (
           <>
-            <SignUp />
+            <SignUp  toggleModal={setSignupModal}/>
           </>
         )}
 

@@ -10,8 +10,10 @@ import { DataProps } from "../home/Home";
 import { filterData } from "../../utils/filterData";
 
 const Room = ({ formData }: DataProps) => {
-  const { user, room, loading, error } = useDataContext();
-
+  const { user, room:allRooms, loading, error } = useDataContext();
+ 
+  const room = allRooms.filter((item) => item.location === user?.location);
+  
   const filteredRoom =
     room && formData?.value ? filterData(room, formData.value) : room;
 
@@ -103,14 +105,11 @@ const Room = ({ formData }: DataProps) => {
                       type="button"
                       className="text-white bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:focus:ring-emerald-800 shadow-lg  dark:shadow-lg dark:shadow-emerald-800/80 font-medium  text-sm p-2 rounded-full text-center w-12 h-12 mx-auto "
                     >
-                       <p className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                      {room.roomNumber}
-                    </p>
+                      <p className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
+                        {room.roomNumber}
+                      </p>
                     </button>
-                   
                   </div>
-
-                  
                 ))}
               </div>
             </div>

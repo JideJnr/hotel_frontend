@@ -6,14 +6,13 @@ import useUpdateFunction from "../../../function/useUpdateFunction";
 import { auth, db } from "../../../../firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import DashboardTile from "../../../components/dashboardtiles/DashboardTiles";
+import { useState } from "react";
 
 const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
   const { user } = useDataContext();
-
+  console.log(data);
   const recordPath = `roomRecord/${data.currentGuest?.docId}`;
-  const roomPath = data
-    ? `hotel/${data.location}/rooms/${data.roomNumber}`
-    : null;
+  const roomPath = data ? `hotelRooms/${data.id}` : null;
   const clientPath = data ? `clientRecord/${data.currentGuest?.id}` : null;
   const activityPath = "activitiesRecord";
 
@@ -36,9 +35,11 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
   } = useUpdateFunction(recordPath);
 
   const { reloadData } = useDataContext();
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleCheckout = async () => {
     try {
+      setIsLoading(true); // Start loading
+
       await updateRoomRecord({
         currentGuest: null,
         docId: null,
@@ -56,15 +57,19 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
         lastSeen: new Date(),
         active: "false",
       });
+
       await addDoc(collection(db, activityPath), {
         details: `${data.customerName} checked out`,
         hostId: auth.currentUser?.uid,
         createdAt: serverTimestamp(),
       });
+
       await reloadData();
       setModal(false);
     } catch (err) {
       console.error("Error updating room status:", err);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
@@ -144,12 +149,16 @@ const RoomDetails = ({ formData: data, setFormData: setModal }: FormProps) => {
                     text="Check Out"
                     className="w-full"
                     onClick={handleCheckout}
+                    loading={isLoading}
+                    loadingText="Checking Out ..."
                   />
                 ) : (
                   <Button
                     text="Ask To Check Out"
                     className="w-full"
                     onClick={handleCheckout}
+                    loading={isLoading}
+                    loadingText="Checking Out ..."
                   />
                 )}
               </>

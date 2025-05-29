@@ -2,7 +2,6 @@ import { useState } from "react";
 import CustomSelect from "../../../components/select/Select";
 import { useDataContext } from "../../../context/dataContext";
 import { FormProps } from "../customer/StepOne";
-import DatePicker from "react-datepicker";
 import dayjs from "dayjs";
 
 const StepOne = ({ formData, setFormData }: FormProps) => {

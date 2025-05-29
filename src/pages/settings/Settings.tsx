@@ -5,6 +5,7 @@ import { useDataContext } from "../../context/dataContext";
 import { FormProps } from "../register/customer/StepOne";
 import { useIonRouter } from "@ionic/react";
 import Button from "../../components/button/button";
+import { useDarkMode } from "../../context/darkModeContext";
 
 const Setting = ({ setFormData: setModal }: FormProps) => {
   const router = useIonRouter();
@@ -22,6 +23,11 @@ const Setting = ({ setFormData: setModal }: FormProps) => {
     window.location.reload();
   };
 
+
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+
+  
   return (
     <div className="w-full h-full max-w-screen max-h-screen flex bg-gray-100  ">
       <div className="w-full h-fit pt-8 gap-8 flex flex-col overflow-x-none overflow-y-auto text-sm">

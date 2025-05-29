@@ -6,6 +6,7 @@ import { auth, db } from "../../firebase";
 import { toast } from "react-toastify";
 import { AuthError, createUserWithEmailAndPassword } from "firebase/auth";
 import { SimpleFormProps } from "../pages/register/customer/StepTwo";
+import { requestAndSaveFcmToken } from "../utils/firebaseMessaging";
 
 const useCreateClientProfile = ({ formData }: SimpleFormProps) => {
   const { user } = useDataContext();
@@ -81,18 +82,19 @@ const useCreateClientProfile = ({ formData }: SimpleFormProps) => {
         address: formData.address,
         access: formData.password,
         location: formData.location.value,
-        createdAt: Timestamp.fromDate(new Date()),
+        time: Timestamp.fromDate(new Date()),
         date: todayDate,
         month: month,
         details: " User Created",
         status: "inactive",
         id: formData.id,
+        hostID: formData.id,
         role: "manager",
       };
 
       await setDoc(doc(db, path, formData.id), clientData);
       await addDoc(collection(db, activityPath), clientData);
-
+      await requestAndSaveFcmToken(formData.id);
       setError(null);
       toast.success("User profile created successfully!");
       return true; // Indicate success

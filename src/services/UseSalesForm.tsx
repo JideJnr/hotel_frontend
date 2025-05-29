@@ -82,8 +82,22 @@ const useSalesForm = ({ formData }: UseSalesOperationProps) => {
       await addDoc(collection(db, clientPath), salesData);
       await addDoc(collection(db, activityPath), salesData);
 
+      const recordDocRef = doc(db, `roomRecord/${docId}`);
+
       const roomDocRef = doc(db, `hotelRooms/${formData.roomNumber.value}`);
       const clientDocRef = doc(db, `clientRecord/${formData.customer.value}`);
+
+      await updateDoc(roomDocRef, {
+        status: "active",
+        currentGuest: {
+          name: formData.customer.label,
+          id: formData.customer.value,
+          docId: docId,
+        },
+      });
+      await updateDoc(recordDocRef, {
+        id: docId,
+      });
 
       await updateDoc(roomDocRef, {
         status: "active",

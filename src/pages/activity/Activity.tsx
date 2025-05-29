@@ -6,6 +6,8 @@ import { useDataContext } from "../../context/dataContext";
 const Activity = ({ formData }: DataProps) => {
   const { activities, dataLoading, loadMoreActivities } = useActivities();
   const { user } = useDataContext();
+
+  console.log(activities);
   return (
     <ActivityProvider>
       <IonContent>
@@ -30,8 +32,16 @@ const Activity = ({ formData }: DataProps) => {
                         {user && user.role === "admin"
                           ? activity.hostName
                           : "You"}{" "}
-                        {activity.details} room {activity.room} for N
-                        {activity.price}
+                        {activity.details === " User Created" &&
+                          "  Created Your Profile"}
+
+{activity.details === "Ran Expenses" &&
+                          "  Ran Expenses for "}
+
+
+                        {activity.details === " Sold Room" &&
+                          `Sold room ${activity.room} for N
+                        ${activity.price} `}
                       </p>
                       {activity.note && (
                         <p className="mt-1 text-sm text-gray-600 dark:text-white/70">

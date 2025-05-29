@@ -61,7 +61,7 @@ export const ActivityProvider: React.FC<ActivityProviderProps> = ({
         let q = query(ref);
 
         if (user && user?.role !== "admin") {
-          q = query(q, where("id", "==", user?.id));
+          q = query(q, where("hostID", "==", user?.id));
         }
 
         // Order by date
