@@ -1,5 +1,5 @@
 import React from "react";
-import NoTask from "../empty/NoTask";
+
 
 interface TableProps {
   title?: string;
@@ -103,7 +103,7 @@ const Table: React.FC<TableProps> = ({
             ) : (
               <tr>
                 <td colSpan={1000} className="text-center py-4 w-full flex ">
-                  <NoTask text={text || "empty"} />
+              
                 </td>
               </tr>
             )}

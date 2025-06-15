@@ -12,14 +12,11 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@capacitor-firebase/app": "^6.2.0",
-    "@capacitor-firebase/authentication": "^6.2.0",
-    "@capacitor-firebase/firestore": "^6.2.0",
-    "@capacitor-firebase/storage": "^6.2.0",
     "@capacitor/android": "6.1.2",
     "@capacitor/app": "^6.0.2",
-    "@capacitor/core": "6.1.2",
+    "@capacitor/core": "^6.1.2",
     "@capacitor/haptics": "6.0.1",
+    "@capacitor/http": "^0.0.2",
     "@capacitor/keyboard": "6.0.2",
     "@capacitor/push-notifications": "^6.0.3",
     "@capacitor/status-bar": "6.0.1",
@@ -30,9 +27,8 @@
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "@use-gesture/react": "^10.3.1",
+    "axios": "^1.9.0",
     "dayjs": "^1.11.13",
-    "firebase": "^10.14.1",
-    "firebase-admin": "^13.0.1",
     "ionicons": "^7.0.0",
     "react": "^18.2.0",
     "react-datepicker": "^7.5.0",
@@ -44,7 +40,8 @@
     "react-spring": "^9.7.4",
     "react-toastify": "^10.0.6",
     "remixicon": "^4.4.0",
-    "swiper": "^11.1.14"
+    "swiper": "^11.1.14",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@capacitor/cli": "6.1.2",
