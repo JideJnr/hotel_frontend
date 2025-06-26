@@ -2,7 +2,7 @@ import { useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Button from "../../../../components/button/button";
-import { useCustomerStore } from "../../../../stores/customerStore";
+import { useCustomerStore } from "../../../../stores/CustomerStore";
 
 
 const CustomerStepTwo  = () => {

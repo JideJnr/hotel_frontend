@@ -1,4 +1,3 @@
-// authStore.ts (corrected)
 import { create } from 'zustand';
 import * as api from '../services/api';
 
@@ -52,7 +51,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (err: any) {
       const msg = err.message || 'Login failed';
       set({ error: msg, loading: false, user: null });
-      throw new Error(msg); // 🔁 Propagate error to SignIn
+      throw new Error(msg); 
     }
   },
   

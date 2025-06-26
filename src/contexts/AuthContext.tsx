@@ -1,7 +1,7 @@
 // src/contexts/AuthContext.tsx
 import { createContext, useContext, ReactNode } from 'react';
 import { useIonRouter } from '@ionic/react';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../stores/AuthStore';
 
 interface AuthContextType {
   user: ReturnType<typeof useAuthStore>['user'];

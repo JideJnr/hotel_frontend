@@ -119,19 +119,12 @@ interface DeleteExpenseResponse {
   message: string;
 }
 
-// 
-
-
 const api = axios.create({
   baseURL: BASE_URL,
   // You can set default headers here if needed
   // headers: { 'Authorization': `Bearer ${token}` }
 });
 
-// Rooms API
-export const getRooms = () => api.get('/api/rooms');
-
-// Auth API
 export const login = async (credentials: { email: string; password: string }) => {
   const response = await api.post<LoginSuccessResponse | ApiErrorResponse>(
     '/api/v1/auth/signin', 
@@ -149,6 +142,10 @@ export const signup = async (credentials: { email: string; password: string }) =
 };
 
 export const logout = () => api.post('/api/v1/auth/logout');
+
+
+export const getRooms = () => api.get('/api/rooms');
+
 
 export const getAllCustomers = async () => {
   const response = await api.get<GetAllCustomersResponse | ApiErrorResponse>('/api/customers');
@@ -175,7 +172,6 @@ export const deleteCustomer = async (id: string) => {
   return response.data;
 };
 
-// Add these functions to your api object
 export const createRoom = async (data: Partial<Room>) => {
   const response = await api.post<SingleRoomResponse | ApiErrorResponse>('/api/rooms', data);
   return response.data;
@@ -207,7 +203,6 @@ export const deleteRoom = async (id: string) => {
 };
 
 
-// Add these functions to your api object
 export const createExpense = async (data: Partial<Expense>) => {
   const response = await api.post<SingleExpenseResponse | ApiErrorResponse>('/api/expenses', data);
   return response.data;
@@ -227,8 +222,5 @@ export const deleteExpense = async (id: string) => {
   const response = await api.delete<DeleteExpenseResponse | ApiErrorResponse>(`/api/expenses/${id}`);
   return response.data;
 };
-
-
-
 
 export default api;
