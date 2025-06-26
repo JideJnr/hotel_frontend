@@ -6,6 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 import Loading from "../components/loading/Loading";
 import UserDetails from "../pages/main/user/details/UserDetails";
 import SalesStepOne from "../pages/forms/sales/step-one/page";
+import Room from "../pages/Room/Room";
 
 
 // Lazy load pages for better performance
@@ -47,6 +48,7 @@ const ProtectedRoute: React.FC<{
 const Routes: React.FC = () => {
   return (
     <IonRouterOutlet>
+      <div className="bg-gray-50 dark:bg-gray-700">
       {/* Public Routes */}
       <Route path="/" exact>
         <Redirect to="/welcome" />
@@ -55,6 +57,7 @@ const Routes: React.FC = () => {
       <Route path="/sign-in" exact component={Signin} />
       <Route path="/auth/signup" exact component={Signup} />
       <Route path="/auth/account" exact component={SignupContinue} />
+      <Route path="/test" exact component={Room} />
 
       {/* Protected Routes */}
       <ProtectedRoute
@@ -67,7 +70,7 @@ const Routes: React.FC = () => {
         path="/staff/dashboard"
         exact
         component={StaffDashboard}
-        allowedRoles={['staff', 'admin']}
+      //  allowedRoles={['staff', 'admin']}
       />
 
 
@@ -78,6 +81,7 @@ const Routes: React.FC = () => {
 
       {/* Fallback Route */}
       <Route render={() => <Redirect to="/welcome" />} />
+      </div>
     </IonRouterOutlet>
   );
 };

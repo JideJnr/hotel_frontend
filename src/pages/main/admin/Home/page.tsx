@@ -6,7 +6,7 @@ import {
   IonHeader,
 } from "@ionic/react";
 import { Tab, TabGroup } from "@headlessui/react";
-import Room from "../../../Room/page";
+import Room from "../../../Room/Room";
 import Activity from "../../../Activity/page";
 import Setting from "../../../Settings/page";
 import User from "../../user/Home/page";

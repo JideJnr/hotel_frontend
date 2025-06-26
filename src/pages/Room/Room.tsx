@@ -20,14 +20,14 @@ const Room = () => {
 
   return (
     <IonContent>
-      <div className="p-4 bg-gray-100 min-h-screen">
+      <div className="p-4 dark:bg-gray-100 min-h-screen">
         <h2 className="text-xl font-bold mb-2">Active Rooms</h2>
         {activeRooms.length > 0 ? (
           activeRooms.map((room) => (
             <div key={room.id} className="p-3 mb-2 bg-white rounded shadow">
               <div className="flex justify-between items-center">
                 <div>
-                  <p className="font-semibold text-lg">{room.name}</p>
+                  <p className="font-semibold text-lg text-black">{room.name}</p>
                   <p className="text-sm text-green-600">Active</p>
                 </div>
                 <p className="text-sm text-gray-600">₦{room.price.toLocaleString()}</p>

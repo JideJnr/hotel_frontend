@@ -18,18 +18,22 @@ import "@ionic/react/css/palettes/dark.system.css";
 import "./index.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import Loading from "./components/loading/Loading";
+import { DarkModeProvider } from "./contexts/DarkModeContext";
 
 
 setupIonicReact();
 
 const App: React.FC = () => {
   return (
-       <IonApp>
+
+    <IonApp>
       <IonReactRouter>
         <AuthProvider>
+          <DarkModeProvider>
           <Suspense fallback={<Loading />}>
             <Routes />
           </Suspense>
+          </DarkModeProvider>
         </AuthProvider>
       </IonReactRouter>
     </IonApp>
