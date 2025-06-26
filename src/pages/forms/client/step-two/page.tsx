@@ -4,11 +4,8 @@ import { toast } from "react-toastify";
 import Button from "../../../../components/button/button";
 import { useCustomerStore } from "../../../../stores/customerStore";
 
-export interface SimpleFormProps {
-  // No need for formData prop since we'll get it from sessionStorage
-}
 
-const StepTwo = () => {
+const CustomerStepTwo  = () => {
   const router = useIonRouter();
   const { createCustomer } = useCustomerStore();
   const [formData, setFormData] = useState<any>(null);
@@ -119,4 +116,4 @@ const StepTwo = () => {
   );
 };
 
-export default StepTwo;
+export default CustomerStepTwo;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Suspense }  from "react";
 import { IonApp, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Routes from "./routes/Routes";
@@ -17,19 +17,19 @@ import "@ionic/react/css/display.css";
 import "@ionic/react/css/palettes/dark.system.css";
 import "./index.css";
 import { AuthProvider } from "./contexts/AuthContext";
+import Loading from "./components/loading/Loading";
 
 
 setupIonicReact();
 
 const App: React.FC = () => {
-
-  
-
   return (
-    <IonApp>
+       <IonApp>
       <IonReactRouter>
         <AuthProvider>
-          <Routes />    
+          <Suspense fallback={<Loading />}>
+            <Routes />
+          </Suspense>
         </AuthProvider>
       </IonReactRouter>
     </IonApp>

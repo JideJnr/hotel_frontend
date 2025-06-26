@@ -1,9 +1,10 @@
-import { IonContent, IonIcon, useIonRouter } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonIcon, IonRow, IonText, useIonRouter } from '@ionic/react';
 import React, { useMemo } from 'react';
-import Table, { Column } from '../src/components/table/table';
-import { useAuth } from '../src/contexts/AuthContext';
-import DashboardTile from '../src/components/templates/dashboardtiles/DashboardTiles';
-import { displayPrice } from '../src/utils/formatNaira';
+import { useAuth } from '../../../contexts/AuthContext';
+import Table, { Column } from '../../../components/table/table';
+import { displayPrice } from '../../../utils/formatNaira';
+import DashboardTile from '../../../components/templates/dashboardtiles/DashboardTiles';
+
 
 const Home = () => {
   const router = useIonRouter();
@@ -115,59 +116,80 @@ const Home = () => {
             <DashboardTile label="Active Room" unit={2} />
           </div>
 
-          <div className="grid grid-cols-4 gap-2 w-full">
-            <div
-              className="flex flex-col items-center justify-center gap-1.5 text-center"
-              onClick={() => router.push('/register/sales', 'forward')}
-            >
-              <IonIcon
-                src="assets/svgs/users.svg"
-                className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
-              />
-              <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                Room
-              </span>
-            </div>
+          <IonRow className="ion-justify-content-between ion-align-items-center   ion-padding-horizontal">
+  <IonCol size="auto">
+    <IonButton 
+      fill="clear" 
+      className="ion-text-center ion-no-padding"
+      onClick={() => router.push('/register/sales', 'forward')}
+    >
+      <div className="flex flex-col items-center gap-1.5">
+        <IonIcon
+          icon="people"
+          className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-primary"
+        />
+        <IonText className="text-[12px] font-medium leading-[20px] tracking-[-0.13px] text-black">
+          Room
+        </IonText>
+      </div>
+    </IonButton>
+  </IonCol>
 
-            <div
-              className="flex flex-col items-center justify-center gap-1.5 text-center"
-              onClick={() => router.push('/register/client', 'forward')}
-            >
-              <IonIcon
-                src="assets/svgs/user-plus.svg"
-                className="border border-green-400 p-4 bg-[#ebe8fe] rounded-full text-[24px] text-green-400"
-              />
-              <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                Client
-              </span>
-            </div>
+  <IonCol size="auto">
+    <IonButton 
+      fill="clear" 
+      className="ion-text-center ion-no-padding"
+      onClick={() => router.push('/register/client', 'forward')}
+    >
+      <div className="flex flex-col items-center gap-1.5">
+        <IonIcon
+          icon="person-add"
+          className="border border-green-400 p-4 bg-[#e8fef1] rounded-full text-[24px] text-green-400"
+        />
+        <IonText className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
+          Client
+        </IonText>
+      </div>
+    </IonButton>
+  </IonCol>
 
-            <div
-              className="flex flex-col items-center justify-center gap-1.5 text-center"
-              onClick={() => router.push('/register/expenses', 'forward')}
-            >
-              <IonIcon
-                src="assets/svgs/user-plus.svg"
-                className="border border-green-400 p-4 bg-[#ebe8fe] rounded-full text-[24px] text-green-400"
-              />
-              <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                Expenses
-              </span>
-            </div>
+  <IonCol size="auto">
+    <IonButton 
+      fill="clear" 
+      className="ion-text-center ion-no-padding"
+      onClick={() => router.push('/register/expenses', 'forward')}
+    >
+      <div className="flex flex-col items-center gap-1.5">
+        <IonIcon
+          icon="cash"
+          className="border border-blue-400 p-4 bg-[#e8f4fe] rounded-full text-[24px] text-blue-400"
+        />
+        <IonText className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
+          Expenses
+        </IonText>
+      </div>
+    </IonButton>
+  </IonCol>
 
-            <div
-              className="flex flex-col items-center justify-center gap-1.5 text-center"
-              onClick={() => router.push('/register/booking', 'forward')}
-            >
-              <IonIcon
-                src="assets/svgs/user-plus.svg"
-                className="border border-green-400 p-4 bg-[#ebe8fe] rounded-full text-[24px] text-green-400"
-              />
-              <span className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
-                Book
-              </span>
-            </div>
-          </div>
+
+  <IonCol size="auto">
+    <IonButton 
+      fill="clear" 
+      className="ion-text-center ion-no-padding"
+      onClick={() => router.push('/register/booking', 'forward')}
+    >
+      <div className="flex flex-col items-center gap-1.5">
+        <IonIcon
+          icon="calendar"
+          className="border border-purple-400 p-4 bg-[#f3e8fe] rounded-full text-[24px] text-purple-400"
+        />
+        <IonText className="text-[12px] font-medium leading-[20px] tracking-[-0.13px]">
+          Book
+        </IonText>
+      </div>
+    </IonButton>
+  </IonCol>
+</IonRow>
         </>
 
         {expenses.length === 0 ? (
