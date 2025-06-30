@@ -3,7 +3,7 @@ import { useIonRouter } from '@ionic/react';
 import { useAuthStore } from '../stores/AuthStore';
 
 interface AuthContextType {
-  user: ReturnType<typeof useAuthStore>['user'];
+  user: any;
   login: (email: string, password: string) => Promise<void>;
   signup: (payload: any) => Promise<void>;
   logout: () => Promise<void>;

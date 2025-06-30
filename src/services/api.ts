@@ -1,123 +1,7 @@
 import axios from 'axios';
+import { ApiErrorResponse, Customer, DeleteCustomerResponse, DeleteExpenseResponse, DeleteRoomResponse, Expense, GetAllExpensesResponse, GetAllRoomsResponse, GetAvailableRoomsResponse, Room, SingleCustomerResponse, SingleExpenseResponse, SingleRoomResponse } from '../interfaces/interface';
 
 const BASE_URL = 'https://bj-hotel-api.onrender.com';
-
-export interface Room {
-  id: string;
-  number: string;
-  type: string;
-  price: number;
-  capacity: number;
-  amenities: string[];
-  isAvailable: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-interface GetAllRoomsResponse {
-  success: true;
-  count: number;
-  rooms: Room[];
-}
-
-interface GetAvailableRoomsResponse {
-  success: true;
-  count: number;
-  rooms: Room[];
-}
-
-interface SingleRoomResponse {
-  success: true;
-  room: Room;
-}
-
-interface DeleteRoomResponse {
-  success: true;
-  message: string;
-}
-
-
-interface ApiErrorResponse {
-  success: false;
-  error: string;
-}
-
-interface LoginSuccessResponse {
-  success: true;
-  token: string;
-  user: {
-    uid: string;
-    email: string;
-    firstName: string;
-    role: string;
-  };
-}
-
-
-interface SignupSuccessResponse {
-  success: true;
-  token: string;
-  user: {
-    uid: string;
-    email: string;
-    firstName: string;
-    role: string;
-  }
-}
-
-
-export interface Customer {
-  id: string;
-  fullName: string;
-  email: string;
-  phone?: string;
-  createdAt?: any;
-  updatedAt?: any;
-}
-
-interface GetAllCustomersResponse {
-  success: true;
-  count: number;
-  customers: Customer[];
-}
-
-interface SingleCustomerResponse {
-  success: true;
-  customer: Customer;
-}
-
-interface DeleteCustomerResponse {
-  success: true;
-  message: string;
-}
-
-
-export interface Expense {
-  id: string;
-  amount: number;
-  category: string;
-  description: string;
-  date: string;
-  createdAt?: string;
-  updatedAt?: string;
-  receiptUrl?: string;
-}
-
-interface GetAllExpensesResponse {
-  success: true;
-  count: number;
-  expenses: Expense[];
-}
-
-interface SingleExpenseResponse {
-  success: true;
-  expense: Expense;
-}
-
-interface DeleteExpenseResponse {
-  success: true;
-  message: string;
-}
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -143,9 +27,7 @@ export const signup = async (credentials: { email: string; password: string }) =
 
 export const logout = () => api.post('/api/v1/auth/logout');
 
-
 export const getRooms = () => api.get('/api/rooms');
-
 
 export const getAllCustomers = async () => {
   const response = await api.get<GetAllCustomersResponse | ApiErrorResponse>('/api/customers');
@@ -173,7 +55,7 @@ export const deleteCustomer = async (id: string) => {
 };
 
 export const createRoom = async (data: Partial<Room>) => {
-  const response = await api.post<SingleRoomResponse | ApiErrorResponse>('/api/rooms', data);
+  const response = await api.post<SingleRoomResponse  | ApiErrorResponse>('/api/rooms', data);
   return response.data;
 };
 

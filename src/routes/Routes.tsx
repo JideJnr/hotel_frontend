@@ -6,7 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 import Loading from "../components/loading/Loading";
 import UserDetails from "../pages/main/user/details/UserDetails";
 import SalesStepOne from "../pages/forms/sales/step-one/page";
-import Room from "../pages/room/Room";
+import Room from "../pages/main/room/Room";
 
 
 // Lazy load pages for better performance
