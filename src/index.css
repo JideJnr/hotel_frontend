@@ -6,14 +6,19 @@
 @tailwind utilities;
 
 .blob {
-  @apply w-[2.66875rem] h-[2.66875rem] ml-[-0.26875rem] rounded-[0.75rem] border-[0.375rem] border-[#f5a226] border-l-transparent border-b-transparent rotate-[40deg];
+  @apply w-12 h-12 ml-[-0.5rem] rotate-[40deg] rounded-xl 
+    border-[6px] border-[#d6ad60] border-l-transparent border-b-transparent 
+    opacity-30;
 }
+
 .blob-white-bg {
-  @apply w-[2.66875rem] h-[2.66875rem] ml-[-0.26875rem] rounded-[0.75rem] border-[0.375rem] border-[#f5a226] border-l-transparent border-b-transparent rotate-[40deg] bg-white;
+  @apply w-12 h-12 ml-[-0.5rem] rotate-[40deg] rounded-xl 
+    border-[6px] border-[#d6ad60] border-l-transparent border-b-transparent 
+    bg-white opacity-60;
 }
 
 .ring-blob {
-  @apply w-[5.6875rem] h-[5.6875rem] rounded-full border-[0.375rem] border-[#00dca0];
+  @apply w-24 h-24 rounded-full border-[6px] border-[#d6ad60] opacity-20;
 }
 
 /* Form Input */

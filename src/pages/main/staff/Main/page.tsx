@@ -7,11 +7,12 @@ import {
 } from "@ionic/react";
 
 import { Tab, TabGroup } from "@headlessui/react";
-import Room from "../../room/Room";
-import Activity from "../../activity/page";
-import Setting from "../../../settings/page";
-import User from "../../user/Home/page";
 import Home from "../../Home/page";
+import Room from "../../room/Room";
+import Users from "../../user/Home/page";
+import Activity from "../../activity/page";
+import Setting from "../../settings/page";
+
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -41,7 +42,7 @@ function Staff() {
       </Tab.Panel>
 
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
-        <User  />
+        <Users  />
       </Tab.Panel>
 
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">

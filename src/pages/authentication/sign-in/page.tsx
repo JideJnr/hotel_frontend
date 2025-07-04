@@ -60,7 +60,7 @@ const Signin = () => {
               <button
                 type="button"
                 onClick={() => router.push('/forgot-password')}
-                className="text-emerald-400 font-semibold text-sm hover:text-emerald-500 transition-colors"
+                className="text-secondary font-semibold text-sm hover:text-emerald-500 transition-colors"
               >
                 Forgot Password?
               </button>

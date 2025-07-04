@@ -7,35 +7,40 @@ interface ButtonProps {
   disabled?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
-  svg?: any;
+  svg?: React.ReactNode;
+  type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
   text,
-  loading,
+  loading = false,
+  disabled = false,
   onClick,
-  className,
+  className = "",
   loadingText,
   svg,
-  disabled,
+  type = "button",
 }) => {
   return (
     <button
-      type="button"
-      className={` bg-emerald-500 text-white  !font-medium !mb-0 !text-[0.85rem] !rounded-[0.35rem] !py-2 !px-3 shadow-none w-fit min-w-20 flex ${loading ? "bg-green-500/50" : ""}  ${className}`}
+      type={type}
       onClick={onClick}
       disabled={loading || disabled}
+      className={`bg-brand-primary text-white font-medium text-sm rounded-md py-2 px-4 flex items-center justify-center gap-2 transition duration-300
+        hover:bg-[#a3773e]
+        disabled:opacity-60 disabled:cursor-not-allowed
+        ${className}`}
     >
-      <span className=" text-center flex flex-1 justify-center mr-2 ">
-        {loadingText ? (loading ? loadingText : text) : text}
-      </span>
-
       {loading ? (
-        <span className="loading">
-          <i className="ri-refresh-line text-[0.75rem] animate-spin"></i>
-        </span>
+        <>
+          <span>{loadingText || "Loading..."}</span>
+          <i className="ri-refresh-line animate-spin text-xs"></i>
+        </>
       ) : (
-        <>{svg && svg}</>
+        <>
+          <span>{text}</span>
+          {svg && <span>{svg}</span>}
+        </>
       )}
     </button>
   );

@@ -4,18 +4,16 @@ import { Redirect, Route } from "react-router-dom";
 import { IonRouterOutlet } from "@ionic/react";
 import { useAuth } from "../contexts/AuthContext";
 import Loading from "../components/loading/Loading";
-import UserDetails from "../pages/main/user/details/UserDetails";
-import SalesStepOne from "../pages/forms/sales/step-one/page";
-import Room from "../pages/main/room/Room";
 
-
-// Lazy load pages for better performance
 const Welcome = React.lazy(() => import("../pages/authentication/welcome/page"));
 const Signin = React.lazy(() => import("../pages/authentication/sign-in/page"));
 const Signup = React.lazy(() => import("../pages/authentication/sign-up/step-one/page"));
 const SignupContinue = React.lazy(() => import("../pages/authentication/sign-up/step-two/page"));
 const StaffDashboard = React.lazy(() => import("../pages/main/staff/Main/page"));
 const AdminDashboard = React.lazy(() => import("../pages/main/admin/Home/page"));
+const UserDetails = React.lazy(() => import("../pages/main/user/details/UserDetails"));
+const SalesStepOne = React.lazy(() => import("../components/forms/sales/step-one/page"));
+const Room = React.lazy(() => import("../pages/main/room/Room"));
 
 const ProtectedRoute: React.FC<{
   component: React.ComponentType<any>;
@@ -48,8 +46,7 @@ const ProtectedRoute: React.FC<{
 const Routes: React.FC = () => {
   return (
     <IonRouterOutlet>
-      <div className="bg-gray-50 dark:bg-gray-700">
-      {/* Public Routes */}
+      <div className="">
       <Route path="/" exact>
         <Redirect to="/welcome" />
       </Route>
@@ -59,7 +56,6 @@ const Routes: React.FC = () => {
       <Route path="/auth/account" exact component={SignupContinue} />
       <Route path="/test" exact component={Room} />
 
-      {/* Protected Routes */}
       <ProtectedRoute
         path="/admin/dashboard"
         exact
@@ -74,12 +70,10 @@ const Routes: React.FC = () => {
       />
 
 
-      {/* Common Protected Routes */}
+      
       <ProtectedRoute path="/user/:id" exact component={UserDetails} />
       <ProtectedRoute path="/register/sales" exact component={SalesStepOne} />
-      {/* Add other protected routes */}
-
-      {/* Fallback Route */}
+      
       <Route render={() => <Redirect to="/welcome" />} />
       </div>
     </IonRouterOutlet>
