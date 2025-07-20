@@ -2,7 +2,7 @@ import React, { Suspense }  from "react";
 import { IonApp, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
-import Routes from "./routes/routes";
+import Routes from "./routes/Routes";
 import Loading from "./components/loading/Loading";
 
 import "@ionic/react/css/core.css";

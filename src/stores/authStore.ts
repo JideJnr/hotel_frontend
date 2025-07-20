@@ -77,7 +77,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       if (!response.success) {
         const errMsg = response.error || 'SignUp failed';
         set({ error: errMsg, loading: false, user: null });
-        throw new Error(errMsg); // 💡 Throw error here to catch it in SignIn
+        throw new Error(errMsg);
       }
   
       set({ user: response.user, loading: false, error: null });

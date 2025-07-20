@@ -2,46 +2,17 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonRouterOutlet } from "@ionic/react";
-import { useAuth } from "../contexts/AuthContext";
-import Loading from "../components/loading/Loading";
+
 
 const Welcome = React.lazy(() => import("../pages/authentication/welcome/page"));
 const Signin = React.lazy(() => import("../pages/authentication/sign-in/page"));
 const Signup = React.lazy(() => import("../pages/authentication/sign-up/step-one/page"));
 const SignupContinue = React.lazy(() => import("../pages/authentication/sign-up/step-two/page"));
-const StaffDashboard = React.lazy(() => import("../pages/main/staff/Main/page"));
-const AdminDashboard = React.lazy(() => import("../pages/main/admin/Home/page"));
 const UserDetails = React.lazy(() => import("../pages/main/user/details/UserDetails"));
 const SalesStepOne = React.lazy(() => import("../components/forms/sales/step-one/page"));
 const Room = React.lazy(() => import("../pages/main/room/Room"));
+const Main = React.lazy(() => import("../pages/main/Main"));
 
-const ProtectedRoute: React.FC<{
-  component: React.ComponentType<any>;
-  path: string;
-  exact?: boolean;
-  allowedRoles?: string[];
-}> = ({ component: Component, allowedRoles, ...rest }) => {
-  const { isAuthenticated, user, loading } = useAuth();
-
-  if (loading) return <Loading />;
-
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuthenticated ? (
-          !allowedRoles || allowedRoles.includes(user?.role?.toLowerCase()) ? (
-            <Component {...props} />
-          ) : (
-            <Redirect to="/unauthorized" />
-          )
-        ) : (
-          <Redirect to="/sign-in" />
-        )
-      }
-    />
-  );
-};
 
 const Routes: React.FC = () => {
   return (
@@ -54,27 +25,11 @@ const Routes: React.FC = () => {
       <Route path="/sign-in" exact component={Signin} />
       <Route path="/auth/signup" exact component={Signup} />
       <Route path="/auth/account" exact component={SignupContinue} />
-      <Route path="/test" exact component={Room} />
+      <Route path="/test" exact component={Room} />      
+      <Route path="/user/:id" exact component={UserDetails} />
+      <Route path="/register/sales" exact component={SalesStepOne} />
+      <Route path="/home" exact component={Main} />
 
-      <ProtectedRoute
-        path="/admin/dashboard"
-        exact
-        component={AdminDashboard}
-        allowedRoles={['admin']}
-      />
-      <ProtectedRoute
-        path="/staff/dashboard"
-        exact
-        component={StaffDashboard}
-      //  allowedRoles={['staff', 'admin']}
-      />
-
-
-      
-      <ProtectedRoute path="/user/:id" exact component={UserDetails} />
-      <ProtectedRoute path="/register/sales" exact component={SalesStepOne} />
-      
-      <Route render={() => <Redirect to="/welcome" />} />
       </div>
     </IonRouterOutlet>
   );

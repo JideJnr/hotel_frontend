@@ -5,51 +5,46 @@ import {
   IonRefresher,
   IonHeader,
 } from "@ionic/react";
-
 import { Tab, TabGroup } from "@headlessui/react";
-import Home from "../../Home/page";
-import Room from "../../room/Room";
-import Users from "../../user/Home/page";
-import Activity from "../../activity/page";
-import Setting from "../../settings/page";
+import React from "react";
 
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-function Staff() {
+function Main() {
+    const User = React.lazy(() => import("./user/Home/page"));
+    const Home = React.lazy(() => import("./Home/page"));   
+    const Activity = React.lazy(() => import("./activity/page"));
+    const Setting = React.lazy(() => import("./settings/page")); 
+    const Room = React.lazy(() => import("./room/Room"));
 
-  const refresh = (e: CustomEvent) => {
-    try {
-      
-      e.detail.complete();
-    } catch (err) {
-      console.error("Refresh error:", err);
-      e.detail.complete();
-    }
-  };
+    const refresh = (e: CustomEvent) => {
+        try {
+        e.detail.complete();
+        } catch (err) {
+        console.error("Refresh error:", err);
+        e.detail.complete();
+        }
+    };
 
   const renderTabs = () => (
-    <Tab.Panels className="h-full mx-auto flex flex-1 overflow-y-auto shadow-t-xl bg-gray-50 dark:bg-gray-700">
+    <Tab.Panels className="h-full mx-auto flex flex-1 overflow-y-auto shadow-t-xl bg-gray-50">
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
-        <>
-          <Home  />
-        </>
+          
       </Tab.Panel>
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
         <Room  />
       </Tab.Panel>
-
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
-        <Users  />
+        <User  />
       </Tab.Panel>
-
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
         <Activity />
       </Tab.Panel>
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
-        <Setting />
+       <Setting />
       </Tab.Panel>
     </Tab.Panels>
   );
@@ -210,4 +205,4 @@ function Staff() {
   );
 }
 
-export default Staff;
+export default Main;

@@ -1,16 +1,18 @@
-import OnboardingTemplate from '../../../components/templates/onboarding/onboarding';
-import { IonLabel, useIonRouter } from '@ionic/react';
+import { IonLabel, IonPage, useIonRouter } from '@ionic/react';
 import { useState, useEffect } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import OnboardingTemplate from '../../../components/templates/onboarding/onboarding';
 import Button from '../../../components/button/button';
 import { useAuth } from '../../../contexts/AuthContext';
 
 const Signin = () => {
   const router = useIonRouter();
+  const { login, loading, error: authError } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-
-  const { login, loading, error: authError } = useAuth();
 
   useEffect(() => {
     if (authError) setError(authError);
@@ -19,92 +21,93 @@ const Signin = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
     try {
       await login(email, password);
+      router.push('/home', 'root');
     } catch (err) {
       console.error('Login error:', err);
     }
   };
 
   return (
-    <OnboardingTemplate titleOne="Sign In">
-      <div className="relative">
-        <div className="blob fixed top-24 translate-y-24 -left-5"></div>
+    <IonPage>
+      <div className="flex items-center justify-center min-h-screen px-6 bg-white">
+       
+      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
+        <h2 className="text-3xl font-bold text-gray-900">Login</h2>
+        <p className="text-sm text-gray-600">Please login to continue</p>
 
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-          {error && (
-            <div className="text-red-500 text-sm p-2 bg-red-50 rounded-md">
-              {error}
-            </div>
-          )}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <div className="flex flex-col gap-2">
-            <IonLabel htmlFor="email">Email</IonLabel>
-            <input
-              id="email"
-              value={email}
-              onChange={({ target }) => setEmail(target.value)}
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              aria-invalid={!!error}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between">
-              <IonLabel htmlFor="password">Password</IonLabel>
-              <button
-                type="button"
-                onClick={() => router.push('/forgot-password')}
-                className="text-secondary font-semibold text-sm hover:text-emerald-500 transition-colors"
-              >
-                Forgot Password?
-              </button>
-            </div>
-            <input
-              id="password"
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              minLength={6}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              aria-invalid={!!error}
-            />
-          </div>
-
-          <Button
-            loading={loading}
-            loadingText="Signing In"
-            className="!w-full !mx-auto mt-4"
-            disabled={loading}
-            onClick={handleSubmit}
-
-          text='Sign In'  
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@email.com"
+            required
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
+        </div>
 
-          <p className="w-fit mx-auto text-sm mt-2">
-            Don't have an account?
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Password</label>
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
             <button
               type="button"
-              onClick={() => router.push('/auth/signup')}
-              className="ml-1 text-emerald-400 font-semibold hover:text-emerald-500 transition-colors"
-              disabled={loading}
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"
             >
-              Sign Up
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
-          </p>
-        </form>
+          </div>
+        </div>
 
-        <div className="ring-blob fixed bottom-24 -translate-y-16 -right-12"></div>
-      </div>
-    </OnboardingTemplate>
+        <Button text='Login' loadingText='loading...' type="submit" loading={loading} className="w-full">
+          
+        </Button>
+
+        <div className="text-center mt-2">
+          <a href="#" className="text-sm text-indigo-600 hover:underline">
+            Forgot password?
+          </a>
+        </div>
+
+        <div className="flex items-center gap-2 mt-6">
+          <hr className="flex-grow border-gray-300" />
+          <span className="text-sm text-gray-400">Or login with</span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
+
+        <div className="flex justify-center space-x-4 mt-2">
+          <button type="button" className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-md">
+            <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook" className="w-5 h-5" />
+            Facebook
+          </button>
+          <button type="button" className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-md">
+            <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png" alt="Google" className="w-5 h-5" />
+            Google
+          </button>
+        </div>
+
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Don’t have an account?{' '}
+          <a href="/auth/signup" className="text-indigo-600 hover:underline">
+            Sign up
+          </a>
+        </p>
+      </form>
+    </div>
+  </IonPage>
   );
 };
 

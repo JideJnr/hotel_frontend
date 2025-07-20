@@ -1,4 +1,6 @@
-import { IonContent } from "@ionic/react";
+import { IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
+import { useState } from "react";
+import GenericList from "../../../components/cards/GenericList";
 
 type Room = {
   id: string;
@@ -15,45 +17,45 @@ const mockRooms: Room[] = [
 ];
 
 const Room = () => {
-  const activeRooms = mockRooms.filter((room) => room.isActive);
-  const inactiveRooms = mockRooms.filter((room) => !room.isActive);
+  const [activeTab, setActiveTab] = useState<"all" | "active">("all");
+
+  const filteredRooms = activeTab === "active" 
+    ? mockRooms.filter((room) => room.isActive)
+    : mockRooms;
+
+  // Convert rooms to GenericList items
+  const roomItems = filteredRooms.map((room) => ({
+    id: room.id,
+    name: room.name,
+    value: room.price,
+    type: room.isActive ? 'active' : 'inactive',
+  }));
 
   return (
     <IonContent>
       <div className="p-4 dark:bg-gray-100 min-h-screen">
-        <h2 className="text-xl font-bold mb-2">Active Rooms</h2>
-        {activeRooms.length > 0 ? (
-          activeRooms.map((room) => (
-            <div key={room.id} className="p-3 mb-2 bg-white rounded shadow">
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="font-semibold text-lg text-black">{room.name}</p>
-                  <p className="text-sm text-green-600">Active</p>
-                </div>
-                <p className="text-sm text-gray-600">₦{room.price.toLocaleString()}</p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No active rooms</p>
-        )}
+        {/* Tab selector */}
+        <IonSegment 
+          value={activeTab}
+          onIonChange={(e) => setActiveTab(e.detail.value as "all" | "active")}
+          className="mb-6"
+        >
+          <IonSegmentButton value="all">
+            <IonLabel>All Rooms</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="active">
+            <IonLabel>Active Rooms</IonLabel>
+          </IonSegmentButton>
+        </IonSegment>
 
-        <h2 className="text-xl font-bold mt-6 mb-2">All Other Rooms</h2>
-        {inactiveRooms.length > 0 ? (
-          inactiveRooms.map((room) => (
-            <div key={room.id} className="p-3 mb-2 bg-white rounded shadow">
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="font-semibold text-lg">{room.name}</p>
-                  <p className="text-sm text-red-500">Inactive</p>
-                </div>
-                <p className="text-sm text-gray-600">₦{room.price.toLocaleString()}</p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No other rooms</p>
-        )}
+        {/* Room list using GenericList */}
+        <GenericList
+          items={roomItems}
+          title={activeTab === "active" ? "Active Rooms" : "All Rooms"}
+          valuePrefix="₦"
+          showTypeLabel={true}
+          showTime={false}
+        />
       </div>
     </IonContent>
   );
