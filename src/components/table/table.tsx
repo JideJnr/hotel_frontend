@@ -67,7 +67,7 @@ const Table: React.FC<TableProps> = ({
           </tr>
         </thead>
       )}
-      <tbody className="dark:bg-[#1A1C1E] bg-white divide-y divide-gray-200 flex flex-col w-full min-w-full h-full ">
+      <tbody className="text-gray-800 bg-white divide-y divide-gray-200 flex flex-col w-full min-w-full h-full ">
         {loading ? (
           <div className="h-full p-10 align-center w-fit mx-auto flex">
             <span className="loading mr-5">

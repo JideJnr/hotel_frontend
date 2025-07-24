@@ -59,7 +59,6 @@ const ClientStepOne = () => {
   };
 
   return (
-    <OnboardingTemplate titleOne="Complete your profile">
       <div className="flex flex-col gap-4 w-full h-full p-4">
         <div className="flex flex-col gap-2">
           <p className="font-medium">Full Name *</p>
@@ -117,7 +116,7 @@ const ClientStepOne = () => {
           <Button text="Continue" onClick={handleNext} />
         </div>
       </div>
-    </OnboardingTemplate>
+  
   );
 };
 

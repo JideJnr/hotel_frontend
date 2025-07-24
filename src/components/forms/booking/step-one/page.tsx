@@ -1,8 +1,7 @@
-import OnboardingTemplate from "../../../../components/templates/onboarding/onboarding"
-import { IonLabel, useIonRouter } from "@ionic/react";
+
+import { useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import TextInput from "../../../../components/input/text/input";
 import Button from "../../../../components/button/button";
 import CustomSelect from "../../../../components/select/Select";
 
@@ -13,6 +12,10 @@ const BookingStepOne = () => {
     customer: null,
     roomNumber: null,
     bookingInstruction: '',
+    paymentType: null,
+    paymentMethod: null,
+    partPaymentAmount: '',
+    price: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -41,6 +44,23 @@ const BookingStepOne = () => {
     if (!formData.roomNumber?.value) {
       newErrors.roomNumber = "Room number is required.";
     }
+    
+      if (!formData.paymentType?.value) {
+        toast.error("Please select a payment type.");
+        return;
+      }
+      if (!formData.paymentMethod?.value) {
+        toast.error("Please select a payment method.");
+        return;
+      }
+      if (
+        formData.paymentType?.value === "partPayment" &&
+        !formData.partPaymentAmount
+      ) {
+        toast.error("Please enter amount for part payment.");
+        return;
+      }
+  
 
     setErrors(newErrors);
 
@@ -75,8 +95,20 @@ const BookingStepOne = () => {
     });
   };
 
+    // Payment types and methods
+    const type = [
+      { value: "fullPayment", label: "Full Payment" },
+      { value: "partPayment", label: "Part Payment" },
+    ];
+  
+    const paymentOptions = [
+      { value: "cash", label: "Cash" },
+      { value: "transfer", label: "Bank Transfer" },
+      { value: "pos", label: "POS" },
+    ];
+
   return (
-    <OnboardingTemplate titleOne="Complete your profile">
+    
       <div className="flex flex-col gap-4 bg-white h-fit p-4">
         {user && user.role !== "customer" && (
           <>
@@ -106,7 +138,7 @@ const BookingStepOne = () => {
           value={formData.roomNumber?.value || null}
           placeholder="Select a room"
         />
-        {errors.roomNumber && <span className="text-red-500 text-sm">{errors.roomNumber}</span>}
+     
 
         <p>Note</p>
         <textarea
@@ -119,7 +151,7 @@ const BookingStepOne = () => {
 
         <Button onClick={handleNext} text="Next" /> 
       </div>
-    </OnboardingTemplate>
+    
   );
 };
 

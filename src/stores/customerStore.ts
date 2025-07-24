@@ -94,4 +94,5 @@ export const useCustomerStore = create<CustomerState>((set) => ({
       set({ error: err.message, loading: false });
     }
   },
+  
 }));

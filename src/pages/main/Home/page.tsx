@@ -1,5 +1,5 @@
 import { IonButton, IonCol, IonContent, IonIcon, IonRow, IonText, useIonRouter } from '@ionic/react';
-import React, { useMemo } from 'react';
+import  { useMemo } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import Table, { Column } from '../../../components/table/table';
 import { displayPrice } from '../../../utils/formatNaira';
@@ -107,7 +107,7 @@ const Home = () => {
   ];
 
   return (
-    <IonContent>
+
       <div className="flex flex-col gap-12 px-4 py-8 bg-gray-100 overflow-y-auto">
         <>
           <div className="grid gap-4 lg:gap-8 md:grid-cols-3 w-full h-fit">
@@ -223,7 +223,7 @@ const Home = () => {
           </div>
         )}
       </div>
-    </IonContent>
+
   );
 };
 

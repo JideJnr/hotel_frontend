@@ -10,7 +10,7 @@ import Room from "../../room/Room";
 import Activity from "../../activity/page";
 import Setting from "../../../settings/page";
 import User from "../../user/Home/page";
-import Home from "../../Home/page";
+import Home from "../../home/page";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");

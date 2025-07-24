@@ -2,7 +2,7 @@ import { useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Button from "../../../../components/button/button";
-import { useCustomerStore } from "../../../../stores/CustomerStore";
+import { useCustomerStore } from "../../../../stores/customerStore";
 
 
 const CustomerStepTwo  = () => {
@@ -12,7 +12,6 @@ const CustomerStepTwo  = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Retrieve data from sessionStorage on component mount
   useEffect(() => {
     const storedData = sessionStorage.getItem("customerData");
     if (storedData) {
@@ -102,14 +101,11 @@ const CustomerStepTwo  = () => {
       
       <div className="flex flex-col gap-3 mt-4">
         <Button 
-          text={loading ? "Creating Customer..." : "Confirm and Create"} 
+          text= "Submit"
           onClick={handleConfirm}
           disabled={loading}
-        />
-        <Button 
-          text="Back to Edit" 
-          onClick={handleBack}
-          disabled={loading}
+          loading={loading}
+          loadingText="submitting..."
         />
       </div>
     </div>

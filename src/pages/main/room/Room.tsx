@@ -48,14 +48,14 @@ const Room = () => {
           </IonSegmentButton>
         </IonSegment>
 
-        {/* Room list using GenericList */}
+        {/* Room list using GenericList 
         <GenericList
           items={roomItems}
           title={activeTab === "active" ? "Active Rooms" : "All Rooms"}
           valuePrefix="₦"
           showTypeLabel={true}
           showTime={false}
-        />
+        />*/}
       </div>
     </IonContent>
   );

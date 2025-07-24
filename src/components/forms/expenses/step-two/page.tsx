@@ -2,7 +2,8 @@ import { useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Button from "../../../../components/button/button";
-import { useExpenseStore } from "../../../../stores/useExpenseStore";
+import { useExpenseStore } from "../../../../stores/expensesStore";
+
 
 const ExpenseStepTwo = () => {
   const router = useIonRouter();
@@ -22,9 +23,6 @@ const ExpenseStepTwo = () => {
     }
   }, []);
 
-  const handleBack = () => {
-    router.push("/expenses/create/stepone", "back", "push");
-  };
 
   const handleConfirm = async () => {
     if (!formData) return;
@@ -66,60 +64,10 @@ const ExpenseStepTwo = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 bg-white p-6 rounded-lg shadow-md max-w-md mx-auto mt-10">
-      <h2 className="text-2xl font-bold text-center mb-4">Confirm Expense Details</h2>
-      
-      <div className="space-y-4">
-        <div className="flex justify-between items-center border-b pb-3">
-          <p className="text-gray-500">Amount</p>
-          <p className="font-bold text-xl">₦{parseFloat(formData.amount).toLocaleString()}</p>
-        </div>
-        
-        <div className="flex justify-between items-center border-b pb-3">
-          <p className="text-gray-500">Category</p>
-          <p className="font-medium">{formData.category}</p>
-        </div>
-        
-        <div className="flex justify-between items-center border-b pb-3">
-          <p className="text-gray-500">Date</p>
-          <p className="font-medium">
-            {new Date(formData.date).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-            })}
-          </p>
-        </div>
-        
-        <div>
-          <p className="text-gray-500 mb-2">Description</p>
-          <p className="font-medium bg-gray-50 p-3 rounded-md">
-            {formData.description}
-          </p>
-        </div>
-      </div>
-      
-      {error && (
-        <div className="bg-red-50 text-red-700 p-3 rounded-md">
-          <p className="font-medium">Error:</p>
-          <p>{error}</p>
-        </div>
-      )}
-      
-      <div className="flex flex-col gap-3 mt-4">
-        <Button 
-          text={loading ? "Recording Expense..." : "Confirm and Record"} 
-          onClick={handleConfirm}
-          disabled={loading}
-        />
-        <Button 
-          text="Back to Edit" 
-          onClick={handleBack}
-          variant="outline"
-          disabled={loading}
-        />
-      </div>
-    </div>
+
+    <>
+    Details
+    </>
   );
 };
 
