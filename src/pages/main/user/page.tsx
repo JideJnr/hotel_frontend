@@ -1,5 +1,6 @@
 import { IonContent } from "@ionic/react";
 import { useHistory } from "react-router-dom";
+import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
 
 const mockClients = [
   {
@@ -20,33 +21,37 @@ const mockClients = [
 ];
 
 const Users = () => {
-  const history = useHistory(); // Ionic uses this for navigation
+  const history = useHistory(); 
 
   return (
-    <IonContent>
+  
       <div className="w-full h-full flex flex-col p-4 gap-4 bg-gray-100">
-        <h2 className="text-xl font-bold">Recent Clients</h2>
+          <div className="grid gap-4 lg:gap-8  grid-cols-2 md:grid-cols-3 w-full h-fit my-4 ">
+          <DashboardTile title="Total Rooms" value={1} delta={1} />
+          <DashboardTile title="Active Rooms" value={2} delta={1} />
+        </div>
+        <h2 className="text-xl font-bold text-black">Recent Clients</h2>
         <div>
           {mockClients.map((client) => (
             <div
               key={client.id}
-              className="flex items-center px-2 py-2 border-y cursor-pointer"
+              className="flex items-center px-2 py-2 border-y cursor-pointer bg-white text-black"
               onClick={() => history.push(`/user/${client.id}`)}
             >
               <img
-                src={client.profilePicture || "https://via.placeholder.com/50"}
+                src= "https://via.placeholder.com"
                 alt="Profile"
                 className="w-10 h-10 rounded-full mr-4"
               />
               <div className="flex flex-col">
                 <p className="font-semibold">{client.name}</p>
-                <p className="text-sm text-gray-500">Last Seen: Just Now</p>
+               
               </div>
             </div>
           ))}
         </div>
       </div>
-    </IonContent>
+    
   );
 };
 

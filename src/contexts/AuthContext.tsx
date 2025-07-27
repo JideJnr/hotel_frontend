@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const wrappedSignup = async (payload:any) => {
-    await signup(payload);
+    const response = await signup(payload);
       if (response.success) {
         router.push('/main', 'forward', 'replace');
       } else {  

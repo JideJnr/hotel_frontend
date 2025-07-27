@@ -1,18 +1,13 @@
-import { useIonRouter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { BackFormContainer, FormHeader,  } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
-import { useExpenseStore } from "../../../../stores/expensesStore";
-
 
 const ExpenseStepTwo = () => {
   const router = useIonRouter();
-  const { createExpense } = useExpenseStore();
-  const [formData, setFormData] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  // Retrieve data from sessionStorage on component mount
+  const [formData, setFormData] = useState<any>(null);
   useEffect(() => {
     const storedData = sessionStorage.getItem("expenseData");
     if (storedData) {
@@ -23,51 +18,90 @@ const ExpenseStepTwo = () => {
     }
   }, []);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const newErrors = {
+      paymentMethod: !additionalData.paymentMethod.trim() ? "Payment method is required" : '',
+      reference: !additionalData.reference.trim() ? "Reference is required" : ''
+    };
 
-  const handleConfirm = async () => {
-    if (!formData) return;
-    
-    setLoading(true);
-    setError(null);
-    
-    try {
-      // Prepare expense data for API
-      const expenseData = {
-        amount: parseFloat(formData.amount),
-        category: formData.category,
-        description: formData.description,
-        date: new Date(formData.date).toISOString(),
-        // receipt would be added here if implemented
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).every(error => !error)) {
+      const completeExpense = {
+        ...formData,
+        ...additionalData,
+        amount: parseFloat(formData.amount)
       };
       
-      await createExpense(expenseData);
-      
-      // Clear session storage after successful creation
-      sessionStorage.removeItem("expenseData");
+      // Here you would typically send the data to your API
+      console.log("Submitting expense:", completeExpense);
       
       toast.success("Expense recorded successfully!");
+      sessionStorage.removeItem("expenseData");
       router.push("/expenses", "forward", "replace");
-    } catch (err: any) {
-      setError(err.message || "Failed to record expense");
-      toast.error("Failed to record expense. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
+
+
 
   if (!formData) {
     return (
       <div className="flex justify-center items-center h-full">
-        <p>Loading expense data...</p>
+        <p className="text-gray-500">Loading expense data...</p>
       </div>
     );
   }
 
   return (
+    <IonPage>
+      <FormHeader/>
+      <IonContent>
+        <BackFormContainer 
+          title="Complete Expense Details" 
+          subtitle="Step 2: Payment information"
+          className="max-w-2xl"
+        >
+          <div className="space-y-6">
+            {/* Display summary from step one */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-medium text-gray-900 mb-3">Expense Summary</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-gray-500">Amount</p>
+                  <p className="font-medium">₦{parseFloat(formData.amount).toFixed(2)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Category</p>
+                  <p className="font-medium">{formData.category}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Date</p>
+                  <p className="font-medium">{new Date(formData.date).toLocaleDateString()}</p>
+                </div>
+              </div>
+            </div>
 
-    <>
-    Details
-    </>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="flex flex-col gap-3 pt-4">
+                <Button 
+                  text="Submit Expense"
+                  type="submit"
+                  className="w-full"
+                />
+                <Button 
+                  text="Back"
+                  onClick={() => router.push("/expenses/create/stepone", "back", "push")}
+                
+                  className="w-full"
+                />
+              </div>
+            </form>
+          </div>
+        </BackFormContainer>
+      </IonContent>
+    </IonPage>
   );
 };
 

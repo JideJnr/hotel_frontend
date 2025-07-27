@@ -1,23 +1,26 @@
-import React from "react";
+// src/components/DashboardCard.tsx
 
-interface DashboardTileProps {
-  label: string;
-  unit: string | number; // Define the type for unit
-  svg?: React.ReactNode; // Use React.ReactNode for SVG or any other JSX elements
+import React from 'react';
+
+interface DashboardCardProps {
+  title: string;
+  value: number;
+  delta: number;
 }
 
-const DashboardTile: React.FC<DashboardTileProps> = ({ label, unit, svg }) => {
+const DashboardCard: React.FC<DashboardCardProps> = ({ title, value, delta }) => {
+  const isPositive = delta >= 0;
+
   return (
-    <div className="rounded-md sm:border border-dashed border-gray-200 p-2 sm:p-4 flex y text-white bg-gradient-to-r from-cyan-700 via-cyan-600 to-cyan-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 shadow-lg shadow-cyan-500/50 dark:shadow-lg dark:shadow-cyan-800/80">
-      <div>
-        <div className="flex mb-0.5 w-fit">
-          <p className="text-xl font-semibold">{unit}</p>
-        </div>
-        <span className="text-white text-sm">{label}</span>
+    <div className="bg-white rounded-xl shadow p-4 w-full">
+      <h4 className="text-gray-500 text-sm mb-1">{title}</h4>
+      <div className="text-2xl font-semibold text-gray-700">{value}</div>
+      <div className={`text-sm mt-1 flex items-center ${isPositive ? 'text-green-600' : 'text-red-500'}`}>
+        <span className="mr-1">{isPositive ? '↑' : '↓'} {Math.abs(delta)}</span>
+        <span className="text-gray-500">vs last month</span>
       </div>
-      <div className="ml-auto h-fit my-auto mr-2">{svg}</div>
     </div>
   );
 };
 
-export default DashboardTile;
+export default DashboardCard;

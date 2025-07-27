@@ -1,10 +1,8 @@
-import OnboardingTemplate from "../../../../components/templates/onboarding/onboarding"
-import { IonLabel, useIonRouter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import TextInput from "../../../../components/input/text/input";
+import { FormContainer, FormInput, FormFooter } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
-
 
 const Signup = () => {
   const router = useIonRouter();
@@ -36,7 +34,8 @@ const Signup = () => {
     setErrors({ ...errors, [name]: validateField(name, value) });
   };
 
-  const handleNext = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     const newErrors = {
       fullName: validateField("fullName", formData.fullName),
       phone: validateField("phone", formData.phone),
@@ -47,55 +46,69 @@ const Signup = () => {
 
     if (Object.values(newErrors).every((e) => !e)) {
       sessionStorage.setItem("coreDetails", JSON.stringify(formData));
-      router.push("/auth/account", "forward", "replace");
+      router.push("/signup/steptwo", "forward", "replace");
     } else {
       toast.error("Please fix the errors before continuing.");
     }
   };
 
   return (
-    <OnboardingTemplate titleOne="Complete your profile">
-    <div className="p-4 gap-4 flex flex-col">
-      <div className="flex flex-col gap-2">
-        <IonLabel>Full Name</IonLabel>
-        <TextInput
+    <IonPage>
+      <IonContent className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-10">
+        
+       
+    <FormContainer 
+      title="Complete your profile" 
+      subtitle="We need a few more details to get started"
+    >
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <FormInput
+          label="Full Name"
           name="fullName"
           value={formData.fullName}
           onChange={handleChange}
           placeholder="Enter your full name"
+          error={errors.fullName}
           required
         />
-        {errors.fullName && <span className="text-red-500 text-xs">{errors.fullName}</span>}
-      </div>
 
-      <div className="flex flex-col gap-2">
-        <IonLabel>Phone Number</IonLabel>
-        <TextInput
+        <FormInput
+          label="Phone Number"
           name="phone"
           value={formData.phone}
           onChange={handleChange}
           placeholder="Enter your phone number"
+          error={errors.phone}
           required
         />
-        {errors.phone && <span className="text-red-500 text-xs">{errors.phone}</span>}
-      </div>
 
-      <div className="flex flex-col gap-2">
-        <IonLabel>Address</IonLabel>
-        <TextInput
+        <FormInput
+          label="Address"
           name="address"
           value={formData.address}
           onChange={handleChange}
           placeholder="Enter your address"
+          error={errors.address}
           required
         />
-        {errors.address && <span className="text-red-500 text-xs">{errors.address}</span>}
-      </div>
 
-      <Button text="Next" onClick={handleNext} className="w-full mt-4" />
-    </div>
-  </OnboardingTemplate>
-  )
-}
+        <Button 
+          text="Next" 
+          type="submit" 
+          className="w-full"
+        />
 
-export default Signup
+        <FormFooter
+          promptText="Already have an account?"
+          linkText="Sign in"
+          linkPath="/auth/signin"
+        />
+      </form>
+    </FormContainer>
+
+     </IonContent>
+    </IonPage>
+  );
+};
+
+export default Signup;

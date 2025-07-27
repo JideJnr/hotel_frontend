@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
-import { IonContent } from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import Button from "../../../../components/button/button";
+import { BackFormContainer, FormHeader } from "../../../../components/forms";
 
 const UserDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -8,8 +9,14 @@ const UserDetails = () => {
   const history = null
 
   return (
-    <IonContent>
-      <div className="w-full h-full flex flex-col p-4">
+    <IonPage>
+          <FormHeader/>
+          <BackFormContainer 
+            title="User Details" 
+            subtitle="User Details"
+            className="max-w-2xl"
+          >
+                  <div className="w-full h-full flex flex-col p-4">
       <div className="flex flex-col gap-4 p-4">
         <div className="flex w-full h-fit">
           <img
@@ -90,8 +97,11 @@ const UserDetails = () => {
           </div>
         </div>
       </div>
-    </div>
-    </IonContent>
+            </div>
+
+          </BackFormContainer>
+    </IonPage>
+
   );
 };
 

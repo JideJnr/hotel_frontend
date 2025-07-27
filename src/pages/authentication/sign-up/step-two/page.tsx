@@ -1,15 +1,12 @@
-
-import OnboardingTemplate from "../../../../components/templates/onboarding/onboarding"
-import { IonInput, IonLabel, useIonRouter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { FormContainer, FormInput, PasswordInput, FormFooter } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
-import TextInput from "../../../../components/input/text/input";
 import { useAuth } from "../../../../contexts/AuthContext";
 
 const SignupContinue = () => {
   const router = useIonRouter();
-  
   const { signup, loading, error: authError } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -26,7 +23,6 @@ const SignupContinue = () => {
 
   const [coreDetails, setCoreDetails] = useState<any>(null);
 
-  
   useEffect(() => {
     const stored = sessionStorage.getItem("coreDetails");
     if (stored) setCoreDetails(JSON.parse(stored));
@@ -48,71 +44,84 @@ const SignupContinue = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
-
-
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
-  
-    const completeData = { ...coreDetails, ...formData };
-  
-    try {
-      console.log("Submitting:", completeData);
-      await signup(completeData);
-      sessionStorage.removeItem("coreDetails");
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error.message || "Failed to create account. Please try again."); // ✅ rely on caught error
+    // Clear error when user starts typing
+    if (errors[name as keyof typeof errors]) {
+      setErrors({ ...errors, [name]: "" });
     }
   };
-  
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    const completeData = { ...coreDetails, ...formData };
+
+    try {
+      await signup(completeData);
+      sessionStorage.removeItem("coreDetails");
+      router.push("/home", "root");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message || "Failed to create account. Please try again.");
+    }
+  };
 
   return (
-    <OnboardingTemplate titleOne="Create your account">
-    <div className="p-4 gap-4 flex flex-col">
-      <div className="flex flex-col gap-2">
-        <IonLabel>Email</IonLabel>
-        <TextInput
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Enter your email"
-          required
-        />
-        {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
-      </div>
+    
+    <IonPage>
+      <IonContent className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-10">
+        <FormContainer 
+          title="Create your account" 
+          subtitle="Set up your login credentials"
+        >
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <FormInput
+              label="Email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              error={errors.email}
+              required
+            />
 
-      <div className="flex flex-col gap-2">
-        <IonLabel>Password</IonLabel>
-        <TextInput
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Create a password"
-          required
-        />
-        {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
-      </div>
+            <PasswordInput
+              label="Password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Create a password"
+              error={errors.password}
+            />
 
-      <div className="flex flex-col gap-2">
-        <IonLabel>Confirm Password</IonLabel>
-        <TextInput
-          name="confirmPassword"
-          type="password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          placeholder="Confirm your password"
-          required
-        />
-        {errors.confirmPassword && <span className="text-red-500 text-xs">{errors.confirmPassword}</span>}
-      </div>
+            <PasswordInput
+              label="Confirm Password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              placeholder="Confirm your password"
+              error={errors.confirmPassword}
+            />
 
-      <Button text="Create Account" onClick={handleSubmit} className="w-full mt-4"  loading={loading} loadingText="Creating Account..."/>
-    </div>
-  </OnboardingTemplate>
-  )
-}
+            <Button 
+              text="Create Account" 
+              type="submit" 
+              className="w-full"
+              loading={loading}
+              loadingText="Creating Account..."
+            />
 
-export default SignupContinue
+            <FormFooter
+              promptText="Already have an account?"
+              linkText="Sign in"
+              linkPath="/auth/signin"
+            />
+          </form>
+        </FormContainer>
+      </IonContent>
+    </IonPage>
+  );
+};
+
+export default SignupContinue;

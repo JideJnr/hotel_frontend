@@ -42,9 +42,7 @@ const activities = [
 ];
 
   return (
-    
-    
-        <div className="p-4  bg-white text-gray-800 w-full h-full flex flex-col  ">
+    <div className="p-4  bg-white text-gray-800 w-full h-full flex flex-col  ">
           
             {activities ? (
               <>
@@ -111,7 +109,7 @@ const activities = [
             ) : (
               <>empty</>
             )}
-          </div>
+    </div>
    
 
   );

@@ -1,168 +1,113 @@
-import OnboardingTemplate from "../../../../components/templates/onboarding/onboarding";
-import { useIonRouter } from "@ionic/react";
-import { useState, useEffect } from "react";
+import { IonPage, IonContent, useIonRouter } from "@ionic/react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { FormContainer, DetailRow, FormHeader, BackFormContainer } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 
-type FormData = {
-  customer: {
-    value: number;
-    label: string;
-  } | null;
-  roomNumber: {
-    value: number;
-    label: string;
-  } | null;
+type BookingData = {
+  customerName: string;
+  roomNumber: string;
+  paymentMethod: string;
   bookingInstruction: string;
-};
-
-type ClientDetails = {
-  id: number;
-  name: string;
-  email?: string;
-  phone?: string;
-};
-
-type RoomDetails = {
-  id: number;
-  type?: string;
-  price?: number;
-  status?: string;
+  roomNumberLabel: string;
+  paymentMethodLabel: string;
 };
 
 const SalesStepTwo = () => {
   const router = useIonRouter();
-  const [formData, setFormData] = useState<FormData | null>(null);
-  const [clientDetails, setClientDetails] = useState<ClientDetails | null>(null);
-  const [roomDetails, setRoomDetails] = useState<RoomDetails | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<BookingData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Retrieve data from session storage
-    const storedData = sessionStorage.getItem("coreDetails");
-    if (storedData) {
-      const parsedData: FormData = JSON.parse(storedData);
-      setFormData(parsedData);
-
-      // In a real app, you would fetch these details from your API
-      if (parsedData.customer?.value) {
-        // Mock client details fetch
-        setClientDetails({
-          id: parsedData.customer.value,
-          name: parsedData.customer.label || "Unknown",
-          email: "client@example.com",
-          phone: "+1234567890",
-        });
-      }
-
-      if (parsedData.roomNumber?.value) {
-        // Mock room details fetch
-        setRoomDetails({
-          id: parsedData.roomNumber.value,
-          type: "Deluxe",
-          price: 150,
-          status: "Available",
-        });
+    const stored = sessionStorage.getItem("bookingData");
+    if (stored) {
+      try {
+        setFormData(JSON.parse(stored));
+      } catch (err) {
+        handleDataError("Invalid booking data format");
       }
     } else {
-      toast.error("No booking data found");
-      router.push("/register/sales/stepone");
+      handleDataError("No booking data found");
     }
-  }, [router]);
+  }, []);
 
-  const handleSubmit = async () => {
-    if (!formData) return;
-
-    setIsSubmitting(true);
-    try {
-      // In a real app, this would be your API call
-      // await api.post('/bookings', {
-      //   clientId: formData.customer?.value,
-      //   roomId: formData.roomNumber?.value,
-      //   instructions: formData.bookingInstruction,
-      // });
-
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast.success("Booking created successfully!");
-      sessionStorage.removeItem("coreDetails");
-      router.push("/bookings/success", "forward", "replace");
-    } catch (error) {
-      toast.error("Failed to create booking");
-      console.error(error);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleDataError = (message: string) => {
+    toast.error(`${message}. Please start again.`);
+    router.push("/sales/stepone", "back", "push");
   };
 
-  const handleBack = () => {
-    router.push("/register/sales/stepone", "back", "replace");
+  const handleConfirm = async () => {
+    if (!formData) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // TODO: replace with real API call
+      console.log("Submitting booking:", formData);
+
+      sessionStorage.removeItem("bookingData");
+      toast.success("Booking confirmed successfully!");
+      router.push("/sales", "forward", "replace");
+    } catch (err: any) {
+      const errorMessage = err?.message || "Failed to confirm booking";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!formData) {
-    return <div>Loading...</div>;
+    return (
+      <IonPage>
+        <IonContent className="flex items-center justify-center">
+          <p className="text-gray-500">Loading booking data...</p>
+        </IonContent>
+      </IonPage>
+    );
   }
 
   return (
-    <OnboardingTemplate titleOne="Review your booking">
-      <div className="flex flex-col gap-6 bg-white h-fit p-6">
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-gray-800">Booking Summary</h2>
-          
-          <div className="border-t border-b border-gray-200 py-4">
-            <h3 className="font-medium text-gray-700">Client Information</h3>
-            {clientDetails ? (
-              <div className="mt-2 space-y-1 text-sm text-gray-600">
-                <p><span className="font-medium">Name:</span> {clientDetails.name}</p>
-                <p><span className="font-medium">Email:</span> {clientDetails.email}</p>
-                <p><span className="font-medium">Phone:</span> {clientDetails.phone}</p>
-              </div>
-            ) : (
-              <p className="text-sm text-gray-500">No client selected</p>
+    <IonPage>
+      <FormHeader/>
+      <BackFormContainer
+        title="Confirm Booking Details"
+        subtitle="Please review the information before submitting"
+        className="max-w-xl"
+      >
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <DetailRow label="Customer" value={formData.customerName} />
+            <DetailRow label="Room" value={formData.roomNumberLabel} />
+            <DetailRow label="Payment Method" value={formData.paymentMethodLabel} />
+            {formData.bookingInstruction && (
+              <DetailRow label="Booking Note" value={formData.bookingInstruction} />
             )}
           </div>
 
-          <div className="border-b border-gray-200 py-4">
-            <h3 className="font-medium text-gray-700">Room Information</h3>
-            {roomDetails ? (
-              <div className="mt-2 space-y-1 text-sm text-gray-600">
-                <p><span className="font-medium">Room:</span> {formData.roomNumber?.label}</p>
-                <p><span className="font-medium">Type:</span> {roomDetails.type}</p>
-                <p><span className="font-medium">Price:</span> ${roomDetails.price}/night</p>
-                <p><span className="font-medium">Status:</span> {roomDetails.status}</p>
-              </div>
-            ) : (
-              <p className="text-sm text-gray-500">No room selected</p>
-            )}
-          </div>
-
-          {formData.bookingInstruction && (
-            <div className="border-b border-gray-200 py-4">
-              <h3 className="font-medium text-gray-700">Special Instructions</h3>
-              <p className="mt-2 text-sm text-gray-600 whitespace-pre-line">
-                {formData.bookingInstruction}
-              </p>
+          {error && (
+            <div className="bg-red-100 text-red-700 p-3 rounded-md">
+              <p className="font-medium">Error:</p>
+              <p>{error}</p>
             </div>
           )}
-        </div>
 
-        <div className="flex justify-between mt-6">
-          <Button 
-            onClick={handleBack}
-            text="Back"
-            variant="outline"
-            className="w-32"
-          />
-          <Button 
-            onClick={handleSubmit}
-            text={isSubmitting ? "Processing..." : "Confirm Booking"}
-            disabled={isSubmitting}
-            className="w-32"
-          />
+          <div className="flex flex-col gap-3 pt-4">
+            <Button
+              text="Confirm Booking"
+              onClick={handleConfirm}
+              loading={loading}
+              disabled={loading}
+              loadingText="Submitting..."
+              className="w-full"
+            />
+
+          </div>
         </div>
-      </div>
-    </OnboardingTemplate>
+      </BackFormContainer>
+    </IonPage>
   );
 };
 

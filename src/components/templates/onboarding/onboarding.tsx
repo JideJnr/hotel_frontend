@@ -21,11 +21,7 @@ const OnboardingTemplate = ({
               className="w-32 h-auto"
             />
 
-            <div className="mt-2 text-center px-4">
-              <h1 className="text-2xl font-bold text-[#3c3c3c] leading-snug tracking-wide font-serif">
-                {titleOne}
-              </h1>
-            </div>
+        
           </div>
 
           {children}

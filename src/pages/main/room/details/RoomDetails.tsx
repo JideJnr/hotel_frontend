@@ -1,12 +1,21 @@
-import Button from "../../../components/button/button";
+import { IonContent, IonPage } from "@ionic/react";
+import Button from "../../../../components/button/button";
+import { BackFormContainer, FormHeader } from "../../../../components/forms";
 
 const RoomDetails = () => {
 
     const data = null;
  
   return (
-    <>
-    <div className="flex flex-col gap-4 p-4">
+       <IonPage>
+              <FormHeader/>
+              <BackFormContainer 
+                title="Room Details" 
+                subtitle="Room Details"
+                className="max-w-2xl"
+              >
+                      <IonContent>
+            <div className="flex flex-col gap-4 p-4">
         <div className="flex flex-col gap-3 border-b py-6 text-xs">
           <p className="flex justify-between">
             <span className="text-gray-400">Room No.:</span>
@@ -70,7 +79,15 @@ const RoomDetails = () => {
           </div>
         </div>
       </div>
-    </>
+
+      </IonContent>
+
+              </BackFormContainer>
+
+    </IonPage>
+    
+
+
   );
 };
 

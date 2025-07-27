@@ -1,7 +1,7 @@
-import OnboardingTemplate from "../../../../components/templates/onboarding/onboarding";
-import { useIonRouter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { BackFormContainer, FormContainer, FormHeader, FormInput } from "../..";
 import Button from "../../../../components/button/button";
 
 const ClientStepOne = () => {
@@ -11,7 +11,7 @@ const ClientStepOne = () => {
     fullName: '',
     phone: '',
     address: '',
-    email: '' // Added email field
+    email: ''
   });
 
   const [errors, setErrors] = useState({
@@ -21,14 +21,14 @@ const ClientStepOne = () => {
     email: ''
   });
 
-  const handleNext = () => {
+  const handleNext = (e: React.FormEvent) => {
+    e.preventDefault();
     const newErrors: any = {};
     
-    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required.";
-    if (!formData.phone.trim()) newErrors.phone = "Phone number is required.";
-    if (!formData.address.trim()) newErrors.address = "Address is required.";
+    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
+    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+    if (!formData.address.trim()) newErrors.address = "Address is required";
     
-    // Basic email validation
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
@@ -43,9 +43,7 @@ const ClientStepOne = () => {
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -59,64 +57,67 @@ const ClientStepOne = () => {
   };
 
   return (
-      <div className="flex flex-col gap-4 w-full h-full p-4">
-        <div className="flex flex-col gap-2">
-          <p className="font-medium">Full Name *</p>
-          <input
-            type="text"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            className="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-md sm:leading-6"
-            placeholder="John Doe"
-          />
-          {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
-        </div>
+    <IonPage>
+      <FormHeader />
+      <IonContent>
+        <BackFormContainer 
+          title="Customer Registration" 
+          subtitle="Step 1: Basic Information"
+          className="max-w-2xl mx-auto"
+        >
+          <form onSubmit={handleNext} className="space-y-4">
+            <FormInput
+              label="Full Name *"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              placeholder="John Doe"
+              error={errors.fullName}
+              required
+            />
 
-        <div className="flex flex-col gap-2">
-          <p className="font-medium">Phone Number *</p>
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            className="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-md sm:leading-6"
-            placeholder="8123456789"
-          />
-          {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-        </div>
+            <FormInput
+              label="Phone Number *"
+              name="phone"
+              type="tel"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="8123456789"
+              error={errors.phone}
+              required
+            />
 
-        <div className="flex flex-col gap-2">
-          <p className="font-medium">Email</p>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-md sm:leading-6"
-            placeholder="john@example.com"
-          />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-        </div>
+            <FormInput
+              label="Email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="john@example.com"
+              error={errors.email}
+            />
 
-        <div className="flex flex-col gap-2">
-          <p className="font-medium">Address *</p>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            className="block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-md sm:leading-6"
-            placeholder="123 Main St, City"
-          />
-          {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
-        </div>
+            <FormInput
+              label="Address *"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              placeholder="123 Main St, City"
+              error={errors.address}
+              required
+            />
 
-        <div className="mt-4">
-          <Button text="Continue" onClick={handleNext} />
-        </div>
-      </div>
-  
+            <div className="pt-4">
+              <Button 
+                text="Continue" 
+                type="submit" 
+                className="w-full"
+              />
+            </div>
+          </form>
+        </BackFormContainer>
+      </IonContent>
+    </IonPage>
   );
 };
 

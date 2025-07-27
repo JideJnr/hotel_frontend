@@ -2,34 +2,57 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonRouterOutlet } from "@ionic/react";
+import PublicRoute from "../components/route/PublicRoute";
+import PrivateRoute from "../components/route/PrivateRoute";
 
+
+
+const SalesStepOne = React.lazy(() => import("../components/forms/sales/step-one/page"));
+const SalesStepTwo = React.lazy(() => import("../components/forms/sales/step-two/page"));
+
+const ClientStepOne = React.lazy(() => import("../components/forms/client/step-one/page"));
+const ClientStepTwo = React.lazy(() => import("../components/forms/client/step-two/page"));
+
+const ExpenseStepOne = React.lazy(() => import("../components/forms/expenses/step-one/page"));
+const ExpenseStepTwo = React.lazy(() => import("../components/forms/expenses/step-two/page"));
+
+const BookingStepOne = React.lazy(() => import("../components/forms/booking/step-one/page"));
+const BookingStepTwo = React.lazy(() => import("../components/forms/booking/step-two/page"));
 
 const Welcome = React.lazy(() => import("../pages/authentication/welcome/page"));
 const Signin = React.lazy(() => import("../pages/authentication/sign-in/page"));
 const Signup = React.lazy(() => import("../pages/authentication/sign-up/step-one/page"));
 const SignupContinue = React.lazy(() => import("../pages/authentication/sign-up/step-two/page"));
 const UserDetails = React.lazy(() => import("../pages/main/user/details/UserDetails"));
-const SalesStepOne = React.lazy(() => import("../components/forms/sales/step-one/page"));
-const Room = React.lazy(() => import("../pages/main/room/Room"));
-const Main = React.lazy(() => import("../pages/main/Main"));
 
+const Main = React.lazy(() => import("../pages/main/Main"));
 
 const Routes: React.FC = () => {
   return (
     <IonRouterOutlet>
-      <div className="">
-      <Route path="/" exact>
-        <Redirect to="/welcome" />
-      </Route>
-      <Route path="/welcome" exact component={Welcome} />
-      <Route path="/sign-in" exact component={Signin} />
-      <Route path="/auth/signup" exact component={Signup} />
-      <Route path="/auth/account" exact component={SignupContinue} />
-      <Route path="/test" exact component={Room} />      
-      <Route path="/user/:id" exact component={UserDetails} />
-      <Route path="/register/sales" exact component={SalesStepOne} />
-      <Route path="/home" exact component={Main} />
+      <div>
+        <Route path="/" exact>
+          <Redirect to="/welcome" />
+        </Route>
 
+        {/* PUBLIC ROUTES */}
+        <PublicRoute path="/welcome" exact component={Welcome} />
+        <PublicRoute path="/sign-in" exact component={Signin} />
+        <PublicRoute path="/signup" exact component={Signup} />
+        <PublicRoute path="/signup/steptwo" exact component={SignupContinue} />
+
+        {/* PRIVATE ROUTES */}
+        <PrivateRoute path="/user/:id" exact component={UserDetails} />
+        <PrivateRoute path="/sales/stepone" exact component={SalesStepOne} />
+        <PrivateRoute path="/sales/steptwo" exact component={SalesStepTwo} />
+        <PrivateRoute path="/register/customer/stepone" exact component={ClientStepOne} />
+        <PrivateRoute path="/register/customer/steptwo" exact component={ClientStepTwo} />
+        <PrivateRoute path="/register/expenses/stepone" exact component={ExpenseStepOne} />
+        <PrivateRoute path="/register/expenses/steptwo" exact component={ExpenseStepTwo} />
+        <PrivateRoute path="/register/booking/stepone" exact component={BookingStepOne} />
+        <PrivateRoute path="/register/booking/steptwo" exact component={BookingStepTwo} />
+        
+        <PrivateRoute path="/home" exact component={Main} />
       </div>
     </IonRouterOutlet>
   );

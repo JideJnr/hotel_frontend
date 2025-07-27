@@ -34,19 +34,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         localStorage.setItem('user', JSON.stringify({
           uid: response.user.uid,
           email: response.user.email,
-          firstName: response.user.firstName,
+          fullName: response.user.fullName,
           role: response.user.role
         }));
-        if (response.overview) {
-          localStorage.setItem('overview', JSON.stringify({
-            totalRooms: response.overview?.totalRooms,
-            totalBookings: response.overview?.totalBookings,
-            totalCustomers: response.overview?.totalCustomers,
-            totalStaff: response.overview?.totalStaff,
-            amount: response.overview?.Amount
-          }))
-        }
-
       return response
     } catch (err: any) {
       const msg = err.message || 'Login failed';
@@ -60,7 +50,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       await api.logout();
       set({ user: null, loading: false });
-      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     } catch (err: any) {
       set({ 
         error: err.message || 'Logout failed',
@@ -81,9 +72,16 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
   
       set({ user: response.user, loading: false, error: null });
-      if (response.token) {
+      if (response.success) {
         localStorage.setItem('authToken', response.token);
-      }
+        localStorage.setItem('user', JSON.stringify({
+          uid: response.user.uid,
+          email: response.user.email,
+          fullName: response.user.fullName,
+          role: response.user.role
+        }));
+              }
+      return response
     } catch (err: any) {
       const msg = err.message || 'Login failed';
       set({ error: msg, loading: false, user: null });

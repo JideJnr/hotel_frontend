@@ -1,6 +1,13 @@
-import { IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
+import {
+  IonContent,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+} from "@ionic/react";
 import { useState } from "react";
 import GenericList from "../../../components/cards/GenericList";
+import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
+import ScheduleCard from "../../../components/templates/card/DashboardCards";
 
 type Room = {
   id: string;
@@ -19,26 +26,45 @@ const mockRooms: Room[] = [
 const Room = () => {
   const [activeTab, setActiveTab] = useState<"all" | "active">("all");
 
-  const filteredRooms = activeTab === "active" 
-    ? mockRooms.filter((room) => room.isActive)
-    : mockRooms;
+  const filteredRooms =
+    activeTab === "active"
+      ? mockRooms.filter((room) => room.isActive)
+      : mockRooms;
 
-  // Convert rooms to GenericList items
   const roomItems = filteredRooms.map((room) => ({
     id: room.id,
     name: room.name,
     value: room.price,
-    type: room.isActive ? 'active' : 'inactive',
+    type: room.isActive ? "active" : "inactive",
   }));
 
+  // Room statistics for dashboard tiles
+  const totalRooms = mockRooms.length;
+  const activeRooms = mockRooms.filter((room) => room.isActive).length;
+  const inactiveRooms = totalRooms - activeRooms;
+
+  const events = [
+  { title: 'Dressage Practice', time: '9:00AM - 11:00AM' },
+  { title: 'Polo', time: '11:00AM - 12:00PM' },
+  { title: 'Barrel Racing Practice', time: '12:00PM - 1:00PM' },
+];
+
+
   return (
-    <IonContent>
-      <div className="p-4 dark:bg-gray-100 min-h-screen">
-        {/* Tab selector */}
-        <IonSegment 
+    <div className="p-4 dark:bg-gray-100 w-full h-full flex flex-col gap-6">
+        {/* Dashboard Tiles */}
+        <div className="grid gap-4 lg:gap-8  grid-cols-2 md:grid-cols-3 w-full h-fit my-4 ">
+          <DashboardTile title="Total Rooms" value={totalRooms} delta={1} />
+          <DashboardTile title="Active Rooms" value={activeRooms} delta={1} />
+        </div>
+
+        {/* Segment Filter */}
+        <IonSegment
           value={activeTab}
-          onIonChange={(e) => setActiveTab(e.detail.value as "all" | "active")}
-          className="mb-6"
+          onIonChange={(e) =>
+            setActiveTab(e.detail.value as "all" | "active")
+          }
+          className="mb-2"
         >
           <IonSegmentButton value="all">
             <IonLabel>All Rooms</IonLabel>
@@ -48,16 +74,15 @@ const Room = () => {
           </IonSegmentButton>
         </IonSegment>
 
-        {/* Room list using GenericList 
-        <GenericList
-          items={roomItems}
-          title={activeTab === "active" ? "Active Rooms" : "All Rooms"}
-          valuePrefix="₦"
-          showTypeLabel={true}
-          showTime={false}
-        />*/}
-      </div>
-    </IonContent>
+                  <div className="space-y-4">
+                    <p className='text-black text-xl'>
+                      Room Sales
+                    </p>
+                    {events.map((event, index) => (
+                      <ScheduleCard key={index} title={event.title} time={event.time} />
+                    ))}
+                  </div>
+    </div>
   );
 };
 

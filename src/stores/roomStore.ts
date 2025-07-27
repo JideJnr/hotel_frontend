@@ -35,6 +35,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
   currentRoom: null,
   loading: false,
   error: null,
+  
 
   fetchRooms: async () => {
     set({ loading: true, error: null });
