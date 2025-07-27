@@ -5,18 +5,21 @@ import DashboardTile from "../../../components/templates/dashboardtiles/Dashboar
 const mockClients = [
   {
     id: "user1",
-    name: "John Doe",
-    profilePicture: "https://randomuser.me/api/portraits/men/10.jpg",
+    clientName: "John Doe",
+    userImg: "https://randomuser.me/api/portraits/men/10.jpg",
+    userInitial:'JD'
   },
   {
     id: "user2",
-    name: "Jane Smith",
-    profilePicture: "https://randomuser.me/api/portraits/women/20.jpg",
+    clientName: "Jane Smith",
+    userImg: "https://randomuser.me/api/portraits/women/20.jpg",
+    userInitial:'JD'
   },
   {
     id: "user3",
-    name: "Mike Johnson",
-    profilePicture: "",
+    clientName: "Mike Johnson",
+    userImg: "",
+    userInitial:'JD'
   },
 ];
 
@@ -38,15 +41,30 @@ const Users = () => {
               className="flex items-center px-2 py-2 border-y cursor-pointer bg-white text-black"
               onClick={() => history.push(`/user/${client.id}`)}
             >
-              <img
-                src= "https://via.placeholder.com"
-                alt="Profile"
-                className="w-10 h-10 rounded-full mr-4"
-              />
-              <div className="flex flex-col">
-                <p className="font-semibold">{client.name}</p>
-               
-              </div>
+                      {client.userImg ? (
+                        <button
+                          type="button"
+                          className="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none "
+                        >
+                          <img
+                            className="flex-shrink-0 size-4 w-8 h-8 rounded-full"
+                            src={client.userImg}
+                            alt="Image Note"
+                          />
+                          {client.clientName}
+                        </button>
+                      ) : client.userInitial ? (
+                        <button
+                          type="button"
+                          className="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                          <span className="flex w-8 h-8 flex-shrink-0 justify-center items-center size-4 bg-white border border-gray-200 text-[10px] font-semibold uppercase text-gray-600 rounded-full ">
+                            {client.userInitial}
+                          </span>
+                          {client.clientName}
+                        </button>
+                      ) : null}
+
             </div>
           ))}
         </div>

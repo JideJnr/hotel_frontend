@@ -59,13 +59,13 @@ const ClientStepOne = () => {
   return (
     <IonPage>
       <FormHeader />
-      <IonContent>
+  
         <BackFormContainer 
           title="Customer Registration" 
           subtitle="Step 1: Basic Information"
-          className="max-w-2xl mx-auto"
+          className="max-w-2xl mx-auto w-full"
         >
-          <form onSubmit={handleNext} className="space-y-4">
+          <form onSubmit={handleNext} className="space-y-4 w-full">
             <FormInput
               label="Full Name *"
               name="fullName"
@@ -116,7 +116,7 @@ const ClientStepOne = () => {
             </div>
           </form>
         </BackFormContainer>
-      </IonContent>
+    
     </IonPage>
   );
 };

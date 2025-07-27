@@ -1,6 +1,7 @@
 import { createContext, useContext, ReactNode } from 'react';
 import { useIonRouter } from '@ionic/react';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../services/stores/authStore';
+
 
 interface AuthContextType {
   user: any;

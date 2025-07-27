@@ -1,7 +1,7 @@
 // src/components/PrivateRoute.tsx
 import React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
-import { isAuthenticated } from "../../utils/auth";
+import { isAuthenticated } from "../utils/auth";
 
 interface PrivateRouteProps extends RouteProps {
   component: React.ComponentType<any>;

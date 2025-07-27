@@ -1,7 +1,7 @@
-import { useIonRouter } from "@ionic/react";
+import { IonPage, useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { DetailRow, FormContainer } from "../../../../components/forms";
+import { BackFormContainer, DetailRow, FormContainer, FormHeader } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 
 interface BookingFormData {
@@ -94,27 +94,44 @@ const BookingStepTwo = () => {
   };
 
   return (
-    <FormContainer 
+  <IonPage>
+    <FormHeader/>
+    <BackFormContainer 
       title="Confirm Booking Details"
       subtitle="Please review all information before confirming"
       className="max-w-2xl"
     >
-      <div className="space-y-6">
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-medium text-gray-900 mb-4">Booking Summary</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <DetailRow label="Customer" value={formData.customer?.label || 'Not specified'} />
-            <DetailRow label="Room" value={formData.roomNumber?.label || 'Not specified'} />
-            <DetailRow label="Check-in Date" value={
+      <div className="space-y-6 pb-12">
+        <div className="">
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+            <div className="col-span-2">
+              <DetailRow label="Customer" value={formData.customerName || 'Not specified'} />
+            </div>
+            <div className="col-span-1">
+              <DetailRow label="Room" value={formData.roomNumber?.label || 'Not specified'} />
+            </div>
+            <div className="col-span-1">
+              <DetailRow label="Duration" value={`${getDuration()} nights`} />
+            </div>
+            <div className="col-span-1">
+              <DetailRow label="Check-in Date" value={
               formData.checkInDate ? new Date(formData.checkInDate).toLocaleDateString() : 'Not specified'
             } />
-            <DetailRow label="Check-out Date" value={
+            </div>
+            <div className="col-span-1">
+                          <DetailRow label="Check-out Date" value={
               formData.checkOutDate ? new Date(formData.checkOutDate).toLocaleDateString() : 'Not specified'
             } />
-            <DetailRow label="Duration" value={`${getDuration()} nights`} />
-            <DetailRow label="Price per night" value={`₦${parseFloat(formData.price || '0').toLocaleString()}`} />
-            <DetailRow label="Total Amount" value={`₦${getTotalAmount()}`} />
+            
+
+            </div>
+            <div className="col-span-1">
+              <DetailRow label="Price per night" value={`₦${parseFloat(formData.price || '0').toLocaleString()}`} />
+            </div>
+            <div className="col-span-1">
+              <DetailRow label="Total Amount" value={`₦${getTotalAmount()}`} />
+            </div>
+
           </div>
           
           {formData.bookingInstruction && (
@@ -130,15 +147,10 @@ const BookingStepTwo = () => {
             onClick={handleConfirm}
             className="w-full"
           />
-          <Button 
-            text="Back to Edit"
-            onClick={handleBack}
-            variant="outline"
-            className="w-full"
-          />
         </div>
       </div>
-    </FormContainer>
+    </BackFormContainer>
+  </IonPage>
   );
 };
 

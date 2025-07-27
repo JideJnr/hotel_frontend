@@ -1,61 +1,63 @@
-import { IonContent, IonPage, useIonRouter } from "@ionic/react";
-import { useState, useEffect } from "react";
+import { IonPage, IonContent, useIonRouter } from "@ionic/react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { FormContainer, FormDatePicker } from "../../../../components/forms";
+import {
+  BackFormContainer,
+  FormContainer,
+  FormDatePicker,
+  FormHeader,
+  FormTextarea
+} from "../../../../components/forms";
 import Button from "../../../../components/button/button";
+import FormSelect from "../../FormSelect";
 
-interface Client {
-  id: number;
-  name: string;
-}
+type Client = { id: number; name: string };
+type Room = { id: number; price: number };
 
-interface Room {
-  id: number;
-  price: number;
-}
-
-interface SelectOption {
-  value: number | string | null;
-  label: string | null;
-}
-
-interface BookingFormData {
-  customer: SelectOption | null;
-  roomNumber: SelectOption | null;
+type FormData = {
+  customerId: number | null;
+  customerName: string | null;
+  roomId: number | null;
+  roomLabel: string | null;
   bookingInstruction: string;
   checkInDate: string;
   checkOutDate: string;
-  paymentType: SelectOption | null;
-  paymentMethod: SelectOption | null;
-  partPaymentAmount: string;
+  paymentMethodId: string | null;
+  paymentMethodLabel: string | null;
   price: string;
-}
+};
 
-const BookingStepOne = () => {
+type Errors = {
+  customer?: string;
+  roomId?: string;
+  checkInDate?: string;
+  checkOutDate?: string;
+};
+
+export default function BookingStepOne() {
   const router = useIonRouter();
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  const [formData, setFormData] = useState<BookingFormData>({
-    customer: null,
-    roomNumber: null,
+  const [formData, setFormData] = useState<FormData>({
+    customerId: null,
+    customerName: null,
+    roomId: null,
+    roomLabel: null,
     bookingInstruction: '',
     checkInDate: tomorrow.toISOString().split('T')[0],
     checkOutDate: '',
-    paymentType: null,
-    paymentMethod: null,
-    partPaymentAmount: '',
+    paymentMethodId: null,
+    paymentMethodLabel: null,
     price: ''
   });
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Errors>({});
   const [clients, setClients] = useState<Client[]>([]);
   const [rooms, setRooms] = useState<Room[]>([]);
-  const [user] = useState({ role: "admin" });
 
   useEffect(() => {
-    // Mock data fetching
     setClients([
       { id: 1, name: "John Doe" },
       { id: 2, name: "Jane Smith" }
@@ -67,151 +69,130 @@ const BookingStepOne = () => {
   }, []);
 
   const handleNext = () => {
-    const newErrors: Record<string, string> = {};
+    const errs: Errors = {};
 
-    if (user.role !== "customer" && !formData.customer?.value) {
-      newErrors.customer = "Customer is required";
-    }
-    if (!formData.roomNumber?.value) {
-      newErrors.roomNumber = "Room number is required";
-    }
-    if (!formData.checkInDate) {
-      newErrors.checkInDate = "Check-in date is required";
-    }
+    if (!formData.customerId) errs.customer = "Customer is required";
+    if (!formData.roomId) errs.roomId = "Room is required";
+    if (!formData.checkInDate) errs.checkInDate = "Check-in date is required";
     if (!formData.checkOutDate) {
-      newErrors.checkOutDate = "Check-out date is required";
+      errs.checkOutDate = "Check-out date is required";
     } else if (new Date(formData.checkOutDate) <= new Date(formData.checkInDate)) {
-      newErrors.checkOutDate = "Check-out must be after check-in";
+      errs.checkOutDate = "Check-out must be after check-in";
     }
 
-    setErrors(newErrors);
+    setErrors(errs);
 
-    if (Object.keys(newErrors).length === 0) {
-      const selectedRoom = rooms.find(r => r.id === formData.roomNumber?.value);
-      const updatedData: BookingFormData = {
+    if (Object.keys(errs).length === 0) {
+      const selectedRoom = rooms.find(r => r.id === formData.roomId);
+      const updatedData: FormData = {
         ...formData,
         price: selectedRoom?.price.toString() || ''
       };
 
       sessionStorage.setItem("bookingData", JSON.stringify(updatedData));
-      router.push("/bookings/create/steptwo", "forward", "replace");
+      router.push("/register/booking/steptwo", "forward", "replace");
     } else {
       toast.error("Please fix the errors before continuing.");
     }
   };
 
-  const handleSelectChange = (name: keyof BookingFormData, option: SelectOption | null) => {
-    setFormData(prev => ({
-      ...prev,
-      [name]: option,
-      ...(name === 'roomNumber' && { price: '' })
-    }));
-    setErrors(prev => ({ ...prev, [name]: '' }));
-  };
-
-  const handleDateChange = (name: keyof BookingFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setErrors(prev => ({ ...prev, [name]: '' }));
-  };
-
-  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
   return (
     <IonPage>
-      <IonContent>
-        <FormContainer 
-          title="New Booking" 
+      <FormHeader/>
+     
+        <BackFormContainer
+          title="New Booking"
           subtitle="Step 1: Select room and dates"
           className="max-w-2xl"
         >
-          <div className="space-y-6">
-        
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Customer *
-                </label>
-                <CustomSelect
-                  options={clients.map(client => ({a
-                    value: client.id,
-                    label: client.name
-                  }))}
-                  onChange={(option) => handleSelectChange("customer", option)}
-                  value={formData.customer}
-                  placeholder="Select customer"
-                  isInvalid={!!errors.customer}
-                />
-                {errors.customer && (
-                  <p className="mt-1 text-sm text-red-600">{errors.customer}</p>
-                )}
-              </div>
-         
+          <form onSubmit={(e) => { e.preventDefault(); handleNext(); }} className="space-y-6">
+            <FormSelect
+              label="Customer *"
+              name="customer"
+              value={
+                formData.customerId != null
+                  ? { value: formData.customerId, label: formData.customerName! }
+                  : null
+              }
+              onChange={opt => setFormData(fd => ({
+                ...fd,
+                customerId: opt ? Number(opt.value) : null,
+                customerName: opt ? opt.label : null
+              }))}
+              options={clients.map(client => ({
+                value: client.id,
+                label: client.name
+              }))}
+              placeholder="Select customer"
+              error={errors.customer}
+              required
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Room *
-              </label>
-              <CustomSelect
-                options={rooms.map(room => ({
-                  value: room.id,
-                  label: `Room ${room.id} (₦${room.price.toLocaleString()}/night)`
-                }))}
-                onChange={(option) => handleSelectChange("roomNumber", option)}
-                value={formData.roomNumber}
-                placeholder="Select room"
-                isInvalid={!!errors.roomNumber}
-              />
-              {errors.roomNumber && (
-                <p className="mt-1 text-sm text-red-600">{errors.roomNumber}</p>
-              )}
-            </div>
+            <FormSelect
+              label="Room *"
+              name="roomId"
+              value={
+                formData.roomId != null
+                  ? { value: formData.roomId, label: formData.roomLabel! }
+                  : null
+              }
+              onChange={opt => setFormData(fd => ({
+                ...fd,
+                roomId: opt ? Number(opt.value) : null,
+                roomLabel: opt ? opt.label : null,
+                price: ''  // reset price on change
+              }))}
+              options={rooms.map(room => ({
+                value: room.id,
+                label: `Room ${room.id} (₦${room.price.toLocaleString()}/night)`
+              }))}
+              placeholder="Select room"
+              error={errors.roomId}
+              required
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormDatePicker
                 label="Check-in Date *"
                 value={formData.checkInDate}
-                onChange={(value) => handleDateChange("checkInDate", value)}
-                minDate={new Date().toISOString().split('T')[0]}
+                onChange={value => setFormData(fd => ({
+                  ...fd,
+                  checkInDate: value
+                }))}
+                minDate={today.toISOString().split("T")[0]}
                 error={errors.checkInDate}
               />
 
               <FormDatePicker
                 label="Check-out Date *"
                 value={formData.checkOutDate}
-                onChange={(value) => handleDateChange("checkOutDate", value)}
-                minDate={formData.checkInDate || new Date().toISOString().split('T')[0]}
+                onChange={value => setFormData(fd => ({
+                  ...fd,
+                  checkOutDate: value
+                }))}
+                minDate={formData.checkInDate}
                 error={errors.checkOutDate}
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Special Instructions
-              </label>
-              <textarea
-                name="bookingInstruction"
-                className="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Any special requests or notes"
-                rows={3}
-                value={formData.bookingInstruction}
-                onChange={handleTextareaChange}
-              />
-            </div>
+            <FormTextarea
+              label="Special Instructions"
+              name="bookingInstruction"
+              value={formData.bookingInstruction}
+              onChange={e => setFormData(fd => ({
+                ...fd,
+                bookingInstruction: e.target.value
+              }))}
+              placeholder="Any special requests or notes"
+              rows={3}
+            />
 
             <div className="pt-4">
-              <Button 
-                text="Continue" 
-                onClick={handleNext}
-                className="w-full"
-              />
+              <Button text="Continue" type="submit" className="w-full" />
             </div>
-          </div>
-        </FormContainer>
-      </IonContent>
+          </form>
+        </BackFormContainer>
+     
     </IonPage>
   );
-};
-
-export default BookingStepOne;
+}

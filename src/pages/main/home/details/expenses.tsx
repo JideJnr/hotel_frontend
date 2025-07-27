@@ -3,7 +3,7 @@ import { IonPage } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 
-const RoomDetails = () => {
+const ExpensesDetails = () => {
   const { id } = useParams<{ id: string }>();
 
   // Dummy user data
@@ -32,7 +32,7 @@ const RoomDetails = () => {
   return (
     <IonPage>
       <FormHeader />
-      <BackFormContainer title="Record Details" subtitle="" className="max-w-2xl">
+      <BackFormContainer title="Expenses Details" subtitle="" className="max-w-2xl">
         <div className="w-full flex flex-col  gap-8 text-gray-800">
 
           {/* Profile Image and Basic Info */}
@@ -60,40 +60,10 @@ const RoomDetails = () => {
           </div>
 
 
-          {/* Lodge History */}
-          <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-semibold">Booking History</h3>
-            <div
-              key={history.id}
-              className="flex justify-between items-center px-4 py-2 border rounded-md text-sm"
-            >
-              <div>
-                <p className="font-semibold">{history.roomNumber}</p>
-                <p className="text-gray-500">Host: {history.hostName}</p>
-              </div>
-              <div className="text-xs text-gray-500">{history.date}</div>
-            </div>
-          </div>
-
-                    {/* Current Guest Info */}
-          {data.active && (
-            <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
-              <h3 className="text-lg font-semibold">Current Stay</h3>
-              <div className="text-sm">
-                <p className="font-semibold">{data.currentRoom.name}</p>
-              </div>
-              {data.status === "active" && (
-                <div className="grid grid-cols-1 gap-2 mt-2">
-                  <Button text="Check Out" className="w-full" />
-                </div>
-              )}
-            </div>
-          )}
-
         </div>
       </BackFormContainer>
     </IonPage>
   );
 };
 
-export default RoomDetails;
+export default ExpensesDetails;

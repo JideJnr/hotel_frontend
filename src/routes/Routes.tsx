@@ -2,8 +2,8 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonRouterOutlet } from "@ionic/react";
-import PublicRoute from "../components/route/PublicRoute";
-import PrivateRoute from "../components/route/PrivateRoute";
+import PublicRoute from "./PublicRoute";
+import PrivateRoute from "./PrivateRoute";
 
 
 
@@ -24,6 +24,9 @@ const Signin = React.lazy(() => import("../pages/authentication/sign-in/page"));
 const Signup = React.lazy(() => import("../pages/authentication/sign-up/step-one/page"));
 const SignupContinue = React.lazy(() => import("../pages/authentication/sign-up/step-two/page"));
 const UserDetails = React.lazy(() => import("../pages/main/user/details/UserDetails"));
+const RecordDetails = React.lazy(() => import("../pages/main/home/details/record"));
+const ExpensesDetails = React.lazy(() => import("../pages/main/home/details/expenses"));
+const RoomDetails = React.lazy(() => import("../pages/main/room/details/RoomDetails"));
 
 const Main = React.lazy(() => import("../pages/main/Main"));
 
@@ -42,7 +45,10 @@ const Routes: React.FC = () => {
         <PublicRoute path="/signup/steptwo" exact component={SignupContinue} />
 
         {/* PRIVATE ROUTES */}
+        <PrivateRoute path="/expenses/:id" exact component={ExpensesDetails} />
+        <PrivateRoute path="/record/:id" exact component={RecordDetails} />
         <PrivateRoute path="/user/:id" exact component={UserDetails} />
+        <PrivateRoute path="/room/:id" exact component={RoomDetails} />
         <PrivateRoute path="/sales/stepone" exact component={SalesStepOne} />
         <PrivateRoute path="/sales/steptwo" exact component={SalesStepTwo} />
         <PrivateRoute path="/register/customer/stepone" exact component={ClientStepOne} />
@@ -51,7 +57,6 @@ const Routes: React.FC = () => {
         <PrivateRoute path="/register/expenses/steptwo" exact component={ExpenseStepTwo} />
         <PrivateRoute path="/register/booking/stepone" exact component={BookingStepOne} />
         <PrivateRoute path="/register/booking/steptwo" exact component={BookingStepTwo} />
-        
         <PrivateRoute path="/home" exact component={Main} />
       </div>
     </IonRouterOutlet>

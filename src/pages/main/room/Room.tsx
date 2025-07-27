@@ -1,13 +1,12 @@
 import {
-  IonContent,
   IonSegment,
   IonSegmentButton,
   IonLabel,
+  useIonRouter,
 } from "@ionic/react";
 import { useState } from "react";
-import GenericList from "../../../components/cards/GenericList";
 import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
-import ScheduleCard from "../../../components/templates/card/DashboardCards";
+import ScheduleCard from "../../../components/templates/card/ScheduleCard";
 
 type Room = {
   id: string;
@@ -24,6 +23,7 @@ const mockRooms: Room[] = [
 ];
 
 const Room = () => {
+  const router = useIonRouter();
   const [activeTab, setActiveTab] = useState<"all" | "active">("all");
 
   const filteredRooms =
@@ -66,7 +66,7 @@ const Room = () => {
           }
           className="mb-2"
         >
-          <IonSegmentButton value="all">
+          <IonSegmentButton value="all" >
             <IonLabel>All Rooms</IonLabel>
           </IonSegmentButton>
           <IonSegmentButton value="active">
@@ -79,7 +79,9 @@ const Room = () => {
                       Room Sales
                     </p>
                     {events.map((event, index) => (
-                      <ScheduleCard key={index} title={event.title} time={event.time} />
+                      <div  onClick={() => router.push(`/record/a`)}>
+                        <ScheduleCard key={index} name={event.title} details={event.time} />
+                      </div>
                     ))}
                   </div>
     </div>

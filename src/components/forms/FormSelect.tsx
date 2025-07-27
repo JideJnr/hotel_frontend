@@ -44,7 +44,7 @@ const FormSelect: React.FC<Props> = ({
     >
       <option value="">{placeholder}</option>
       {options.map(o => (
-        <option key={o.value} value={o.value}>{o.label}</option>
+        <option className="" key={o.value} value={o.value}>{o.label}</option>
       ))}
     </select>
     {error && <p className="mt-1 text-sm text-red-600">{error}</p>}

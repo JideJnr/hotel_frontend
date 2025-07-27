@@ -8,4 +8,4 @@ export function formatNaira(amount = 0) {
 }
 
 
-export const displayPrice = (amount: number): string => formatNaira(amount);
+export const CurrencyFormatter = (amount: number): string => formatNaira(amount);

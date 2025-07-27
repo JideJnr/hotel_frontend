@@ -1,6 +1,7 @@
 import { IonButton, IonCol,  IonIcon, IonRow, IonText, useIonRouter } from '@ionic/react';
 import DashboardTile from '../../../components/templates/dashboardtiles/DashboardTiles';
-import ScheduleCard from '../../../components/templates/card/DashboardCards';
+import ScheduleCard from '../../../components/templates/card/ScheduleCard';
+import { useHistory } from 'react-router';
 
 
 
@@ -22,15 +23,15 @@ const Home = () => {
     },
   ];
 
-const events = [
-  { title: 'Dressage Practice', time: '9:00AM - 11:00AM' },
-  { title: 'Polo', time: '11:00AM - 12:00PM' },
-  { title: 'Barrel Racing Practice', time: '12:00PM - 1:00PM' },
-];
+  const record = [
+    { customerName: 'Dressage Practice', RoomNumber: 2 },
+    { customerName: 'Polo',  RoomNumber: 2 },
+    { customerName: 'Barrel Racing Practice',  RoomNumber: 2 },
+  ];
+
 
   return (
-
-      <div className="flex flex-col gap-8 px-4 py-8 bg-gray-100 overflow-y-auto h-full w-full">
+    <div className="flex flex-col gap-8 px-4 py-8 bg-gray-100 overflow-y-auto h-full w-full">
         
           <div className="grid gap-4 lg:gap-8 grid-cols-2 w-full h-fit">
             <DashboardTile title="Balance" value={20000} delta={1}/>
@@ -99,7 +100,7 @@ const events = [
               <IonButton 
                 fill="clear" 
                 className="ion-text-center ion-no-padding"
-                onClick={() => router.push('/register/booking', 'forward')}
+                onClick={() => router.push('/register/booking/stepone', 'forward')}
               >
                 <div className="flex flex-col items-center gap-1.5">
                   <IonIcon
@@ -134,8 +135,10 @@ const events = [
             <p className='text-black text-xl'>
               Room Sales
             </p>
-            {events.map((event, index) => (
-              <ScheduleCard key={index} title={event.title} time={event.time} />
+            {record.map((event, index) => (
+              <div onClick={() => router.push(`/record/a`)}>
+              <ScheduleCard key={index} name={event.customerName} details={`Room ${event.RoomNumber}`} />
+              </div>
             ))}
           </div>
      
@@ -145,8 +148,10 @@ const events = [
             <p className='text-black text-xl'>
                 Expenses
             </p>
-            {events.map((event, index) => (
-              <ScheduleCard key={index} title={event.title} time={event.time} />
+            {expenses.map((expenses, index) => (
+              <div onClick={() => router.push(`/expenses/a`)}>
+                <ScheduleCard key={index} name={expenses.expenseType} details={`N ${expenses.price}`} />
+              </div>
             ))}
           </div>
         )}
