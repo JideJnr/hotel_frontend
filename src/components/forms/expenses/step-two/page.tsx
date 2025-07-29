@@ -1,13 +1,24 @@
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { BackFormContainer, FormHeader,  } from "../../../../components/forms";
+import { BackFormContainer, FormHeader, FormInput } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
+import { useExpenseStore } from "../../../../services/stores/expensesStore";
 
 const ExpenseStepTwo = () => {
   const router = useIonRouter();
+  const { createExpense } = useExpenseStore();
 
   const [formData, setFormData] = useState<any>(null);
+  const [additionalData, setAdditionalData] = useState({
+    paymentMethod: "",
+    reference: ""
+  });
+  const [errors, setErrors] = useState({
+    paymentMethod: "",
+    reference: ""
+  });
+
   useEffect(() => {
     const storedData = sessionStorage.getItem("expenseData");
     if (storedData) {
@@ -18,12 +29,17 @@ const ExpenseStepTwo = () => {
     }
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAdditionalData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const newErrors = {
-      paymentMethod: !additionalData.paymentMethod.trim() ? "Payment method is required" : '',
-      reference: !additionalData.reference.trim() ? "Reference is required" : ''
+      paymentMethod: additionalData.paymentMethod.trim() ? "" : "Payment method is required",
+      reference: additionalData.reference.trim() ? "" : "Reference is required"
     };
 
     setErrors(newErrors);
@@ -34,17 +50,17 @@ const ExpenseStepTwo = () => {
         ...additionalData,
         amount: parseFloat(formData.amount)
       };
-      
-      // Here you would typically send the data to your API
-      console.log("Submitting expense:", completeExpense);
-      
-      toast.success("Expense recorded successfully!");
-      sessionStorage.removeItem("expenseData");
-      router.push("/expenses", "forward", "replace");
+
+      try {
+        await createExpense(completeExpense); // Replace with actual API call
+        toast.success("Expense recorded successfully!");
+        sessionStorage.removeItem("expenseData");
+        router.push("/expenses", "forward", "replace");
+      } catch (err: any) {
+        toast.error(err?.message || "Failed to record expense");
+      }
     }
   };
-
-
 
   if (!formData) {
     return (

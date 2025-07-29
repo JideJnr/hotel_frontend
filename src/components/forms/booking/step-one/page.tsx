@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   BackFormContainer,
-  FormContainer,
   FormDatePicker,
   FormHeader,
   FormTextarea
@@ -14,18 +13,6 @@ import FormSelect from "../../FormSelect";
 type Client = { id: number; name: string };
 type Room = { id: number; price: number };
 
-type FormData = {
-  customerId: number | null;
-  customerName: string | null;
-  roomId: number | null;
-  roomLabel: string | null;
-  bookingInstruction: string;
-  checkInDate: string;
-  checkOutDate: string;
-  paymentMethodId: string | null;
-  paymentMethodLabel: string | null;
-  price: string;
-};
 
 type Errors = {
   customer?: string;
@@ -40,7 +27,7 @@ export default function BookingStepOne() {
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<BookingData>({
     customerId: null,
     customerName: null,
     roomId: null,

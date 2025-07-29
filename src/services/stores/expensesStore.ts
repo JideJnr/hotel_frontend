@@ -1,28 +1,7 @@
 import { create } from 'zustand';
-import * as api from '../services/api';
+import * as api from '../api';
 
-interface Expense {
-  id: string;
-  amount: number;
-  category: string;
-  description: string;
-  date: string;
-  createdAt?: string;
-  updatedAt?: string;
-  receiptUrl?: string;
-}
 
-interface ExpenseState {
-  expenses: Expense[];
-  loading: boolean;
-  error: string | null;
-
-  // Actions
-  fetchExpenses: () => Promise<void>;
-  createExpense: (data: Partial<Expense>) => Promise<void>;
-  updateExpense: (id: string, data: Partial<Expense>) => Promise<void>;
-  deleteExpense: (id: string) => Promise<void>;
-}
 
 export const useExpenseStore = create<ExpenseState>((set) => ({
   expenses: [],
@@ -47,7 +26,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     }
   },
 
-  createExpense: async (data: Partial<Expense>) => {
+  createExpense: async (data: Partial<ExpensesData>) => {
     set({ loading: true, error: null });
     try {
       const response = await api.createExpense(data);
@@ -67,7 +46,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     }
   },
 
-  updateExpense: async (id: string, data: Partial<Expense>) => {
+  updateExpense: async (id: string, data: Partial<ExpensesData>) => {
     set({ loading: true, error: null });
     try {
       const response = await api.updateExpense(id, data);

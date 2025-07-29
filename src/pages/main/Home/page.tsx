@@ -104,7 +104,7 @@ const Home = () => {
               >
                 <div className="flex flex-col items-center gap-1.5">
                   <IonIcon
-                    icon="calendar"
+                    icon="book"
                     className=" p-4 bg-[#f3e8fe] rounded-full text-[24px] text-purple-400"
                   />
                   <IonText className="text-[14px] font-medium leading-[20px] tracking-[-0.13px] text-gray-700 font-semibold">

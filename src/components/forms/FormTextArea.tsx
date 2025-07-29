@@ -1,17 +1,5 @@
 import React from 'react';
 
-interface FormTextareaProps {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  placeholder?: string;
-  rows?: number;
-  error?: string;
-  required?: boolean;
-  className?: string;
-}
-
 export const FormTextarea: React.FC<FormTextareaProps> = ({
   label,
   name,

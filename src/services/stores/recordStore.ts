@@ -1,29 +1,7 @@
 import { create } from 'zustand';
-import * as api from '../services/api';
+import * as api from '../api';
 
-interface Record {
-  id: string;
-  amount: number;
-  category: string;
-  description: string;
-  date: string;
-  createdAt?: string;
-  updatedAt?: string;
-  receiptUrl?: string;
-}
 
-interface RecordState {
-  record: null;
-  records: Record[];
-  loading: boolean;
-  error: string | null;
-
-  // Actions
-  fetchRecords: () => Promise<void>;
-  createRecord: (id: string) => Promise<void>;
-  updateRecord: (id: string, data: Partial<Record>) => Promise<void>;
-  deleteRecord: (id: string) => Promise<void>;
-}
 
 export const useRecordStore = create<RecordState>((set) => ({
   records: [],
@@ -82,7 +60,7 @@ export const useRecordStore = create<RecordState>((set) => ({
     }
   },
 
-  updateRecord: async (id: string, data: Partial<Record>) => {
+  updateRecord: async (id: string, data: Partial<RecordData>) => {
     set({ loading: true, error: null });
     try {
       const response = await api.updateRecord(id, data);
@@ -121,4 +99,5 @@ export const useRecordStore = create<RecordState>((set) => ({
       set({ error: err.message, loading: false });
     }
   },
+  
 }));

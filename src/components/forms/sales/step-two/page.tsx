@@ -1,23 +1,21 @@
 import { IonPage, IonContent, useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { FormContainer, DetailRow, FormHeader, BackFormContainer } from "../../../../components/forms";
+import {
+  DetailRow,
+  FormHeader,
+  BackFormContainer
+} from "../../../../components/forms";
 import Button from "../../../../components/button/button";
-
-type BookingData = {
-  customerName: string;
-  roomNumber: string;
-  paymentMethod: string;
-  bookingInstruction: string;
-  roomNumberLabel: string;
-  paymentMethodLabel: string;
-};
+import { useRecordStore } from "../../../../services/stores/recordStore";
 
 const SalesStepTwo = () => {
   const router = useIonRouter();
-  const [formData, setFormData] = useState<BookingData | null>(null);
+  const [formData, setFormData] = useState<SalesData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const { createRecord } = useRecordStore();
 
   useEffect(() => {
     const stored = sessionStorage.getItem("bookingData");
@@ -37,6 +35,7 @@ const SalesStepTwo = () => {
     router.push("/sales/stepone", "back", "push");
   };
 
+  
   const handleConfirm = async () => {
     if (!formData) return;
 
@@ -44,12 +43,19 @@ const SalesStepTwo = () => {
     setError(null);
 
     try {
-      // TODO: replace with real API call
-      console.log("Submitting booking:", formData);
+      const payload = {
+        customerId: formData.customerId,
+        roomId: formData.roomNumberId,
+        requestId: formData.requestId || null,
+        bookingInstruction: formData.bookingInstruction || null,
+        requestId:  formData.requestId || null,
+      };
 
+      const response = await createRecord(payload); // <-- replace with actual API logic
+      {response.success && 
       sessionStorage.removeItem("bookingData");
       toast.success("Booking confirmed successfully!");
-      router.push("/sales", "forward", "replace");
+      router.push("/sales", "forward", "replace");}
     } catch (err: any) {
       const errorMessage = err?.message || "Failed to confirm booking";
       setError(errorMessage);
@@ -71,7 +77,7 @@ const SalesStepTwo = () => {
 
   return (
     <IonPage>
-      <FormHeader/>
+      <FormHeader />
       <BackFormContainer
         title="Confirm Booking Details"
         subtitle="Please review the information before submitting"
@@ -103,7 +109,6 @@ const SalesStepTwo = () => {
               loadingText="Submitting..."
               className="w-full"
             />
-
           </div>
         </div>
       </BackFormContainer>

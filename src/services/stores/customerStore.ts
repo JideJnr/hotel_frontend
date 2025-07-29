@@ -1,27 +1,6 @@
 import { create } from 'zustand';
-import * as api from '../services/api';
+import * as api from '../api';
 
-interface Customer {
-  id: string;
-  fullName: string;
-  email: string;
-  phone?: string;
-  createdAt?: any;
-  updatedAt?: any;
-}
-
-interface CustomerState {
-  customers: Customer[];
-  customer: Customer | null;
-  loading: boolean;
-  error: string | null;
-
-  fetchCustomers: () => Promise<void>;
-  getCustomer: (id: string) => Promise<void>;
-  createCustomer: (data: Partial<Customer>) => Promise<void>;
-  updateCustomer: (id: string, data: Partial<Customer>) => Promise<void>;
-  deleteCustomer: (id: string) => Promise<void>;
-}
 
 export const useCustomerStore = create<CustomerState>((set) => ({
   customers: [],
@@ -29,7 +8,7 @@ export const useCustomerStore = create<CustomerState>((set) => ({
   loading: false,
   error: null,
 
-  fetchCustomers: async () => {
+  fetchCustomer: async () => {
     set({ loading: true, error: null });
     try {
       const response = await api.getAllCustomers();
@@ -40,7 +19,7 @@ export const useCustomerStore = create<CustomerState>((set) => ({
     }
   },
 
-  getCustomer: async (id: string) => {
+  getCustomerById: async (id: string) => {
     set({ loading: true, error: null });
     try {
       const response = await api.getCustomerById(id);
@@ -51,7 +30,7 @@ export const useCustomerStore = create<CustomerState>((set) => ({
     }
   },
 
-  createCustomer: async (data: Partial<Customer>) => {
+  createCustomer: async (data: Partial<CustomerData>) => {
     set({ loading: true, error: null });
     try {
       const response = await api.createCustomer(data);
@@ -65,7 +44,7 @@ export const useCustomerStore = create<CustomerState>((set) => ({
     }
   },
 
-  updateCustomer: async (id: string, data: Partial<Customer>) => {
+  updateCustomer: async (id: string, data: Partial<CustomerData>) => {
     set({ loading: true, error: null });
     try {
       const response = await api.updateCustomer(id, data);

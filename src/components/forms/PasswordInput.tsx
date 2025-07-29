@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 
-interface PasswordInputProps {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-  error?: string;
-  className?: string;
-}
-
 export const PasswordInput: React.FC<PasswordInputProps> = ({
   label,
   value,

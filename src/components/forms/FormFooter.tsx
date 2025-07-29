@@ -1,12 +1,5 @@
 import React from 'react';
 
-interface FormFooterProps {
-  promptText: string;
-  linkText: string;
-  linkPath: string;
-  className?: string;
-}
-
 export const FormFooter: React.FC<FormFooterProps> = ({
   promptText,
   linkText,

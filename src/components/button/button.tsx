@@ -1,15 +1,5 @@
 import React from "react";
 
-interface ButtonProps {
-  text: string;
-  loadingText?: string;
-  loading?: boolean;
-  disabled?: boolean;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  className?: string;
-  svg?: React.ReactNode;
-  type?: "button" | "submit" | "reset";
-}
 
 const Button: React.FC<ButtonProps> = ({
   text,

@@ -1,7 +1,7 @@
-import { IonContent, IonPage, useIonRouter } from "@ionic/react";
+import {  IonPage, useIonRouter } from "@ionic/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { BackFormContainer, FormContainer, FormHeader, FormInput } from "../..";
+import { BackFormContainer, FormHeader, FormInput } from "../..";
 import Button from "../../../../components/button/button";
 
 const ClientStepOne = () => {

@@ -1,19 +1,12 @@
 import { useIonRouter } from "@ionic/react";
 import { ChevronLeft } from "lucide-react";
 
-interface FormHeaderProps {
-
-  backUrl?: string;
-  className?: string;
-}
 
 export const FormHeader: React.FC<FormHeaderProps> = ({
-  
   backUrl,
   className = ""
 }) => {
   const router = useIonRouter();
-
   const handleBack = () => {
     if (backUrl) {
       router.push(backUrl, "back", "push");

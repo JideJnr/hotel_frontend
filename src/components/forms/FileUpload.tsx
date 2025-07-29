@@ -1,10 +1,3 @@
-// FileUpload.tsx
-interface FileUploadProps {
-  accept?: string;
-  maxSize?: number; // in MB
-  className?: string;
-}
-
 export const FileUpload: React.FC<FileUploadProps> = ({ 
   accept = '.jpg,.jpeg,.png,.pdf', 
   maxSize = 5,

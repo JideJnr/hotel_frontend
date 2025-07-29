@@ -10,13 +10,15 @@ export const ContextProvider:  React.FC<{ children: React.ReactNode }> = ({ chil
 
   return (
     <AuthProvider>
-        <DarkModeProvider>
-            
-             
+      <DarkModeProvider>
+        <RecordProvider>
+          <RoomProvider>
+            <CustomerProvider>          
                   {children}
-            
-            
-        </DarkModeProvider>
+            </CustomerProvider>
+          </RoomProvider>
+        </RecordProvider>   
+      </DarkModeProvider>
     </AuthProvider>
   );
 };

@@ -4,27 +4,21 @@ import { toast } from "react-toastify";
 import { BackFormContainer, DetailRow, FormContainer, FormHeader } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 
-interface BookingFormData {
-  customer: { value: number; label: string } | null;
-  roomNumber: { value: number; label: string } | null;
-  bookingInstruction: string;
-  checkInDate: string;
-  checkOutDate: string;
-  price: string;
-  paymentType?: { value: string; label: string } | null;
-  paymentMethod?: { value: string; label: string } | null;
-  partPaymentAmount?: string;
-}
+
 
 const BookingStepTwo = () => {
   const router = useIonRouter();
-  const [formData, setFormData] = useState<BookingFormData>({
-    customer: null,
-    roomNumber: null,
+  const [formData, setFormData] = useState<BookingData>({
+    customerId: null,
+    customerName: null,
+    roomId: null,
+    roomLabel: null,
     bookingInstruction: '',
     checkInDate: '',
     checkOutDate: '',
-    price: '',
+    paymentMethodId: null,
+    paymentMethodLabel: null,
+    price: ''
   });
   const [loading, setLoading] = useState(true);
 
@@ -108,7 +102,7 @@ const BookingStepTwo = () => {
               <DetailRow label="Customer" value={formData.customerName || 'Not specified'} />
             </div>
             <div className="col-span-1">
-              <DetailRow label="Room" value={formData.roomNumber?.label || 'Not specified'} />
+              <DetailRow label="Room" value={formData.roomLabel || 'Not specified'} />
             </div>
             <div className="col-span-1">
               <DetailRow label="Duration" value={`${getDuration()} nights`} />

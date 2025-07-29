@@ -1,16 +1,5 @@
 import React from 'react';
 
-interface FormDatePickerProps {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  minDate?: string;
-  maxDate?: string;
-  error?: string;
-  className?: string;
-  required?: boolean;
-}
-
 export const FormDatePicker: React.FC<FormDatePickerProps> = ({
   label,
   value,

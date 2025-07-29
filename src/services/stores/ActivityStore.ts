@@ -1,33 +1,7 @@
 import { create } from 'zustand';
-import * as api from '../services/api';
+import * as api from '../api';
 
-interface Room {
-  id: string;
-  number: string;
-  type: string;
-  price: number;
-  capacity: number;
-  amenities: string[];
-  isAvailable: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
 
-interface RoomState {
-  rooms: Room[];
-  availableRooms: Room[];
-  currentRoom: Room | null;
-  loading: boolean;
-  error: string | null;
-
-  // Actions
-  fetchRooms: () => Promise<void>;
-  getAvailableRooms: () => Promise<void>;
-  getRoomById: (id: string) => Promise<void>;
-  createRoom: (data: Partial<Room>) => Promise<void>;
-  updateRoom: (id: string, data: Partial<Room>) => Promise<void>;
-  deleteRoom: (id: string) => Promise<void>;
-}
 
 export const useRoomStore = create<RoomState>((set, get) => ({
   rooms: [],
@@ -69,7 +43,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
     }
   },
 
-  createRoom: async (data: Partial<Room>) => {
+  createRoom: async (data: Partial<RoomData>) => {
     set({ loading: true, error: null });
     try {
       const response = await api.createRoom(data);
@@ -88,7 +62,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
     }
   },
 
-  updateRoom: async (id: string, data: Partial<Room>) => {
+  updateRoom: async (id: string, data: Partial<RoomData>) => {
     set({ loading: true, error: null });
     try {
       const response = await api.updateRoom(id, data);

@@ -2,8 +2,8 @@ import { IonPage, useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Button from "../../../../components/button/button";
-import { useCustomerStore } from "../../../../stores/customerStore";
-import { BackFormContainer, DetailRow, FormContainer, FormHeader } from "../..";
+import { BackFormContainer, DetailRow, FormHeader } from "../..";
+import { useCustomerStore } from "../../../../services/stores/customerStore";
 
 interface CustomerData {
   fullName: string;

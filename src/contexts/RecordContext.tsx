@@ -1,25 +1,94 @@
-import { createContext, useContext, ReactNode } from 'react';
-import { useRecordStore } from '../stores/recordStore';
+import { createContext, useContext, ReactNode, useMemo } from 'react';
+import { toast } from 'react-toastify';
+import { useRecordStore } from '../services/stores/recordStore';
+
+interface Record {
+  id: string;
+  // Add other record properties here
+}
+
+interface ApiResponse {
+  success: boolean;
+  message: string;
+  data?: any;
+}
 
 interface RecordContextType {
-
+  records: Record[];
+  record: Record | null;
+  loading: boolean;
+  error: string | null;
+  createRecord: (payload: any) => Promise<void>;
+  updateRecord: (id: string, payload: any) => Promise<void>;
+  fetchRecords: () => Promise<void>;
+  fetchRecord: (id: string) => Promise<void>;
 }
 
 const RecordContext = createContext<RecordContextType | undefined>(undefined);
 
-const { records, record ,createRecord,fetchRecords, loading, error } = useRecordStore();
-
 export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
- 
+  const store = useRecordStore();
+  const { records, record, loading, error } = store;
+
+  const wrappedCreateRecord = async (payload: any) => {
+    try {
+      const response = await store.createRecord(payload);
+      if (response.success) {
+        toast.success('Record created successfully');
+      } else {
+        toast.error(`Creation failed: ${response.message}`);
+      }
+    } catch (error) {
+      toast.error('Record creation error');
+      console.error('Creation error:', error);
+    }
+  };
+
+  const wrappedUpdateRecord = async (id: string, payload: any) => {
+    try {
+      const response = await store.updateRecord(id, payload);
+      if (response.success) {
+        toast.success('Record updated successfully');
+      } else {
+        toast.error(`Update failed: ${response.message}`);
+      }
+    } catch (error) {
+      toast.error('Record update error');
+      console.error('Update error:', error);
+    }
+  };
+
+  const wrappedFetchRecords = async () => {
+    try {
+      await store.fetchRecords();
+    } catch (error) {
+      toast.error('Failed to fetch records');
+      console.error('Fetch error:', error);
+    }
+  };
+
+  const wrappedFetchRecord = async (id: string) => {
+    try {
+      await store.fetchRecord(id);
+    } catch (error) {
+      toast.error(`Failed to fetch record ${id}`);
+      console.error('Fetch error:', error);
+    }
+  };
+
+  const contextValue = useMemo(() => ({
+    records,
+    record,
+    loading,
+    error,
+    createRecord: wrappedCreateRecord,
+    updateRecord: wrappedUpdateRecord,
+    fetchRecords: wrappedFetchRecords,
+    fetchRecord: wrappedFetchRecord,
+  }), [records, record, loading, error]);
+
   return (
-    <RecordContext.Provider value={{
-      record,
-      records,
-      createRecord,
-      fetchRecords,
-      loading,
-      error
-    }}>
+    <RecordContext.Provider value={contextValue}>
       {children}
     </RecordContext.Provider>
   );
@@ -27,6 +96,6 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
 export const useRecord = () => {
   const context = useContext(RecordContext);
-  if (!context) throw new Error('useRecord must be used within an RecordProvider');
+  if (!context) throw new Error('useRecord must be used within a RecordProvider');
   return context;
 };

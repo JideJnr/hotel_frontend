@@ -1,12 +1,5 @@
 import React from 'react';
 
-interface FormContainerProps {
-  title: string;
-  subtitle: string;
-  children: React.ReactNode;
-  className?: string;
-}
-
 export const FormContainer: React.FC<FormContainerProps> = ({ 
   title, 
   subtitle, 

@@ -11,15 +11,7 @@ import {
 import Button from "../../../../components/button/button";
 import FormSelect from "../../FormSelect";
 
-type FormData = {
-  customerId: number | null;
-  customerName: string | null;
-  roomNumberId: number | null;
-  roomNumberLabel: string | null;
-  paymentMethodId: string | null;
-  paymentMethodLabel: string | null;
-  bookingInstruction: string;
-};
+
 
 type Errors = {
   customer?: string;
@@ -32,9 +24,11 @@ type Room   = { id: number; };
 export default function SalesStepOne() {
   const router = useIonRouter();
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<SalesData>({
     customerId: null,
     customerName: null,
+    requestId: null,
+    requestLabel: null,
     roomNumberId: null,
     roomNumberLabel: null,
     paymentMethodId: null,
@@ -48,6 +42,12 @@ export default function SalesStepOne() {
     { value: "cash",     label: "Cash"     },
     { value: "card",     label: "Card"     },
     { value: "transfer", label: "Transfer" },
+  ];
+
+  const requestOption: Option[] = [
+    { value: "oneHour",     label: "Short Rest (One Hour)"     },
+    { value: "twoHours",     label: "Short Rest (Two Hours)"     },
+    { value: "lodge", label: "Lodge" },
   ];
 
   useEffect(() => {
@@ -127,6 +127,24 @@ export default function SalesStepOne() {
             required
           />
 
+          
+          <FormSelect
+            label="Request Type"
+            name="requestType"
+            value={
+              formData.paymentMethodId != null
+                ? { value: formData.requestId, label: formData.requestLabel }
+                : null
+            }
+            onChange={opt => setFormData(fd => ({
+              ...fd,
+              requestId: opt ? String(opt.value) : null,
+              requestLabel: opt ? opt.label : null
+            }))}
+            options={requestOption}
+            placeholder="Select request type"
+          />
+
           <FormSelect
             label="Payment Method"
             name="paymentMethod"
@@ -143,6 +161,7 @@ export default function SalesStepOne() {
             options={paymentOptions}
             placeholder="Select payment method"
           />
+
 
           <FormTextarea
             label="Booking Note"
