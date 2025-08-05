@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import * as api from '../api';
+import { createExpense, deleteExpense, getAllExpenses, updateExpense } from '../api/expenseApi';
 
 
 
@@ -11,7 +12,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
   fetchExpenses: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await api.getAllExpenses();
+      const response = await getAllExpenses();
       
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch expenses');
@@ -29,7 +30,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
   createExpense: async (data: Partial<ExpensesData>) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.createExpense(data);
+      const response = await createExpense(data);
       
       if (!response.success) {
         throw new Error(response.error || 'Failed to create expense');
@@ -49,7 +50,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
   updateExpense: async (id: string, data: Partial<ExpensesData>) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.updateExpense(id, data);
+      const response = await updateExpense(id, data);
       
       if (!response.success) {
         throw new Error(response.error || 'Failed to update expense');
@@ -71,7 +72,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
   deleteExpense: async (id: string) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.deleteExpense(id);
+      const response = await deleteExpense(id);
       
       if (!response.success) {
         throw new Error(response.error || 'Failed to delete expense');

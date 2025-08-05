@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../..";
 import { useCustomerStore } from "../../../../services/stores/customerStore";
+import { useCustomer } from "../../../../contexts/CustomerContext";
 
 interface CustomerData {
   fullName: string;
@@ -14,7 +15,7 @@ interface CustomerData {
 
 const ClientStepTwo = () => {
   const router = useIonRouter();
-  const { createCustomer } = useCustomerStore();
+  const { createCustomer } = useCustomer();
   const [formData, setFormData] = useState<CustomerData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,9 +53,6 @@ const ClientStepTwo = () => {
       };
       
       await createCustomer(customerData);
-      sessionStorage.removeItem("customerData");
-      toast.success("Customer created successfully!");
-      router.push("/customers", "forward", "replace");
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || err.message || "Failed to create customer";
       setError(errorMessage);

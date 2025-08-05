@@ -1,5 +1,8 @@
 import { create } from 'zustand';
 import * as api from '../api';
+import { setAuthToken } from '../api/index';
+import { login, signup } from '../api/authApi';
+
 
 
 
@@ -11,14 +14,16 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (email, password) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.login({ email, password });
+      const response = await login({ email, password });
       if (!response.success) {
         const errMsg = response.error || 'Login failed';
         set({ error: errMsg, loading: false, user: null });
         throw new Error(errMsg); 
       }
+
       set({ user: response.user, loading: false, error: null });
         localStorage.setItem('token', response.token);
+        setAuthToken(response.token);
         localStorage.setItem('user', JSON.stringify({
           uid: response.user.uid,
           email: response.user.email,
@@ -36,7 +41,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: async () => {
     set({ loading: true });
     try {
-      await api.logout();
+      // await api.logout();
       set({ user: null, loading: false });
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -51,17 +56,18 @@ export const useAuthStore = create<AuthState>((set) => ({
   signup: async (payload) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.signup(payload);
-  
+      const response = await signup(payload);
+
       if (!response.success) {
         const errMsg = response.error || 'SignUp failed';
         set({ error: errMsg, loading: false, user: null });
         throw new Error(errMsg);
       }
-  
+
       set({ user: response.user, loading: false, error: null });
       if (response.success) {
-        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('token', response.token); // Store as 'token' for consistency
+        setAuthToken(response.token); // Set axios header
         localStorage.setItem('user', JSON.stringify({
           uid: response.user.uid,
           email: response.user.email,

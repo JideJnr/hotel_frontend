@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import * as api from '../api';
+import { createRoom, deleteRoom, getAllRooms, getAvailableRooms, getRoomById, updateRoom } from '../api/roomApi';
 
 
 
@@ -13,7 +14,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
   fetchRooms: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await api.getAllRooms();
+      const response = await getAllRooms();
       if (!response.success) throw new Error(response.error || 'Failed to fetch rooms');
       set({ rooms: response.rooms, loading: false });
     } catch (err: any) {
@@ -24,7 +25,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
   getAvailableRooms: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await api.getAvailableRooms();
+      const response = await getAvailableRooms();
       if (!response.success) throw new Error(response.error || 'Failed to fetch available rooms');
       set({ availableRooms: response.rooms, loading: false });
     } catch (err: any) {
@@ -35,7 +36,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
   getRoomById: async (id: string) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.getRoomById(id);
+      const response = await getRoomById(id);
       if (!response.success) throw new Error(response.error || 'Room not found');
       set({ currentRoom: response.room, loading: false });
     } catch (err: any) {
@@ -46,7 +47,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
   createRoom: async (data: Partial<RoomData>) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.createRoom(data);
+      const response = await createRoom(data);
       if (!response.success) throw new Error(response.error || 'Failed to create room');
       
       set((state) => ({
@@ -65,7 +66,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
   updateRoom: async (id: string, data: Partial<RoomData>) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.updateRoom(id, data);
+      const response = await updateRoom(id, data);
       if (!response.success) throw new Error(response.error || 'Failed to update room');
       
       set((state) => {
@@ -94,7 +95,7 @@ export const useRoomStore = create<RoomState>((set, get) => ({
   deleteRoom: async (id: string) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.deleteRoom(id);
+      const response = await deleteRoom(id);
       if (!response.success) throw new Error(response.error || 'Failed to delete room');
       
       set((state) => ({

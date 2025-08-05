@@ -1,14 +1,3 @@
-interface AuthSuccessResponse {
-  success: true;
-  token: string;
-  user: {
-    uid: string;
-    email: string;
-    firstName: string;
-    role: string;
-  };
-}
-
 interface Response {
   success: true;
   token: string;
@@ -48,14 +37,10 @@ interface ExpensesData {
 }
 
 interface SalesData  {
-  customerName: string | null;
   customerId: string | null;
   roomNumberId: string| null;
-  roomNumberLabel: string| null;
   paymentMethodId: string| null;
-  paymentMethodLabel: string| null;
   requestId: string | null,
-  requestLabel: string | null,
   bookingInstruction: string;
 };
 
@@ -259,3 +244,85 @@ interface BookingData {
   paymentMethodLabel: string | null;
   price: string;
 };
+
+interface RecordContextType {
+  records: Record[];
+  record: Record | null;
+  loading: boolean;
+  error: string | null;
+  createRecord: (payload: any) => Promise<void>;
+  updateRecord: (id: string, payload: any) => Promise<void>;
+  fetchRecords: () => Promise<void>;
+  fetchRecord: (id: string) => Promise<void>;
+}
+
+interface Room {
+  id: string;
+  // Add other room properties here
+}
+
+interface RoomContextType {
+  rooms: Room[];
+  currentRoom: Room | null;
+  loading: boolean;
+  error: string | null;
+  createRoom: (payload: any) => Promise<void>;
+  updateRoom: (id: string, payload: any) => Promise<void>;
+  fetchRooms: () => Promise<void>;
+  fetchRoom: (id: string) => Promise<void>;
+}
+
+// Add this interface for booking data
+interface Booking {
+  id: string;
+  customerId: string;
+  roomId: string;
+  userId: string;
+  requestId?: string;
+  bookingInstruction?: string;
+  checkInDate: string;
+  checkOutDate: string;
+  status: 'active' | 'cancelled';
+  createdAt: string;
+  updatedAt?: string;
+  cancelledAt?: string;
+}
+
+interface CreateBookingInput {
+  customerId: string;
+  roomId: string;
+  requestId?: string;
+  bookingInstruction?: string;
+  checkInDate: string;
+  checkOutDate: string;
+}
+
+interface UpdateBookingInput {
+  checkInDate?: string;
+  checkOutDate?: string;
+  bookingInstruction?: string;
+}
+
+interface PaginatedBookingsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    count: number;
+    bookings: Booking[];
+    nextPage?: {
+      lastCreatedAt: string;
+      lastId: string;
+    };
+  };
+}
+
+interface SingleBookingResponse {
+  success: boolean;
+  message: string;
+  data: Booking;
+}
+
+interface BasicResponse {
+  success: boolean;
+  message: string;
+}

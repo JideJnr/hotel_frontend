@@ -1,17 +1,11 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useCustomerStore } from '../services/stores/customerStore';
+import { useIonRouter } from '@ionic/react';
 
-// Define proper types for customer and operations
 interface Customer {
   id: string;
   // Add other customer properties here
-}
-
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data?: any;
 }
 
 interface CustomerContextType {
@@ -28,16 +22,18 @@ interface CustomerContextType {
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined);
 
 export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Move store hook inside the component
   const store = useCustomerStore();
   const { customers, customer, loading, error } = store;
-
+  const router = useIonRouter();
 
   const wrappedCreateCustomer = async (payload: any) => {
     try {
       const response = await store.createCustomer(payload);
+      console.log('Customer created:', response);
       if (response.success) {
         toast.success('Customer created successfully');
+        sessionStorage.removeItem("customerData");
+        router.push(`/customer/${response.data.id}`, 'forward')
       } else {
         toast.error(`Creation failed: ${response.message}`);
       }
@@ -52,6 +48,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       const response = await store.updateCustomer(id, payload);
       if (response.success) {
         toast.success('Customer updated successfully');
+        router.push(`/customer/${response.data.id}`, 'forward')
       } else {
         toast.error(`Update failed: ${response.message}`);
       }
@@ -63,7 +60,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const wrappedFetchCustomers = async () => {
     try {
-      await store.fetchCustomers();
+      await store.fetchCustomer();
     } catch (error) {
       toast.error('Failed to fetch customers');
       console.error('Fetch error:', error);

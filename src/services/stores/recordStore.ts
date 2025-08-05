@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import * as api from '../api';
+import { createRecord } from '../api/recordApi';
 
 
 
-export const useRecordStore = create<RecordState>((set) => ({
+export const useRecordStore = create<any>((set) => ({
   records: [],
   record:null,
   loading: false,
@@ -12,25 +13,7 @@ export const useRecordStore = create<RecordState>((set) => ({
   fetchRecords: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await api.getAllTodaysRecord();
-      
-      if (!response.success) {
-        throw new Error(response.error || 'Failed to fetch records');
-      }
-      
-      set({ 
-        records: (response).records || [],
-        loading: false 
-      });
-    } catch (err: any) {
-      set({ error: err.message, loading: false });
-    }
-  },
-  
-  fetchRecordById: async (id:string) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await api.fetchRecordById(id);
+      const response = await getAllTodaysRecord();
       
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch records');
@@ -45,59 +28,19 @@ export const useRecordStore = create<RecordState>((set) => ({
     }
   },
 
-  createRecord: async (id: string) => {
+  createRecord: async (payload: any) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.createRecord(id);
+      const response = await createRecord(payload);
       
       if (!response.success) {
         throw new Error(response.error || 'Failed to create record');
       }
-      
-
+      set({ record: response.record, loading: false });
+      return response
     } catch (err: any) {
       set({ error: err.message, loading: false });
     }
-  },
-
-  updateRecord: async (id: string, data: Partial<RecordData>) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await api.updateRecord(id, data);
-      
-      if (!response.success) {
-        throw new Error(response.error || 'Failed to update record');
-      }
-      
-      const updatedRecord = (response as api.SingleRecordResponse).record;
-      
-      set((state) => ({
-        records: state.records.map((exp) =>
-          exp.id === id ? updatedRecord : exp
-        ),
-        loading: false,
-      }));
-    } catch (err: any) {
-      set({ error: err.message, loading: false });
-    }
-  },
-
-  deleteRecord: async (id: string) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await api.deleteRecord(id);
-      
-      if (!response.success) {
-        throw new Error(response.error || 'Failed to delete record');
-      }
-      
-      set((state) => ({
-        records: state.records.filter((exp) => exp.id !== id),
-        loading: false,
-      }));
-    } catch (err: any) {
-      set({ error: err.message, loading: false });
-    }
-  },
+  }
   
 }));

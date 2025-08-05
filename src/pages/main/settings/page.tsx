@@ -1,9 +1,19 @@
 import { useIonRouter } from "@ionic/react";
 import Button from "../../../components/button/button";
+import { useAuth } from "../../../contexts/AuthContext";
 
 
 const Setting = () => {
   const router = useIonRouter();
+    const { logout, loading } = useAuth();
+
+    const handleLogout = async () => {
+      try {
+        await logout();
+      } catch (err) {
+        console.error('Login error:', err);
+      }
+    };
 
 
   
@@ -48,7 +58,7 @@ const Setting = () => {
         </div>
 
         <div className="flex justify-center p-4">
-          <Button className="w-full "  text="Sign Out" />
+          <Button className="w-full "  text="Sign Out"  onClick={handleLogout} />
         </div>
       </div>
     </div>

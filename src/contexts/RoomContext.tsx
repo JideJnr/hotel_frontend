@@ -1,43 +1,26 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useRoomStore } from '../services/stores/ActivityStore';
+import { useIonRouter } from '@ionic/react';
 
-interface Room {
-  id: string;
-  // Add other room properties here
-}
-
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data?: any;
-}
-
-interface RoomContextType {
-  rooms: Room[];
-  currentRoom: Room | null;
-  loading: boolean;
-  error: string | null;
-  createRoom: (payload: any) => Promise<void>;
-  updateRoom: (id: string, payload: any) => Promise<void>;
-  fetchRooms: () => Promise<void>;
-  fetchRoom: (id: string) => Promise<void>;
-}
 
 const RoomContext = createContext<RoomContextType | undefined>(undefined);
 
 export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const store = useRoomStore();
   const { rooms, currentRoom, loading, error } = store;
+  const router = useIonRouter();
 
   const wrappedCreateRoom = async (payload: any) => {
     try {
       const response = await store.createRoom(payload);
       if (response.success) {
         toast.success('Room created successfully');
+        router.push(`/room/${response.data.id}`, 'forward')
       } else {
         toast.error(`Creation failed: ${response.message}`);
       }
+      
     } catch (error) {
       toast.error('Room creation error');
       console.error('Creation error:', error);
@@ -58,7 +41,7 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const wrappedFetchRooms = async () => {
+  const wrappedFetchAllRooms = async () => {
     try {
       await store.fetchRooms();
     } catch (error) {
@@ -83,7 +66,7 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     error,
     createRoom: wrappedCreateRoom,
     updateRoom: wrappedUpdateRoom,
-    fetchRooms: wrappedFetchRooms,
+    fetchRooms: wrappedFetchAllRooms,
     fetchRoom: wrappedFetchRoom,
   }), [rooms, currentRoom, loading, error]);
 

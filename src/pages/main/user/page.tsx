@@ -30,8 +30,8 @@ const Users = () => {
   
       <div className="w-full h-full flex flex-col p-4 gap-4 bg-gray-100">
           <div className="grid gap-4 lg:gap-8  grid-cols-2 md:grid-cols-3 w-full h-fit my-4 ">
-          <DashboardTile title="Total Rooms" value={1} delta={1} />
-          <DashboardTile title="Active Rooms" value={2} delta={1} />
+          <DashboardTile title="Total Customers" value={1} delta={1} subtitle="vs yesterday" />
+          <DashboardTile title="Active Customers" value={2} delta={1} />
         </div>
         <h2 className="text-xl font-bold text-black">Recent Clients</h2>
         <div>

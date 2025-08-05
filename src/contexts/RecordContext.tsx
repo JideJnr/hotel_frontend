@@ -2,28 +2,6 @@ import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useRecordStore } from '../services/stores/recordStore';
 
-interface Record {
-  id: string;
-  // Add other record properties here
-}
-
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data?: any;
-}
-
-interface RecordContextType {
-  records: Record[];
-  record: Record | null;
-  loading: boolean;
-  error: string | null;
-  createRecord: (payload: any) => Promise<void>;
-  updateRecord: (id: string, payload: any) => Promise<void>;
-  fetchRecords: () => Promise<void>;
-  fetchRecord: (id: string) => Promise<void>;
-}
-
 const RecordContext = createContext<RecordContextType | undefined>(undefined);
 
 export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
