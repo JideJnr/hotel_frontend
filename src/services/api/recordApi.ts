@@ -1,15 +1,4 @@
-import axios from 'axios';
-
-const BASE_URL = 'https://bj-hotel-api.onrender.com/api/v1';
-
-const api = axios.create({
-  baseURL: BASE_URL,
-});
-
-// Set JWT token for every request
-export const setAuthToken = (token: string) => {
-  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-};
+import api from './index';
 
 // --- Types ---
 export interface RecordInput {
@@ -66,42 +55,42 @@ export interface SingleRecordResponse {
 
 // Create a new sales record
 export const createRecord = async (data: RecordInput) => {
-  const res = await api.post('/records', data);
+  const res = await api.post('api/v1/records', data);
   return res.data as { success: boolean; message: string; recordId: string };
 };
 
 // Update a sales record
 export const updateRecord = async (id: string, data: RecordInput) => {
-  const res = await api.put(`/records/${id}`, data);
+  const res = await api.put(`api/v1/records/${id}`, data);
   return res.data as { success: boolean; message: string };
 };
 
 // Delete a sales record
 export const deleteRecord = async (id: string) => {
-  const res = await api.delete(`/records/${id}`);
+  const res = await api.delete(`api/v1/records/${id}`);
   return res.data as { success: boolean; message: string };
 };
 
 // Get today's sales records
 export const getTodayRecords = async (params?: PaginationParams) => {
-  const res = await api.get('/records/today', { params });
+  const res = await api.get('api/v1/records/today', { params });
   return res.data as RecordsResponse;
 };
 
 // Get records within a date range
 export const getRecordsByDateRange = async (params: DateRangeParams) => {
-  const res = await api.get('/records/range', { params });
+  const res = await api.get('api/v1/records/range', { params });
   return res.data as RecordsResponse;
 };
 
 // Get record by ID
 export const getRecordById = async (id: string) => {
-  const res = await api.get(`/records/${id}`);
+  const res = await api.get(`api/v1/records/${id}`);
   return res.data as SingleRecordResponse;
 };
 
 // Get authenticated user's records
 export const getUserRecords = async (params?: PaginationParams) => {
-  const res = await api.get('/records/user', { params });
+  const res = await api.get('api/v1/records/user', { params });
   return res.data as RecordsResponse;
 };

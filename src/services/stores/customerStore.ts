@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import * as api from '../api';
 import { createCustomer, deleteCustomer, getAllCustomers, getCustomerById, updateCustomer } from '../api/customerApi';
 
 
@@ -38,14 +37,12 @@ export const useCustomerStore = create<CustomerState>((set) => ({
     try {
       const response = await createCustomer(data);  
       if (!response.success) throw new Error(response.error || 'Failed to create customer');
-      set((state) => ({
-        customers: [...state.customers, response.customer],
-        loading: false,
-      }));
       console.log('Customer created:', response);
       return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      // Return a default error response to satisfy the type
+      return { success: false, token: '', data: null };
     }
   },
 

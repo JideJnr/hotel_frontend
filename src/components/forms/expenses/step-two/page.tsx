@@ -1,7 +1,7 @@
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { BackFormContainer, FormHeader, FormInput } from "../../../../components/forms";
+import { BackFormContainer, DetailRow, FormHeader, FormInput } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import { useExpenseStore } from "../../../../services/stores/expensesStore";
 
@@ -29,10 +29,6 @@ const ExpenseStepTwo = () => {
     }
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setAdditionalData((prev) => ({ ...prev, [name]: value }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,50 +69,38 @@ const ExpenseStepTwo = () => {
   return (
     <IonPage>
       <FormHeader/>
-      <IonContent>
+    
         <BackFormContainer 
           title="Complete Expense Details" 
-          subtitle="Step 2: Payment information"
-          className="max-w-2xl"
+          subtitle="Please review the information before submitting"
+          className="max-w-md"
         >
-          <div className="space-y-6">
-            {/* Display summary from step one */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="font-medium text-gray-900 mb-3">Expense Summary</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-gray-500">Amount</p>
-                  <p className="font-medium">₦{parseFloat(formData.amount).toFixed(2)}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Category</p>
-                  <p className="font-medium">{formData.category}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Date</p>
-                  <p className="font-medium">{new Date(formData.date).toLocaleDateString()}</p>
-                </div>
-              </div>
-            </div>
+        <div className="space-y-6">
+        <div className="space-y-4">
+          <DetailRow label="Category" value={formData.category.label} />
+          <DetailRow label="Amount" value={formData.amount} />
+          {formData.description && <DetailRow label="description" value={formData.description} />}
+        </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="flex flex-col gap-3 pt-4">
-                <Button 
-                  text="Submit Expense"
-                  type="submit"
-                  className="w-full"
-                />
-                <Button 
-                  text="Back"
-                  onClick={() => router.push("/expenses/create/stepone", "back", "push")}
-                
-                  className="w-full"
-                />
-              </div>
-            </form>
-          </div>
+        <div>
+                  <img src={formData.receiptBase64} alt="Preview" className="mt-2 max-h-40 rounded w-full max-w-32" />
+        </div>
+        
+
+        
+        <div className="flex flex-col gap-3 pt-4">
+          <Button 
+            text="Submit"
+            onClick={handleSubmit}
+            
+            loadingText="Submitting..."
+            className="w-full"
+          />
+      
+        </div>
+        </div>
         </BackFormContainer>
-      </IonContent>
+    
     </IonPage>
   );
 };

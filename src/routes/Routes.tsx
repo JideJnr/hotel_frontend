@@ -46,6 +46,7 @@ const Routes: React.FC = () => {
 
         {/* PRIVATE ROUTES */}
         <PrivateRoute path="/expenses/:id" exact component={ExpensesDetails} />
+        <PrivateRoute path="/customer/:id" exact component={UserDetails} />
         <PrivateRoute path="/record/:id" exact component={RecordDetails} />
         <PrivateRoute path="/user/:id" exact component={UserDetails} />
         <PrivateRoute path="/room/:id" exact component={RoomDetails} />

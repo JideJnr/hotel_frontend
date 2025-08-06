@@ -102,7 +102,7 @@ interface CustomerState {
 
   fetchCustomer: () => Promise<void>;
   getCustomerById: (id: string) => Promise<void>;
-  createCustomer: (data: Partial<Customer>) => Promise<void>;
+  createCustomer: (data: Partial<Customer>) => Promise<Response>;
   updateCustomer: (id: string, data: Partial<Customer>) => Promise<void>;
   deleteCustomer: (id: string) => Promise<void>;
 }
@@ -156,6 +156,7 @@ interface FileUploadProps {
   accept?: string;
   maxSize?: number; // in MB
   className?: string;
+  onChange?: any;
 }
 
 interface PasswordInputProps {

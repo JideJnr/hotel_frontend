@@ -10,6 +10,7 @@ import {
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import FormSelect from "../../FormSelect";
+import { useCustomer } from "../../../../contexts/CustomerContext";
 
 
 
@@ -24,6 +25,7 @@ type Room   = { id: number; };
 export default function SalesStepOne() {
   const router = useIonRouter();
 
+  const { fetchCustomers , customers } = useCustomer();
   const [formData, setFormData] = useState<SalesData>({
     customerId: null,
     customerName: null,
@@ -51,11 +53,7 @@ export default function SalesStepOne() {
   ];
 
   useEffect(() => {
-    // fetch your real data here…
-    setClients([
-      { id: 1, name: "John Doe" },
-      { id: 2, name: "Jane Smith" },
-    ]);
+    fetchCustomers() 
     setRooms([
       { id: 101 }, { id: 102 }
     ]);
@@ -85,25 +83,25 @@ export default function SalesStepOne() {
         className="max-w-2xl"
       >
         <form onSubmit={e => { e.preventDefault(); handleNext(); }} className="space-y-6">
-
           <FormSelect
-            label="Customer *"
-            name="customer"
-            value={
-              formData.customerId != null
-                ? { value: formData.customerId, label: formData.customerName! }
-                : null
-            }
-            onChange={opt => setFormData(fd => ({
-              ...fd,
-              customerId: opt ? Number(opt.value) : null,
-              customerName: opt ? opt.label : null
-            }))}
-            options={clients.map(c => ({ value: c.id, label: c.name }))}
-            placeholder="Select a customer"
-            error={errors.customer}
-            required
-          />
+  label="Customer *"
+  name="customer"
+  value={
+    formData.customerId != null
+      ? { value: formData.customerId, label: formData.customerName! }
+      : null
+  }
+  onChange={opt => setFormData(fd => ({
+    ...fd,
+    customerId: opt ? opt.value : null,
+    customerName: opt ? opt.label : null
+  }))}
+  options={customers.map(c => ({ value: c.id, label: c.fullName }))}
+  placeholder="Select a customer"
+  error={errors.customer}
+  required
+/>
+
 
           <FormSelect
             label="Room *"

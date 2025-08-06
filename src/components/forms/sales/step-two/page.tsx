@@ -45,13 +45,13 @@ const SalesStepTwo = () => {
     try {
       const payload = {
         customerId: formData.customerId,
-        roomId: formData.roomNumberId,
+        roomNumberId: formData.roomNumberId,
         requestId: formData.requestId || null,
         bookingInstruction: formData.bookingInstruction || null,
-        requestId:  formData.requestId || null,
+        paymentMethodId:  formData.paymentMethodId || null,
       };
 
-      const response = await createRecord(payload); // <-- replace with actual API logic
+      const response = await createRecord(payload);
       {response.success && 
       sessionStorage.removeItem("bookingData");
       toast.success("Booking confirmed successfully!");
@@ -87,6 +87,7 @@ const SalesStepTwo = () => {
           <div className="space-y-4">
             <DetailRow label="Customer" value={formData.customerName} />
             <DetailRow label="Room" value={formData.roomNumberLabel} />
+            <DetailRow label="Request" value={formData.requestLabel} />
             <DetailRow label="Payment Method" value={formData.paymentMethodLabel} />
             {formData.bookingInstruction && (
               <DetailRow label="Booking Note" value={formData.bookingInstruction} />

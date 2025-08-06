@@ -2,9 +2,21 @@ import { useParams } from "react-router-dom";
 import { IonPage } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
+import { useCustomer } from "../../../../contexts/CustomerContext";
+import { useEffect } from "react";
 
 const UserDetails = () => {
   const { id } = useParams<{ id: string }>();
+
+  console.log("User ID from params:", id);
+
+  const { fetchCustomer , customer } = useCustomer();
+
+  useEffect(() => {
+    fetchCustomer(id)
+  }, [id]);
+
+  console.log(customer)
 
   // Dummy user data
   const data = {
@@ -35,6 +47,8 @@ const UserDetails = () => {
       <BackFormContainer title="User Details" subtitle="" className="max-w-2xl">
         <div className="w-full flex flex-col  gap-8 text-gray-800">
 
+
+
           {/* Profile Image and Basic Info */}
           <div className="flex items-center gap-6">
             {data.userImg ? (
@@ -55,22 +69,29 @@ const UserDetails = () => {
             </div>
           </div>
 
+                    <div className="text-black">
+            <button>
+              Edit
+            </button>
+            <button className="ml-2">
+              contact
+            </button>
+          </div>
+
           {/* Personal Information */}
           <div className="flex flex-col gap-2">
          
-            <div className="text-sm text-gray-600 grid grid-cols-2 px-2">
+            <div className="text-sm text-gray-600  px-2">
+              <h3 className="text-lg font-semibold">Personal Information</h3>
              
-              <DetailRow label='DOB' value='12th Jan 1990'/>
-              <DetailRow label='Nationality' value='Nigerian'/>
-              <DetailRow label='Gender' value='Female'/>
-              <DetailRow label='Gender' value='Female'/>
+
             </div>
           </div>
 
 
           {/* Lodge History */}
-          <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-semibold">Lodge History</h3>
+          <div className="flex flex-col gap-2   px-2">
+            <h3 className="text-lg font-semibold text-gray-600">Lodge History</h3>
             <div
               key={history.id}
               className="flex justify-between items-center px-4 py-2 border rounded-md text-sm"

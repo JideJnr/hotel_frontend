@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import {
   FormInput,
   FormTextarea,
-  FileUpload,
   FormHeader,
   BackFormContainer,
+  FileUpload,
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import FormSelect from "../../FormSelect";
@@ -19,6 +19,7 @@ const ExpenseStepOne = () => {
     category: null as { value: string; label: string } | null,
     description: '',
     date: new Date().toISOString().split('T')[0],
+    receiptBase64: '', // Add base64 field
   });
 
   const [errors, setErrors] = useState({
@@ -80,6 +81,18 @@ const ExpenseStepOne = () => {
     setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
+  // File to base64 handler
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, receiptBase64: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <IonPage>
       <FormHeader />
@@ -127,13 +140,22 @@ const ExpenseStepOne = () => {
             required
           />
 
+
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Receipt (Optional)
             </label>
-            <FileUpload accept=".jpg,.jpeg,.png,.pdf" maxSize={5} />
+            <FileUpload
+              accept=".jpg,.jpeg,.png,.pdf"
+              maxSize={5}
+              onChange={handleFileChange}
+              preview={formData.receiptBase64}
+              onRemove={() => setFormData(fd => ({ ...fd, receiptBase64: '' }))}
+            />
+          
           </div>
 
+        
           <div className="pt-4">
             <Button text="Continue" type="submit" className="w-full" />
           </div>

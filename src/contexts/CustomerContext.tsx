@@ -2,6 +2,7 @@ import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useCustomerStore } from '../services/stores/customerStore';
 import { useIonRouter } from '@ionic/react';
+import {  } from '../services/api/customerApi';
 
 interface Customer {
   id: string;
@@ -22,13 +23,22 @@ interface CustomerContextType {
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined);
 
 export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const store = useCustomerStore();
-  const { customers, customer, loading, error } = store;
-  const router = useIonRouter();
 
+  const router = useIonRouter();
+  const {
+    customers,
+    customer,
+    loading,
+    error,
+    createCustomer,
+    updateCustomer,
+    fetchCustomer,
+    getCustomerById,
+  } = useCustomerStore();
+  
   const wrappedCreateCustomer = async (payload: any) => {
     try {
-      const response = await store.createCustomer(payload);
+      const response = await createCustomer(payload);
       console.log('Customer created:', response);
       if (response.success) {
         toast.success('Customer created successfully');
@@ -45,7 +55,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const wrappedUpdateCustomer = async (id: string, payload: any) => {
     try {
-      const response = await store.updateCustomer(id, payload);
+      const response = await updateCustomer(id, payload);
       if (response.success) {
         toast.success('Customer updated successfully');
         router.push(`/customer/${response.data.id}`, 'forward')
@@ -60,7 +70,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const wrappedFetchCustomers = async () => {
     try {
-      await store.fetchCustomer();
+      await fetchCustomer();
     } catch (error) {
       toast.error('Failed to fetch customers');
       console.error('Fetch error:', error);
@@ -69,7 +79,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const wrappedFetchCustomer = async (id: string) => {
     try {
-      await store.fetchCustomer(id);
+      await getCustomerById(id);
     } catch (error) {
       toast.error(`Failed to fetch customer ${id}`);
       console.error('Fetch error:', error);
