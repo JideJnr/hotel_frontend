@@ -7,6 +7,7 @@ import PrivateRoute from "./PrivateRoute";
 
 
 
+
 const SalesStepOne = React.lazy(() => import("../components/forms/sales/step-one/page"));
 const SalesStepTwo = React.lazy(() => import("../components/forms/sales/step-two/page"));
 
@@ -28,6 +29,7 @@ const RecordDetails = React.lazy(() => import("../pages/main/home/details/record
 const ExpensesDetails = React.lazy(() => import("../pages/main/home/details/expenses"));
 const RoomDetails = React.lazy(() => import("../pages/main/room/details/RoomDetails"));
 
+const Analytics = React.lazy(() => import("../pages/analytics/page"));
 const Main = React.lazy(() => import("../pages/main/Main"));
 
 const Routes: React.FC = () => {
@@ -58,6 +60,7 @@ const Routes: React.FC = () => {
         <PrivateRoute path="/register/expenses/steptwo" exact component={ExpenseStepTwo} />
         <PrivateRoute path="/register/booking/stepone" exact component={BookingStepOne} />
         <PrivateRoute path="/register/booking/steptwo" exact component={BookingStepTwo} />
+        <PrivateRoute path="/analytic" exact component={Analytics} />
         <PrivateRoute path="/home" exact component={Main} />
       </div>
     </IonRouterOutlet>

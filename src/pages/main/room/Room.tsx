@@ -41,7 +41,6 @@ const Room = () => {
   // Room statistics for dashboard tiles
   const totalRooms = mockRooms.length;
   const activeRooms = mockRooms.filter((room) => room.isActive).length;
-  const inactiveRooms = totalRooms - activeRooms;
 
   const events = [
   { title: 'Dressage Practice', time: '9:00AM - 11:00AM' },
@@ -64,10 +63,10 @@ const Room = () => {
           onIonChange={(e) =>
             setActiveTab(e.detail.value as "all" | "active")
           }
-          className="mb-2"
+          className="mb-2 bg-white shadow-md rounded-lg"
         >
-          <IonSegmentButton value="all" >
-            <IonLabel>All Rooms</IonLabel>
+          <IonSegmentButton value="all " >
+            <IonLabel className="text-black ">All Rooms</IonLabel>
           </IonSegmentButton>
           <IonSegmentButton value="active">
             <IonLabel>Active Rooms</IonLabel>
@@ -75,11 +74,8 @@ const Room = () => {
         </IonSegment>
 
                   <div className="space-y-4">
-                    <p className='text-black text-xl'>
-                      Room Sales
-                    </p>
                     {events.map((event, index) => (
-                      <div  onClick={() => router.push(`/record/a`)}>
+                      <div  onClick={() => router.push(`/room/${event.id}`)}>
                         <ScheduleCard key={index} name={event.title} details={event.time} />
                       </div>
                     ))}

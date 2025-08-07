@@ -2,9 +2,19 @@ import { useParams } from "react-router-dom";
 import { IonPage } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
+import { useRoom } from "../../../../contexts/RoomContext";
+import { useEffect } from "react";
 
 const RoomDetails = () => {
   const { id } = useParams<{ id: string }>();
+
+      const { fetchRoom , currentRoom } = useRoom();
+    
+      useEffect(() => {
+        fetchRoom(id)
+      }, [id]);
+    
+  
 
   // Dummy user data
   const data = {
@@ -32,7 +42,7 @@ const RoomDetails = () => {
   return (
     <IonPage>
       <FormHeader />
-      <BackFormContainer title="Record Details" subtitle="" className="max-w-2xl">
+      <BackFormContainer title="Room Details" subtitle="" className="max-w-2xl">
         <div className="w-full flex flex-col  gap-8 text-gray-800">
 
           {/* Profile Image and Basic Info */}
@@ -59,6 +69,20 @@ const RoomDetails = () => {
             </div>
           </div>
 
+                    {data.active && (
+            <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
+              <h3 className="text-lg font-semibold">Current Stay</h3>
+              <div className="text-sm">
+                <p className="font-semibold">{data.currentRoom.name}</p>
+              </div>
+              {data.status === "active" && (
+                <div className="grid grid-cols-1 gap-2 mt-2">
+                  <Button text="Check Out" className="w-full" />
+                </div>
+              )}
+            </div>
+          )}
+
 
           {/* Lodge History */}
           <div className="flex flex-col gap-2">
@@ -76,19 +100,7 @@ const RoomDetails = () => {
           </div>
 
                     {/* Current Guest Info */}
-          {data.active && (
-            <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
-              <h3 className="text-lg font-semibold">Current Stay</h3>
-              <div className="text-sm">
-                <p className="font-semibold">{data.currentRoom.name}</p>
-              </div>
-              {data.status === "active" && (
-                <div className="grid grid-cols-1 gap-2 mt-2">
-                  <Button text="Check Out" className="w-full" />
-                </div>
-              )}
-            </div>
-          )}
+
 
         </div>
       </BackFormContainer>

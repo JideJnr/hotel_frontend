@@ -42,8 +42,13 @@ const activities = [
 ];
 
   return (
-    <div className="p-4  bg-white text-gray-800 w-full h-full flex flex-col  ">
-          
+    <div className="p-4  bg-white text-gray-800 w-full h-full flex flex-col  gap-4 ">
+
+      <div>
+        Filters  
+      </div> 
+
+          <>
             {activities ? (
               <>
                 {activities.map((activity, index) => (
@@ -109,6 +114,7 @@ const activities = [
             ) : (
               <>empty</>
             )}
+      </>
     </div>
    
 

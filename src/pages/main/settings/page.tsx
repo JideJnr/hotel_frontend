@@ -36,7 +36,7 @@ const Setting = () => {
           
             <div
               className="flex w-full items-center justify-between border-y rounded-lg p-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-         
+                         onClick={() => router.push('/analytic', 'forward')}
             >
               <p>Analytics</p>
             </div>

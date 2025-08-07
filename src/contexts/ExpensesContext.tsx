@@ -164,7 +164,7 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
   );
 };
 
-export const useExpense = () => {
+export const useExpenses = () => {
   const context = useContext(ExpenseContext);
   if (!context) throw new Error('useExpense must be used within an ExpenseProvider');
   return context;

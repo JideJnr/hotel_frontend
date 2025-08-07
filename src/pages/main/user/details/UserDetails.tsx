@@ -8,8 +8,6 @@ import { useEffect } from "react";
 const UserDetails = () => {
   const { id } = useParams<{ id: string }>();
 
-  console.log("User ID from params:", id);
-
   const { fetchCustomer , customer } = useCustomer();
 
   useEffect(() => {

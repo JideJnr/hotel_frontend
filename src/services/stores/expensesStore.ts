@@ -16,6 +16,10 @@ interface ExpenseState {
   expenses: Expense[];
   loading: boolean;
   error: string | null;
+  fetchExpense: (params?: {
+    id?: string;
+    
+  }) => Promise<void>;
   fetchExpenses: (params?: {
     startDate?: string;
     endDate?: string;
@@ -42,7 +46,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
   loading: false,
   error: null,
 
-  fetchExpenses: async (params) => {
+  fetchExpense: async (params) => {
     set({ loading: true, error: null });
     try {
       const response: ApiResponse<PaginatedExpenseResponse> = await getAllExpenses(params);
@@ -59,8 +63,9 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
       set({ error: err.message, loading: false });
     }
   },
+  
 
-  fetchExpensesByCategory: async (category, params) => {
+  fetchExpvensesByCategory: async (category, params) => {
     set({ loading: true, error: null });
     try {
       const response: ApiResponse<PaginatedExpenseResponse> = await getExpensesByCategory(category, params);

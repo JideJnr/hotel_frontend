@@ -2,10 +2,12 @@ import { useParams } from "react-router-dom";
 import { IonPage } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
+import { useEffect } from "react";
+import { useExpenses } from "../../../../contexts/ExpensesContext";
 
 const ExpensesDetails = () => {
   const { id } = useParams<{ id: string }>();
-
+  
   // Dummy user data
   const data = {
     name: "Olivia Benson",
@@ -22,12 +24,14 @@ const ExpensesDetails = () => {
     clientName: "Olivia Benson",
   };
 
-  const history = {
-    id: "abc123",
-    roomNumber: "Room 102",
-    hostName: "John Doe",
-    date: "2025-07-26",
-  };
+    const { fetchExpense , expense } = useExpenses();
+  
+    useEffect(() => {
+      fetchExpense(id)
+    }, [id]);
+  
+
+
 
   return (
     <IonPage>
@@ -52,10 +56,16 @@ const ExpensesDetails = () => {
           {/* Personal Information */}
           <div className="flex flex-col gap-2">
          
-            <div className="text-sm text-gray-600 grid grid-cols-2 px-2">
+            <div className="text-sm text-gray-600 flex flex-col gap-2 px-2">
              
-              <DetailRow label='Short Rest' value='12th Jan 1990'/>
-              <DetailRow label='Lodge' value='Nigerian'/>
+              <DetailRow label='Amount' value='12th Jan 1990'/>
+              <DetailRow label='Category' value='Nigerian'/>
+              <DetailRow label='Description' value='Nigerian'/>
+              <DetailRow label='Date' value='Nigerian'/>
+            </div>
+
+            <div>
+              <img />
             </div>
           </div>
 
