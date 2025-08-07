@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { IonPage } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
-import { useRecord } from "../../../../contexts/RecordContext";
+import { useRecord } from "../../../../contexts/data/RecordContext";
 import { useEffect } from "react";
 
 const RecordDetails = () => {

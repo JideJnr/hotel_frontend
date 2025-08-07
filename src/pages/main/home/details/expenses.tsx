@@ -3,7 +3,7 @@ import { IonPage } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import { useEffect } from "react";
-import { useExpenses } from "../../../../contexts/ExpensesContext";
+import { useExpenses } from "../../../../contexts/data/ExpensesContext";
 
 const ExpensesDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,8 +23,8 @@ const ExpensesDetails = () => {
     userInitial: "OB",
     clientName: "Olivia Benson",
   };
-
-    const { fetchExpense , expense } = useExpenses();
+  
+  const { fetchExpense , expense } = useExpenses();
   
     useEffect(() => {
       fetchExpense(id)

@@ -1,6 +1,6 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { useRoomStore } from '../services/stores/ActivityStore';
+import { useRoomStore } from '../../services/stores/ActivityStore';
 import { useIonRouter } from '@ionic/react';
 
 

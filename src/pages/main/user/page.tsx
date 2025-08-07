@@ -1,7 +1,8 @@
 import { useHistory } from "react-router-dom";
 import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
 import { useEffect, useState } from "react";
-import { useCustomer } from "../../../contexts/CustomerContext";
+import { useCustomer } from "../../../contexts/data/CustomerContext";
+
 
 const mockClients = [
   {

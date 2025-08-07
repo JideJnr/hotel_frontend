@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { IonPage } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
-import { useRoom } from "../../../../contexts/RoomContext";
+import { useRoom } from "../../../../contexts/data/RoomContext";
 import { useEffect } from "react";
 
 const RoomDetails = () => {

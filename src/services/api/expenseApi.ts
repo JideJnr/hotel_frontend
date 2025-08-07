@@ -44,7 +44,7 @@ export const getAllExpenses = async (params?: {
   lastCreatedAt?: string;
   lastId?: string;
 }): Promise<ApiResponse<PaginatedExpenseResponse>> => {
-  const res = await api.get('/expenses/by-date-range', { params });
+  const res = await api.get('/api/v1/expenses/by-date-range', { params });
   return res.data;
 };
 
@@ -53,7 +53,7 @@ export const getExpensesByCategory = async (category: string, params?: {
   lastCreatedAt?: string;
   lastId?: string;
 }): Promise<ApiResponse<PaginatedExpenseResponse>> => {
-  const res = await api.get('/expenses/by-category', { 
+  const res = await api.get('/api/v1/expenses/by-category', { 
     params: { category, ...params } 
   });
   return res.data;
@@ -63,26 +63,26 @@ export const getExpenseSummary = async (params: {
   startDate: string;
   endDate: string;
 }): Promise<ApiResponse<ExpenseSummary>> => {
-  const res = await api.get('/expenses/summary', { params });
+  const res = await api.get('/api/v1/expenses/summary', { params });
   return res.data;
 };
 
 export const getExpenseById = async (id: string): Promise<ApiResponse<Expense>> => {
-  const res = await api.get(`/expenses/${id}`);
+  const res = await api.get(`/api/v1/expenses/${id}`);
   return res.data;
 };
 
 export const createExpense = async (data: Partial<Expense>): Promise<ApiResponse<{ expenseId: string }>> => {
-  const res = await api.post('/expenses', data);
+  const res = await api.post('/api/v1/expenses', data);
   return res.data;
 };
 
 export const updateExpense = async (id: string, data: Partial<Expense>): Promise<ApiResponse<void>> => {
-  const res = await api.put(`/expenses/${id}`, data);
+  const res = await api.put(`/api/v1/expenses/${id}`, data);
   return res.data;
 };
 
 export const deleteExpense = async (id: string): Promise<ApiResponse<void>> => {
-  const res = await api.delete(`/expenses/${id}`);
+  const res = await api.delete(`/api/v1/expenses/${id}`);
   return res.data;
 };

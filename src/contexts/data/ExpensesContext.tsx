@@ -1,7 +1,7 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { useIonRouter } from '@ionic/react';
-import { useExpenseStore } from '../services/stores/expensesStore';
+import { useExpenseStore } from '../../services/stores/expensesStore';
 
 interface Expense {
   id: string;

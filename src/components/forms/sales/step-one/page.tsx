@@ -10,7 +10,8 @@ import {
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import FormSelect from "../../FormSelect";
-import { useCustomer } from "../../../../contexts/CustomerContext";
+import { useCustomer } from "../../../../contexts/data/CustomerContext";
+
 
 
 

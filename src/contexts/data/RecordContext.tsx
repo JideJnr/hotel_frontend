@@ -1,6 +1,6 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { useRecordStore } from '../services/stores/recordStore';
+import { useRecordStore } from '../../services/stores/recordStore';
 
 const RecordContext = createContext<RecordContextType | undefined>(undefined);
 

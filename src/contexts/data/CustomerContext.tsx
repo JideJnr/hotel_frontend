@@ -1,8 +1,9 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { useCustomerStore } from '../services/stores/customerStore';
+
 import { useIonRouter } from '@ionic/react';
-import {  } from '../services/api/customerApi';
+import { useCustomerStore } from '../../services/stores/customerStore';
+
 
 interface Customer {
   id: string;

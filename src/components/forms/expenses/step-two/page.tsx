@@ -5,7 +5,7 @@ import { BackFormContainer, DetailRow, FormHeader } from "../../../../components
 import Button from "../../../../components/button/button";
 
 import { useIonRouter } from "@ionic/react";
-import { useExpense } from "../../../../contexts/ExpensesContext";
+import { useExpenses } from "../../../../contexts/data/ExpensesContext";
 
 interface FormData {
   category: {
@@ -21,7 +21,7 @@ interface FormData {
 
 const ExpenseStepTwo = () => {
   const router = useIonRouter();
-  const { createExpense } = useExpense();
+  const { createExpense } = useExpenses();
   const [formData, setFormData] = useState<FormData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 

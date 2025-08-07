@@ -60,9 +60,6 @@ const BookingStepTwo = () => {
     }
   };
 
-  const handleBack = () => {
-    router.push("/bookings/create/stepone", "back", "push");
-  };
 
   if (loading) {
     return (

@@ -1,6 +1,7 @@
 import { useIonRouter } from "@ionic/react";
 import Button from "../../../components/button/button";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/auth/AuthContext";
+
 
 
 const Setting = () => {

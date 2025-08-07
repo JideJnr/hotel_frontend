@@ -1,9 +1,6 @@
 import { IonButton, IonCol,  IonIcon, IonRow, IonText, useIonRouter } from '@ionic/react';
 import DashboardTile from '../../../components/templates/dashboardtiles/DashboardTiles';
 import ScheduleCard from '../../../components/templates/card/ScheduleCard';
-import { useHistory } from 'react-router';
-
-
 
 const Home = () => {
   const router = useIonRouter();
