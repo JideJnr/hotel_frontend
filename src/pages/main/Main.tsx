@@ -15,6 +15,7 @@ import { useRecord } from "../../contexts/data/RecordContext";
 import { useExpenses } from "../../contexts/data/ExpensesContext";
 import { useRoom } from "../../contexts/data/RoomContext";
 import { useActivity } from "../../contexts/data/ActivityContext";
+import { useCustomer } from "../../contexts/data/CustomerContext";
 
 
 
@@ -29,6 +30,7 @@ function Main() {
     const {fetchExpenses} = useExpenses();
     const { fetchRooms } = useRoom();
     const { fetchActivities, activity, loading } = useActivity();
+    const {fetchCustomers} = useCustomer();
 
 
     const refresh = async (e: CustomEvent) => {
@@ -38,6 +40,7 @@ function Main() {
           fetchExpenses(),
           fetchRooms(),
           fetchActivities(),
+          fetchCustomers()
         ]);
       } catch (err) {
         console.error("Refresh error:", err);

@@ -140,7 +140,7 @@ const wrappedFetchTodayExpenses = async (params?: {
     try {
       await fetchExpenses(params);
     } catch (error) {
-      toast.error('Failed to fetch expenses');
+     
       console.error('Fetch error:', error);
     }
   };

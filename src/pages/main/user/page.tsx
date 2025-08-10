@@ -1,12 +1,12 @@
-import { useHistory } from "react-router-dom";
 import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
 import { useEffect, useState } from "react";
 import { useCustomer } from "../../../contexts/data/CustomerContext";
 import { getNameInitials } from "../../../utils/getInitials";
+import { useIonRouter } from "@ionic/react";
 
 
 const Users = () => {
-  const history = useHistory(); 
+  const router = useIonRouter();
   const { fetchCustomers, customers } = useCustomer();
 
     useEffect(() => {
@@ -14,10 +14,6 @@ const Users = () => {
     }, []);
 
 const [clientsWithInitials, setClientsWithInitials] = useState([]);
-
-useEffect(() => {
-    fetchCustomers()
-}, []);
 
 useEffect(() => {
   if (customers.length) {
@@ -43,7 +39,7 @@ useEffect(() => {
             <div
               key={client.id}
               className="flex items-center px-2 py-2 border-y cursor-pointer bg-white text-black"
-              onClick={() => history.push(`/user/${client.id}`)}
+              onClick={() => router.push(`/user/${client.id}`)}
             >
                       {client.userImg ? (
                         <button

@@ -1,10 +1,13 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { useRecord } from './RecordContext';
 import { toast } from 'react-toastify';
+import { useRoom } from './RoomContext';
+import { useCustomer } from './CustomerContext';
 
 interface ComputationContextType {
   balance: number;
   activeRooms: number;
+  totalRooms: number
   totalSales: number;
   activeUsers: number;
   totalExpenses: number;
@@ -19,6 +22,8 @@ const ComputationContext = createContext<ComputationContextType | undefined>(und
 
 export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { records } = useRecord();
+  const {rooms} = useRoom();
+  const {customers} = useCustomer();
 
   const computeBalance = () => {
     try {
@@ -79,6 +84,8 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const balance = useMemo(() => computeBalance(), [records]);
   const activeRooms = useMemo(() => computeActiveRooms(), [records]);
+  const totalRooms = rooms.length || 0;
+  const totalCustomers = customers.length || 0;
   const totalSales = useMemo(() => computeTotalSales(), [records]);
   const activeUsers = useMemo(() => computeActiveUsers(), [records]);
   const totalExpenses = useMemo(() => computeTotalExpenses(), [records]);
@@ -86,6 +93,8 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
   const contextValue: ComputationContextType = useMemo(() => ({
     balance,
     activeRooms,
+    totalCustomers,
+    totalRooms,
     totalSales,
     activeUsers,
     totalExpenses,

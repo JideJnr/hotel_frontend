@@ -4,26 +4,31 @@ import ScheduleCard from '../../../components/templates/card/ScheduleCard';
 import { useRecord } from '../../../contexts/data/RecordContext';
 import { useEffect } from 'react';
 import { useExpenses } from '../../../contexts/data/ExpensesContext';
+import { useComputation } from '../../../contexts/data/ComputationContext';
 
 const Home = () => {
   const router = useIonRouter();
 
   const { fetchRecords, records } = useRecord();
   const {fetchExpenses, expenses} = useExpenses();
+  const { balance ,    activeRooms,
+    totalSales,
+    activeUsers,
+    totalExpenses, } = useComputation();
 
   
-      useEffect(() => {
-        fetchRecords()
-        fetchExpenses()
-      }, []);
+  useEffect(() => {
+    fetchRecords()
+    fetchExpenses()
+  }, []);
 
   return (
     <div className="flex flex-col gap-8 px-4 py-8 bg-gray-100 overflow-y-auto h-full w-full">
         
           <div className="grid gap-4 lg:gap-8 grid-cols-2 w-full h-fit">
-            <DashboardTile title="Balance" value={20000} delta={1}/>
-            <DashboardTile title="Active Room" value={2} delta={1}/>
-            <DashboardTile title="Total Sales " value={2} delta={1}/>
+            <DashboardTile title="Balance" value={balance} delta={1}/>
+            <DashboardTile title="Active Room" value={activeRooms} delta={1}/>
+            <DashboardTile title="Total Sales " value={totalSales} delta={1}/>
             <DashboardTile title="New Customer" value={2} delta={1}/>
           </div>
 
