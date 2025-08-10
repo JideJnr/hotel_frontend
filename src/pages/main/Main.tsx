@@ -11,6 +11,10 @@ import Room from "./room/Room";
 import Activity from "./activity/page";
 import Setting from "./settings/page";
 import User from "./user/page"
+import { useRecord } from "../../contexts/data/RecordContext";
+import { useExpenses } from "../../contexts/data/ExpensesContext";
+import { useRoom } from "../../contexts/data/RoomContext";
+import { useActivity } from "../../contexts/data/ActivityContext";
 
 
 
@@ -20,14 +24,26 @@ function classNames(...classes: string[]) {
 
 function Main() {
 
+  
+    const { fetchRecords } = useRecord();
+    const {fetchExpenses} = useExpenses();
+    const { fetchRooms } = useRoom();
+    const { fetchActivities, activity, loading } = useActivity();
 
-    const refresh = (e: CustomEvent) => {
-        try {
-        e.detail.complete();
-        } catch (err) {
+
+    const refresh = async (e: CustomEvent) => {
+      try {
+        await Promise.all([
+          fetchRecords(),
+          fetchExpenses(),
+          fetchRooms(),
+          fetchActivities(),
+        ]);
+      } catch (err) {
         console.error("Refresh error:", err);
-        e.detail.complete();
-        }
+      } finally {
+        e.detail.complete(); // Always complete, success or failure
+      }
     };
 
   const renderTabs = () => (
@@ -180,9 +196,9 @@ function Main() {
   );
 
   return (
-    <IonPage>
+    <IonPage className="bg-white">
       <IonContent fullscreen>
-        <IonRefresher slot="fixed" onIonRefresh={refresh}>
+        <IonRefresher slot="fixed" onIonRefresh={refresh} className="text-gray-800">
           <IonRefresherContent />
         </IonRefresher>
 

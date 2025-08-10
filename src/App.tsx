@@ -1,4 +1,4 @@
-import React, { Suspense }  from "react";
+import React, { Suspense, useEffect }  from "react";
 import { IonApp, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
@@ -19,9 +19,12 @@ import "@ionic/react/css/palettes/dark.system.css";
 import "./index.css";
 import { ContextProvider } from "./contexts/ContextProvider";
 
+
+
 setupIonicReact();
 
 const App: React.FC = () => {
+
   return (
 
     <IonApp>

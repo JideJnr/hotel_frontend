@@ -4,6 +4,7 @@ import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import { useRecord } from "../../../../contexts/data/RecordContext";
 import { useEffect } from "react";
+import { useExpenses } from "../../../../contexts/data/ExpensesContext";
 
 const RecordDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,10 +13,8 @@ const RecordDetails = () => {
         useEffect(() => {
           fetchRecord(id)
         }, [id]);
-      
-    
 
-  // Dummy user data
+      
   const data = {
     name: "Olivia Benson",
     phone: "+2348012345678",
@@ -31,12 +30,6 @@ const RecordDetails = () => {
     clientName: "Olivia Benson",
   };
 
-  const history = {
-    id: "abc123",
-    recordNumber: "Record 102",
-    hostName: "John Doe",
-    date: "2025-07-26",
-  };
 
   return (
     <IonPage>

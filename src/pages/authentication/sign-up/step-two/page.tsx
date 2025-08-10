@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { FormContainer, FormInput, PasswordInput, FormFooter } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
-import { useAuth } from "../../../../contexts/AuthContext";
+import { useAuth } from "../../../../contexts/auth/AuthContext";
+
 
 const SignupContinue = () => {
   const router = useIonRouter();

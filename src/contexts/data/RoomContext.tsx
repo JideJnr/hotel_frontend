@@ -1,7 +1,8 @@
 import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { useRoomStore } from '../../services/stores/ActivityStore';
+
 import { useIonRouter } from '@ionic/react';
+import { useRoomStore } from '../../services/stores/roomStore';
 
 
 const RoomContext = createContext<RoomContextType | undefined>(undefined);

@@ -1,123 +1,80 @@
 import { IonContent } from "@ionic/react";
+import { useEffect } from "react";
+import { useActivity } from "../../../contexts/data/ActivityContext";
 
 const Activity = () => {
-  // Mock user
-const user = {
-  role: "admin",
-};
+  const user = {
+    role: "admin",
+  };
 
-// Mock activities
-const activities = [
-  {
-    time: {
-      toDate: () => new Date(),
-    },
-    details: " User Created",
-    hostName: "Admin Bot",
-    note: "Initial profile setup completed.",
-    userImg: "https://randomuser.me/api/portraits/men/32.jpg",
-    clientName: "John Doe",
-  },
-  {
-    time: {
-      toDate: () => new Date(),
-    },
-    details: " Sold Room",
-    room: "A101",
-    price: 15000,
-    hostName: "Jane Admin",
-    userInitial: "JD",
-    clientName: "Jane Doe",
-  },
-  {
-    time: {
-      toDate: () => new Date(),
-    },
-    details: "Ran Expenses",
-    hostName: "Super Admin",
-    note: "Ran expenses for April 2025",
-    userInitial: "SA",
-    clientName: "Super Admin",
-  },
-];
+  const { fetchActivities, activity, loading } = useActivity();
+
+  useEffect(() => {
+    fetchActivities();
+  }, []);
 
   return (
-    <div className="p-4  bg-white text-gray-800 w-full h-full flex flex-col  gap-4 ">
+    <div className="p-4 bg-white text-gray-800 w-full h-full flex flex-col gap-4">
+      <div>Filters</div>
 
-      <div>
-        Filters  
-      </div> 
+      {loading ? (
+        <div className="text-gray-500 text-sm">Loading...</div>
+      ) : activity.length > 0 ? (
+        activity.map((act, index) => (
+          <div key={index} className="grid grid-cols-12 gap-x-3">
+            <div className="col-span-3 text-end">
+              <span className="text-xs text-gray-500">
+                {act.time?.toDate().toLocaleString()}
+              </span>
+            </div>
+            <div className="col-span-1 relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200">
+              <div className="relative z-10 size-7 flex justify-center items-center">
+                <div className="size-2 rounded-full bg-gray-400"></div>
+              </div>
+            </div>
+            <div className="col-span-8 p-1.5 pb-4">
+              <p className="flex gap-x-1.5 font-semibold text-gray-800">
+                {user.role === "admin" ? act.hostName : "You"}{" "}
+                {act.details === "User Created" && "Created Your Profile"}
+                {act.details === "Ran Expenses" && "Ran Expenses for "}
+                {act.details === "Sold Room" &&
+                  `Sold room ${act.room} for N${act.price}`}
+              </p>
 
-          <>
-            {activities ? (
-              <>
-                {activities.map((activity, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-x-3">
-                    <div className="col-span-3 text-end ">
-                      <span className="text-xs text-gray-500 ">
-                        {activity.time?.toDate().toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="col-span-1 relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 ">
-                      <div className="relative z-10 size-7 flex justify-center items-center">
-                        <div className="size-2 rounded-full bg-gray-400 "></div>
-                      </div>
-                    </div>
-                    <div className=" col-span-8 p-1.5 pb-4">
-                      <p className="flex gap-x-1.5 font-semibold text-gray-800 ">
-                        {user && user.role === "admin"
-                          ? activity.hostName
-                          : "You"}{" "}
-                        {activity.details === " User Created" &&
-                          "  Created Your Profile"}
+              {act.note && (
+                <p className="mt-1 text-sm text-gray-600">{act.note}</p>
+              )}
 
-{activity.details === "Ran Expenses" &&
-                          "  Ran Expenses for "}
-
-
-                        {activity.details === " Sold Room" &&
-                          `Sold room ${activity.room} for N
-                        ${activity.price} `}
-                      </p>
-                      {activity.note && (
-                        <p className="mt-1 text-sm text-gray-600 ">
-                          {activity.note}
-                        </p>
-                      )}
-                      {activity.userImg ? (
-                        <button
-                          type="button"
-                          className="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none "
-                        >
-                          <img
-                            className="flex-shrink-0 size-4 rounded-full"
-                            src={activity.userImg}
-                            alt="Image Note"
-                          />
-                          {activity.clientName}
-                        </button>
-                      ) : activity.userInitial ? (
-                        <button
-                          type="button"
-                          className="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-                        >
-                          <span className="flex flex-shrink-0 justify-center items-center size-4 bg-white border border-gray-200 text-[10px] font-semibold uppercase text-gray-600 rounded-full ">
-                            {activity.userInitial}
-                          </span>
-                          {activity.clientName}
-                        </button>
-                      ) : null}
-                    </div>
-                  </div>
-                ))}
-              </>
-            ) : (
-              <>empty</>
-            )}
-      </>
+              {act.userImg ? (
+                <button
+                  type="button"
+                  className="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                >
+                  <img
+                    className="flex-shrink-0 size-4 rounded-full"
+                    src={act.userImg}
+                    alt="User"
+                  />
+                  {act.clientName}
+                </button>
+              ) : act.userInitial ? (
+                <button
+                  type="button"
+                  className="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+                >
+                  <span className="flex flex-shrink-0 justify-center items-center size-4 bg-white border border-gray-200 text-[10px] font-semibold uppercase text-gray-600 rounded-full">
+                    {act.userInitial}
+                  </span>
+                  {act.clientName}
+                </button>
+              ) : null}
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="text-gray-500 text-sm">No activities found</div>
+      )}
     </div>
-   
-
   );
 };
 

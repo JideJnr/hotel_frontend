@@ -38,7 +38,7 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   const wrappedFetchRecords = async () => {
     try {
-      await store.fetchRecords();
+      await store.fetchTodayRecords();
     } catch (error) {
       toast.error('Failed to fetch records');
       console.error('Fetch error:', error);
@@ -47,7 +47,7 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   const wrappedFetchRecord = async (id: string) => {
     try {
-      await store.fetchRecord(id);
+      await store.fetchRecordById(id);
     } catch (error) {
       toast.error(`Failed to fetch record ${id}`);
       console.error('Fetch error:', error);

@@ -10,13 +10,19 @@ interface Customer {
   // Add other customer properties here
 }
 
+interface CustomerResponse {
+  success: boolean;
+  message?: string;
+  data?: any;
+}
+
 interface CustomerContextType {
   customers: Customer[];
   customer: Customer | null;
   loading: boolean;
   error: string | null;
-  createCustomer: (payload: any) => Promise<void>;
-  updateCustomer: (id: string, payload: any) => Promise<void>;
+  createCustomer: (payload: any) => Promise<CustomerResponse>;
+  updateCustomer: (id: string, payload: any) => Promise<CustomerResponse>;
   fetchCustomers: () => Promise<void>;
   fetchCustomer: (id: string) => Promise<void>;
 }

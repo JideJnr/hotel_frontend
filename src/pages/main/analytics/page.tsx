@@ -1,8 +1,8 @@
 import { IonButton, IonCol,  IonIcon, IonPage, IonRow, IonText, useIonRouter } from '@ionic/react';
-import DashboardTile from '../../components/templates/dashboardtiles/DashboardTiles';
-import ScheduleCard from '../../components/templates/card/ScheduleCard';
+import DashboardTile from '../../../components/templates/dashboardtiles/DashboardTiles';
+import ScheduleCard from '../../../components/templates/card/ScheduleCard';
 import { useHistory } from 'react-router';
-import { FormHeader } from '../../components/forms';
+import { FormHeader } from '../../../components/forms';
 
 const Analytics = () => {
   const router = useIonRouter();
@@ -36,6 +36,8 @@ const Analytics = () => {
     <div className="flex flex-col gap-8 px-4 py-8 bg-gray-100 overflow-y-auto h-full w-full">
         
           <div className="grid gap-4 lg:gap-8 grid-cols-2 w-full h-fit">
+            <DashboardTile title="Total Sales " value={2} delta={1}/>
+            <DashboardTile title="Total Expenses" value={2} delta={1}/>
             <DashboardTile title="Total Sales " value={2} delta={1}/>
             <DashboardTile title="Total Expenses" value={2} delta={1}/>
           </div>

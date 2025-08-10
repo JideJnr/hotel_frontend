@@ -1,31 +1,21 @@
 import { IonButton, IonCol,  IonIcon, IonRow, IonText, useIonRouter } from '@ionic/react';
 import DashboardTile from '../../../components/templates/dashboardtiles/DashboardTiles';
 import ScheduleCard from '../../../components/templates/card/ScheduleCard';
+import { useRecord } from '../../../contexts/data/RecordContext';
+import { useEffect } from 'react';
+import { useExpenses } from '../../../contexts/data/ExpensesContext';
 
 const Home = () => {
   const router = useIonRouter();
 
-  const expenses = [
-    {
-      expenseType: 'Cleaning Supplies',
-      price: '45.00',
-    },
-    {
-      expenseType: 'Toiletries',
-      price: '120.50',
-    },
-    {
-      expenseType: 'Maintenance',
-      price: '75.25',
-    },
-  ];
+  const { fetchRecords, records } = useRecord();
+  const {fetchExpenses, expenses} = useExpenses();
 
-  const record = [
-    { customerName: 'Dressage Practice', RoomNumber: 2 },
-    { customerName: 'Polo',  RoomNumber: 2 },
-    { customerName: 'Barrel Racing Practice',  RoomNumber: 2 },
-  ];
-
+  
+      useEffect(() => {
+        fetchRecords()
+        fetchExpenses()
+      }, []);
 
   return (
     <div className="flex flex-col gap-8 px-4 py-8 bg-gray-100 overflow-y-auto h-full w-full">
@@ -49,7 +39,7 @@ const Home = () => {
                     icon="people"
                     className="border border-primary p-4 bg-[#ebe8fe] rounded-full text-[24px] text-black "
                   />
-                  <IonText className="text-[12px] font-medium leading-[20px] tracking-[-0.13px] text-gray-700 font-semibold">
+                  <IonText className="text-[12px] font-medium leading-[20px] tracking-[-0.13px] text-black font-semibold">
                     Room
                   </IonText>
                 </div>
@@ -132,9 +122,9 @@ const Home = () => {
             <p className='text-black text-xl'>
               Room Sales
             </p>
-            {record.map((event, index) => (
+            {records.map((event, index) => (
               <div onClick={() => router.push(`/record/a`)}>
-              <ScheduleCard key={index} name={event.customerName} details={`Room ${event.RoomNumber}`} />
+              <ScheduleCard key={index} name={event.customerId} details={`Room ${event.roomNumberId}`} />
               </div>
             ))}
           </div>

@@ -6,7 +6,7 @@ import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 
 
-
+const Support = React.lazy(() => import("../pages/main/support/Support"));
 
 const SalesStepOne = React.lazy(() => import("../components/forms/sales/step-one/page"));
 const SalesStepTwo = React.lazy(() => import("../components/forms/sales/step-two/page"));
@@ -20,6 +20,9 @@ const ExpenseStepTwo = React.lazy(() => import("../components/forms/expenses/ste
 const BookingStepOne = React.lazy(() => import("../components/forms/booking/step-one/page"));
 const BookingStepTwo = React.lazy(() => import("../components/forms/booking/step-two/page"));
 
+const RoomStepOne = React.lazy(() => import("../components/forms/room/step-one/page"));
+const RoomStepTwo = React.lazy(() => import("../components/forms/room/step-two/page"));
+
 const Welcome = React.lazy(() => import("../pages/authentication/welcome/page"));
 const Signin = React.lazy(() => import("../pages/authentication/sign-in/page"));
 const Signup = React.lazy(() => import("../pages/authentication/sign-up/step-one/page"));
@@ -29,7 +32,7 @@ const RecordDetails = React.lazy(() => import("../pages/main/home/details/record
 const ExpensesDetails = React.lazy(() => import("../pages/main/home/details/expenses"));
 const RoomDetails = React.lazy(() => import("../pages/main/room/details/RoomDetails"));
 
-const Analytics = React.lazy(() => import("../pages/analytics/page"));
+const Analytics = React.lazy(() => import("../pages/main/analytics/page"));
 const Main = React.lazy(() => import("../pages/main/Main"));
 
 const Routes: React.FC = () => {
@@ -45,6 +48,7 @@ const Routes: React.FC = () => {
         <PublicRoute path="/sign-in" exact component={Signin} />
         <PublicRoute path="/signup" exact component={Signup} />
         <PublicRoute path="/signup/steptwo" exact component={SignupContinue} />
+        <Route path="/support" exact component={Support} />
 
         {/* PRIVATE ROUTES */}
         <PrivateRoute path="/expenses/:id" exact component={ExpensesDetails} />
@@ -60,6 +64,8 @@ const Routes: React.FC = () => {
         <PrivateRoute path="/register/expenses/steptwo" exact component={ExpenseStepTwo} />
         <PrivateRoute path="/register/booking/stepone" exact component={BookingStepOne} />
         <PrivateRoute path="/register/booking/steptwo" exact component={BookingStepTwo} />
+        <PrivateRoute path="/register/room/stepone" exact component={RoomStepOne} />
+        <PrivateRoute path="/register/room/steptwo" exact component={RoomStepTwo} />
         <PrivateRoute path="/analytic" exact component={Analytics} />
         <PrivateRoute path="/home" exact component={Main} />
       </div>

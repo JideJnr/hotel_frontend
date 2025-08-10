@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../..";
 import { useCustomerStore } from "../../../../services/stores/customerStore";
-import { useCustomer } from "../../../../contexts/CustomerContext";
 
 interface CustomerData {
   fullName: string;
@@ -15,7 +14,7 @@ interface CustomerData {
 
 const ClientStepTwo = () => {
   const router = useIonRouter();
-  const { createCustomer } = useCustomer();
+  const { createCustomer } = useCustomerStore();
   const [formData, setFormData] = useState<CustomerData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

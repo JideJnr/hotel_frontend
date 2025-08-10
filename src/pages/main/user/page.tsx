@@ -2,28 +2,8 @@ import { useHistory } from "react-router-dom";
 import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
 import { useEffect, useState } from "react";
 import { useCustomer } from "../../../contexts/data/CustomerContext";
+import { getNameInitials } from "../../../utils/getInitials";
 
-
-const mockClients = [
-  {
-    id: "user1",
-    clientName: "John Doe",
-    userImg: "https://randomuser.me/api/portraits/men/10.jpg",
-    userInitial:'JD'
-  },
-  {
-    id: "user2",
-    clientName: "Jane Smith",
-    userImg: "https://randomuser.me/api/portraits/women/20.jpg",
-    userInitial:'JD'
-  },
-  {
-    id: "user3",
-    clientName: "Mike Johnson",
-    userImg: "",
-    userInitial:'JD'
-  },
-];
 
 const Users = () => {
   const history = useHistory(); 
@@ -33,15 +13,6 @@ const Users = () => {
       fetchCustomers()
     }, []);
 
-  console.log("Fetched Customers:", customers);
-
-  const getInitials = (name: string): string => {
-  if (!name) return '';
-  const words = name.trim().split(' ');
-  return words.map(w => w[0].toUpperCase()).join('').slice(0, 2);
-};
-
-// inside Users component
 const [clientsWithInitials, setClientsWithInitials] = useState([]);
 
 useEffect(() => {
@@ -52,7 +23,7 @@ useEffect(() => {
   if (customers.length) {
     const updated = customers.map((customer) => ({
       ...customer,
-      userInitial: getInitials(customer?.fullName),
+      userInitial: getNameInitials(customer?.fullName),
     }));
     setClientsWithInitials(updated);
   }

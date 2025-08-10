@@ -62,10 +62,14 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
   
   const wrappedCreateExpense = async (payload: Partial<Expense>) => {
     try {
-      await createExpense(payload);
-      toast.success('Expense created successfully');
-      sessionStorage.removeItem("expenseData");
-      router.push('/expenses', 'forward');
+      const response = await createExpense(payload);
+      if (response.success) {
+        toast.success('Expense created successfully');
+        sessionStorage.removeItem("expenseData");
+        router.push('/expenses', 'forward');
+      } else {
+        toast.error(`Creation failed: ${response.message}`);
+      }
     } catch (error) {
       toast.error('Expense creation error');
       console.error('Creation error:', error);
@@ -75,8 +79,13 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
   const wrappedUpdateExpense = async (id: string, payload: Partial<Expense>) => {
     try {
       await updateExpense(id, payload);
-      toast.success('Expense updated successfully');
-      router.push(`/expenses/${id}`, 'forward');
+      if (response.success) {
+        toast.success('Expense created successfully');
+        sessionStorage.removeItem("expenseData");
+        router.push('/expenses', 'forward');
+      } else {
+        toast.error(`Creation failed: ${response.message}`);
+      }
     } catch (error) {
       toast.error('Expense update error');
       console.error('Update error:', error);
@@ -86,15 +95,42 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
   const wrappedDeleteExpense = async (id: string) => {
     try {
       await deleteExpense(id);
-      toast.success('Expense deleted successfully');
-      router.push('/expenses', 'back');
+      if (response.success) {
+        toast.success('Expense created successfully');
+        sessionStorage.removeItem("expenseData");
+        router.push('/expenses', 'forward');
+      } else {
+        toast.error(`Creation failed: ${response.message}`);
+      }
     } catch (error) {
       toast.error('Expense deletion error');
       console.error('Deletion error:', error);
     }
   };
 
-  const wrappedFetchExpenses = async (params?: {
+const wrappedFetchTodayExpenses = async (params?: { 
+  startDate?: string; 
+  endDate?: string; 
+}) => {
+  try {
+    const today = new Date();
+    const todayStr = today.toISOString().split("T")[0];
+
+
+    const queryParams = {
+      startDate: params?.startDate || todayStr,
+      endDate: params?.endDate || todayStr,
+    };
+
+    await fetchExpenses(queryParams);
+  } catch (error) {
+  
+    console.error("Fetch error:", error);
+  }
+};
+
+
+  const wrappedFetchExpensesByDateRange = async (params?: {
     startDate?: string;
     endDate?: string;
     pageSize?: number;
@@ -151,7 +187,8 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
     createExpense: wrappedCreateExpense,
     updateExpense: wrappedUpdateExpense,
     deleteExpense: wrappedDeleteExpense,
-    fetchExpenses: wrappedFetchExpenses,
+    fetchExpenses: wrappedFetchExpensesByDateRange,
+    fetchTodayExpenses: wrappedFetchTodayExpenses,
     fetchExpense: wrappedFetchExpense,
     fetchExpensesByCategory: wrappedFetchExpensesByCategory,
     fetchExpenseSummary: wrappedFetchExpenseSummary,

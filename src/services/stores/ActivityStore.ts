@@ -1,37 +1,35 @@
 import { create } from 'zustand';
-import * as api from '../api';
-import { getAllRooms, getAvailableRooms } from '../api/roomApi';
+import { fetchMyActivity } from '../api/ActivityApi';
 
+interface Activity {
+  // Define activity properties based on your API response
+  id: string;
+  name: string;
+  // ...other fields
+}
 
+interface ActivityStore {
+  activity: Activity[];
+  loading: boolean;
+  error: string | null;
+  getAvailableActivities: () => Promise<void>;
+}
 
-export const useRoomStore = create<any>((set, get) => ({
-  rooms: [],
-  availableRooms: [],
-  currentRoom: null,
+export const useActivityStore = create<ActivityStore>((set) => ({
+  activity: [],
   loading: false,
   error: null,
 
-  fetchRooms: async () => {
+  getAvailableActivities: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await getAllRooms();
-      if (!response.success) throw new Error(response.error || 'Failed to fetch rooms');
-      set({ rooms: response.rooms, loading: false });
-    } catch (err: any) {
-      set({ error: err.message, loading: false });
-    }
-  },
-
-  getAvailableRooms: async () => {
-    set({ loading: true, error: null });
-    try {
-      const response = await getAvailableRooms();
-      if (!response.success) throw new Error(response.error || 'Failed to fetch available rooms');
-      set({ availableRooms: response.rooms, loading: false });
-    } catch (err: any) {
-      set({ error: err.message, loading: false });
+      const response = await fetchMyActivity();
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to fetch available activities');
+      }
+      set({ activity: response.activities || [], loading: false });
+    } catch (err) {
+      set({ error: err instanceof Error ? err.message : 'Unknown error', loading: false });
     }
   }
-
-
 }));

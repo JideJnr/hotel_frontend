@@ -2,8 +2,8 @@ import { IonContent, IonLabel, IonPage, useIonRouter } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import Button from '../../../components/button/button';
-import { useAuth } from '../../../contexts/AuthContext';
 import { FormContainer, FormFooter, FormInput, PasswordInput } from '../../../components/forms';
+import { useAuth } from '../../../contexts/auth/AuthContext';
 
 const Signin = () => {
   const router = useIonRouter();

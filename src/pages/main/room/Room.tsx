@@ -4,82 +4,75 @@ import {
   IonLabel,
   useIonRouter,
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
 import ScheduleCard from "../../../components/templates/card/ScheduleCard";
-
-type Room = {
-  id: string;
-  name: string;
-  isActive: boolean;
-  price: number;
-};
-
-const mockRooms: Room[] = [
-  { id: "1", name: "Room A", isActive: true, price: 20000 },
-  { id: "2", name: "Room B", isActive: false, price: 15000 },
-  { id: "3", name: "Room C", isActive: true, price: 18000 },
-  { id: "4", name: "Room D", isActive: false, price: 22000 },
-];
+import { useRoom } from "../../../contexts/data/RoomContext";
 
 const Room = () => {
   const router = useIonRouter();
   const [activeTab, setActiveTab] = useState<"all" | "active">("all");
 
-  const filteredRooms =
-    activeTab === "active"
-      ? mockRooms.filter((room) => room.isActive)
-      : mockRooms;
+  const { fetchRooms, rooms } = useRoom();
 
-  const roomItems = filteredRooms.map((room) => ({
-    id: room.id,
-    name: room.name,
-    value: room.price,
-    type: room.isActive ? "active" : "inactive",
-  }));
+  useEffect(() => {
+    fetchRooms();
+  }, []);
 
-  // Room statistics for dashboard tiles
-  const totalRooms = mockRooms.length;
-  const activeRooms = mockRooms.filter((room) => room.isActive).length;
+  // Derived counts
+  const totalRooms = rooms?.length || 0;
+  const activeRooms = rooms?.filter((r) => r.isActive)?.length || 0;
 
-  const events = [
-  { title: 'Dressage Practice', time: '9:00AM - 11:00AM' },
-  { title: 'Polo', time: '11:00AM - 12:00PM' },
-  { title: 'Barrel Racing Practice', time: '12:00PM - 1:00PM' },
-];
-
+  // Filter based on activeTab
+  const displayedRooms =
+    activeTab === "all" ? rooms : rooms.filter((r) => r.isActive);
 
   return (
     <div className="p-4 dark:bg-gray-100 w-full h-full flex flex-col gap-6">
-        {/* Dashboard Tiles */}
-        <div className="grid gap-4 lg:gap-8  grid-cols-2 md:grid-cols-3 w-full h-fit my-4 ">
-          <DashboardTile title="Total Rooms" value={totalRooms} delta={1} />
-          <DashboardTile title="Active Rooms" value={activeRooms} delta={1} />
-        </div>
+      {/* Dashboard Tiles */}
+      <div className="grid gap-4 lg:gap-8 grid-cols-2 md:grid-cols-3 w-full h-fit my-4">
+        <DashboardTile title="Total Rooms" value={totalRooms} delta={1} />
+        <DashboardTile title="Active Rooms" value={activeRooms} delta={1} />
+      </div>
 
-        {/* Segment Filter */}
-        <IonSegment
-          value={activeTab}
-          onIonChange={(e) =>
-            setActiveTab(e.detail.value as "all" | "active")
-          }
-          className="mb-2 bg-white shadow-md rounded-lg"
+      {/* Add New Button */}
+      <div className="w-fit ml-auto mr-2">
+        <button
+          className="text-black"
+          onClick={() => router.push(`/register/room/stepone`)}
         >
-          <IonSegmentButton value="all " >
-            <IonLabel className="text-black ">All Rooms</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="active">
-            <IonLabel>Active Rooms</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
+          Add New
+        </button>
+      </div>
 
-                  <div className="space-y-4">
-                    {events.map((event, index) => (
-                      <div  onClick={() => router.push(`/room/${event.id}`)}>
-                        <ScheduleCard key={index} name={event.title} details={event.time} />
-                      </div>
-                    ))}
-                  </div>
+      {/* Tabs */}
+      <IonSegment
+        value={activeTab}
+        onIonChange={(e) => setActiveTab(e.detail.value as "all" | "active")}
+        className="mb-2 bg-white shadow-md rounded-lg"
+      >
+        <IonSegmentButton value="all">
+          <IonLabel className="text-black">All Rooms</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton value="active">
+          <IonLabel>Active Rooms</IonLabel>
+        </IonSegmentButton>
+      </IonSegment>
+
+      {/* Room List */}
+      <div className="space-y-4">
+        {displayedRooms?.map((room, index) => (
+          <div
+            key={room.id || index}
+            onClick={() => router.push(`/room/${room.id}`)}
+          >
+            <ScheduleCard
+              name={room.title}
+              details={room.description || room.title}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

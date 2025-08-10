@@ -2,19 +2,18 @@ import { useParams } from "react-router-dom";
 import { IonPage } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
-import { useCustomer } from "../../../../contexts/CustomerContext";
+
 import { useEffect } from "react";
+import { useCustomer } from "../../../../contexts/data/CustomerContext";
 
 const UserDetails = () => {
   const { id } = useParams<{ id: string }>();
 
   const { fetchCustomer , customer } = useCustomer();
-
   useEffect(() => {
     fetchCustomer(id)
   }, [id]);
 
-  console.log(customer)
 
   // Dummy user data
   const data = {
