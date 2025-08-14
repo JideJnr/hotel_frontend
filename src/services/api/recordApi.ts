@@ -3,7 +3,8 @@ import api from './index';
 // --- Types ---
 export interface RecordInput {
   customerId: string;
-  roomNumberId: string;
+  customerName: string;
+  roomId: string;
   paymentMethodId: string;
   requestId: string;
   bookingInstruction: string;
@@ -32,65 +33,48 @@ export interface DateRangeParams extends PaginationParams {
   endDate: string; // Date string (YYYY-MM-DD)
 }
 
-export interface RecordsResponse {
-  success: boolean;
-  message: string;
-  data: {
-    count: number;
-    records: Record[];
-    nextPage?: {
-      lastCreatedAt: string;
-      lastId: string;
-    };
-  };
-}
 
-export interface SingleRecordResponse {
-  success: boolean;
-  message: string;
-  data: Record;
-}
 
 // --- API Functions ---
 
 // Create a new sales record
 export const createRecord = async (data: RecordInput) => {
-  const res = await api.post('/records', data);
-  return res.data as { success: boolean; message: string; recordId: string };
+  const response = await api.post('/records', data);
+  return response.data;
 };
 
 // Update a sales record
 export const updateRecord = async (id: string, data: RecordInput) => {
-  const res = await api.put(`/records/${id}`, data);
-  return res.data as { success: boolean; message: string };
+  const response = await api.put(`/records/${id}`, data);
+  return response.data;
 };
 
 // Delete a sales record
 export const deleteRecord = async (id: string) => {
-  const res = await api.delete(`/records/${id}`);
-  return res.data as { success: boolean; message: string };
+  const response = await api.delete(`/records/${id}`);
+  return response.data;
 };
 
 // Get today's sales records
 export const getTodayRecords = async (params?: PaginationParams) => {
-  const res = await api.get('/records/today', { params });
-  return res.data as RecordsResponse;
+  const response = await api.get('/records/today', { params });
+  return response.data;
 };
 
 // Get records within a date range
 export const getRecordsByDateRange = async (params: DateRangeParams) => {
-  const res = await api.get('/records/range', { params });
-  return res.data as RecordsResponse;
+  const response = await api.get('/records/range', { params });
+  return response.data;
 };
 
 // Get record by ID
 export const getRecordById = async (id: string) => {
-  const res = await api.get(`/records/${id}`);
-  return res.data as SingleRecordResponse;
+  const response = await api.get(`/records/${id}`);
+  return response.data;
 };
 
 // Get authenticated user's records
 export const getUserRecords = async (params?: PaginationParams) => {
-  const res = await api.get('/records/user', { params });
-  return res.data as RecordsResponse;
+  const response = await api.get('/records/user', { params });
+  return response.data;
 };

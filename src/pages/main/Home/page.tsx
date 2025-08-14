@@ -10,6 +10,7 @@ const Home = () => {
   const router = useIonRouter();
 
   const { fetchRecords, records } = useRecord();
+  console.log(records);
   const {fetchExpenses, expenses} = useExpenses();
   const { balance ,    activeRooms,
     totalSales,
@@ -108,7 +109,7 @@ const Home = () => {
           </IonRow>
         
 
-        {expenses.length === 0 ? (
+        {expenses?.length === 0 ? (
           <div className="flex items-center gap-3 p-3 rounded-lg bg-white">
             <IonIcon src="assets/svgs/announce.svg" />
             <div className="overflow-hidden whitespace-nowrap flex-1">
@@ -127,15 +128,15 @@ const Home = () => {
             <p className='text-black text-xl'>
               Room Sales
             </p>
-            {records.map((event, index) => (
-              <div onClick={() => router.push(`/record/a`)}>
-              <ScheduleCard key={index} name={event.customerId} details={`Room ${event.roomNumberId}`} />
+            {records?.map((event, index) => (
+              <div onClick={() => router.push(`/record/${event.id}`)}>
+              <ScheduleCard key={index} name={event.customerName} details={`Room ${event.roomId}`} />
               </div>
             ))}
           </div>
-     
+    
 
-        {expenses.length > 0 && (
+        {expenses?.length > 0 && (
           <div className="space-y-4">
             <p className='text-black text-xl'>
                 Expenses

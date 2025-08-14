@@ -19,8 +19,8 @@ const Activity = () => {
 
       {loading ? (
         <div className="text-gray-500 text-sm">Loading...</div>
-      ) : activity.length > 0 ? (
-        activity.map((act, index) => (
+      ) : activity?.length > 0 ? (
+        activity?.map((act, index) => (
           <div key={index} className="grid grid-cols-12 gap-x-3">
             <div className="col-span-3 text-end">
               <span className="text-xs text-gray-500">

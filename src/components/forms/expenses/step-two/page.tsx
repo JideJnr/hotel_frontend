@@ -66,11 +66,8 @@ const ExpenseStepTwo = () => {
       };
 
       await createExpense(expensePayload);
-      toast.success("Expense recorded successfully!");
-      sessionStorage.removeItem("expenseData");
-      router.push("/expenses", "forward", "replace");
     } catch (err: any) {
-      toast.error(err?.message || "Failed to record expense");
+     
     } finally {
       setIsSubmitting(false);
     }

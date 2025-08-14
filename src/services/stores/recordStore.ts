@@ -13,114 +13,106 @@ import type {
   RecordInput,
   DateRangeParams,
   PaginationParams,
+  
 } from '../api/recordApi';
 
 interface RecordStoreState {
-  records: Record[];
-  record: Record | null;
   loading: boolean;
   error: string | null;
-
-  fetchTodayRecords: (params?: PaginationParams) => Promise<void>;
-  fetchRecordsByDateRange: (params: DateRangeParams) => Promise<void>;
-  fetchRecordById: (id: string) => Promise<void>;
-  fetchUserRecords: (params?: PaginationParams) => Promise<void>;
-  createRecord: (payload: RecordInput) => Promise<void>;
-  updateRecord: (id: string, payload: RecordInput) => Promise<void>;
-  deleteRecord: (id: string) => Promise<void>;
+  fetchTodayRecords: (params?: PaginationParams) => Promise<Response>;
+  fetchRecordsByDateRange: (params: DateRangeParams) => Promise<Response>;
+  fetchRecordById: (id: string) => Promise<Response>;
+  fetchUserRecords: (params?: PaginationParams) => Promise<Response>;
+  createRecord: (payload: RecordInput) => Promise<Response>;
+  updateRecord: (id: string, payload: RecordInput) => Promise<Response>;
+  deleteRecord: (id: string) => Promise<Response>;
 }
 
 export const useRecordStore = create<RecordStoreState>((set) => ({
-  records: [],
-  record: null,
   loading: false,
   error: null,
 
   fetchTodayRecords: async (params) => {
     set({ loading: true, error: null });
     try {
-      const res = await getTodayRecords(params);
-      if (!res.success) throw new Error(res.message);
-      set({ records: res.data.records, loading: false });
+      const response = await getTodayRecords(params);
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
   fetchRecordsByDateRange: async (params) => {
     set({ loading: true, error: null });
     try {
-      const res = await getRecordsByDateRange(params);
-      if (!res.success) throw new Error(res.message);
-      set({ records: res.data.records, loading: false });
+      const response = await getRecordsByDateRange(params);
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
   fetchRecordById: async (id) => {
     set({ loading: true, error: null });
     try {
-      const res = await getRecordById(id);
-      if (!res.success) throw new Error(res.message);
-      set({ record: res.data, loading: false });
+      const response = await getRecordById(id);
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
   fetchUserRecords: async (params) => {
     set({ loading: true, error: null });
     try {
-      const res = await getUserRecords(params);
-      if (!res.success) throw new Error(res.message);
-      set({ records: res.data.records, loading: false });
+      const response = await getUserRecords(params);
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
   createRecord: async (payload) => {
     set({ loading: true, error: null });
     try {
-      const res = await apiCreateRecord(payload);
-      if (!res.success) throw new Error(res.message);
-      set((state) => ({
-        records: [...state.records], // could refetch after creation
-        loading: false,
-      }));
+      const response = await apiCreateRecord(payload);
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
   updateRecord: async (id, payload) => {
     set({ loading: true, error: null });
     try {
-      const res = await apiUpdateRecord(id, payload);
-      if (!res.success) throw new Error(res.message);
-      set((state) => ({
-        records: state.records.map((r) =>
-          r.id === id ? { ...r, ...payload } : r
-        ),
-        loading: false,
-      }));
+      const response = await apiUpdateRecord(id, payload);
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
   deleteRecord: async (id) => {
     set({ loading: true, error: null });
     try {
-      const res = await apiDeleteRecord(id);
-      if (!res.success) throw new Error(res.message);
-      set((state) => ({
-        records: state.records.filter((r) => r.id !== id),
-        loading: false,
-      }));
+      const response = await apiDeleteRecord(id);
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 }));

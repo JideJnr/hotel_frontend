@@ -45,9 +45,10 @@ const SalesStepTwo = () => {
     try {
       const payload = {
         customerId: formData.customerId,
-        roomNumberId: formData.roomNumberId,
+        customerName: formData.customerName,
+        roomId: formData.roomNumberId,
         requestId: formData.requestId || null,
-        bookingInstruction: formData.bookingInstruction || null,
+        bookingInstruction: formData.bookingInstruction || 'No Instruction Given',
         paymentMethodId:  formData.paymentMethodId || null,
       };
 

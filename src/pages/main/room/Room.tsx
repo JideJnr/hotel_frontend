@@ -8,72 +8,84 @@ import { useEffect, useState } from "react";
 import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
 import ScheduleCard from "../../../components/templates/card/ScheduleCard";
 import { useRoom } from "../../../contexts/data/RoomContext";
+import { useComputation } from "../../../contexts/data/ComputationContext";
 
 const Room = () => {
   const router = useIonRouter();
   const [activeTab, setActiveTab] = useState<"all" | "active">("all");
 
   const { fetchRooms, rooms } = useRoom();
+  // const { totalRooms, activeRooms } = useComputation();
 
   useEffect(() => {
     fetchRooms();
   }, []);
 
-  // Derived counts
-  const totalRooms = rooms?.length || 0;
-  const activeRooms = rooms?.filter((r) => r.isActive)?.length || 0;
+  const handleAddNew = () => router.push("/register/room/stepone");
+  const handleRoomClick = (id?: string) => id && router.push(`/room/${id}`);
 
-  // Filter based on activeTab
-  const displayedRooms =
-    activeTab === "all" ? rooms : rooms.filter((r) => r.isActive);
+  const TABS = [
+    { value: "all", label: "All Rooms" },
+    { value: "active", label: "Active Rooms" },
+  ] as const;
+
+  const filteredRooms =
+    activeTab === "active"
+      ? rooms.filter((room) => room.isAvailable) // Adjust filter condition
+      : rooms;
+
+      console.log(rooms)
 
   return (
-    <div className="p-4 dark:bg-gray-100 w-full h-full flex flex-col gap-6">
-      {/* Dashboard Tiles */}
+
+    <div className="px-4  py-8 text-black bg-gray-100 w-full h-full flex flex-col gap-6 overflow-y-auto ">
+
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Rooms</h1>
+            <p className="text-sm text-gray-500">Manage your rooms, availability and details.</p>
+          </div>
+
+        </div>
+
+      
       <div className="grid gap-4 lg:gap-8 grid-cols-2 md:grid-cols-3 w-full h-fit my-4">
-        <DashboardTile title="Total Rooms" value={totalRooms} delta={1} />
-        <DashboardTile title="Active Rooms" value={activeRooms} delta={1} />
+        <DashboardTile title="Total Rooms" value={1} delta={1} />
+        <DashboardTile title="Active Rooms" value={1} delta={1} />
       </div>
 
-      {/* Add New Button */}
       <div className="w-fit ml-auto mr-2">
-        <button
-          className="text-black"
-          onClick={() => router.push(`/register/room/stepone`)}
-        >
+        <button className="text-black" onClick={handleAddNew}>
           Add New
         </button>
       </div>
 
-      {/* Tabs */}
+
       <IonSegment
         value={activeTab}
         onIonChange={(e) => setActiveTab(e.detail.value as "all" | "active")}
         className="mb-2 bg-white shadow-md rounded-lg"
       >
-        <IonSegmentButton value="all">
-          <IonLabel className="text-black">All Rooms</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton value="active">
-          <IonLabel>Active Rooms</IonLabel>
-        </IonSegmentButton>
+        {TABS.map(({ value, label }) => (
+          <IonSegmentButton key={value} value={value}>
+            <IonLabel className="text-black">{label}</IonLabel>
+          </IonSegmentButton>
+        ))}
       </IonSegment>
 
-      {/* Room List */}
+
       <div className="space-y-4">
-        {displayedRooms?.map((room, index) => (
-          <div
-            key={room.id || index}
-            onClick={() => router.push(`/room/${room.id}`)}
-          >
+        {filteredRooms.map((room, index) => (
+          <div key={room.id || index} onClick={() => handleRoomClick(room.id)}>
             <ScheduleCard
-              name={room.title}
-              details={room.description || room.title}
+              name={room.name||'test'}
+              details={room.description || room.title ||'test' }
             />
           </div>
         ))}
       </div>
     </div>
+  
   );
 };
 

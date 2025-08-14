@@ -9,3 +9,4 @@ export * from './FormTextArea';
 export * from './FormHeader';
 export * from './BackFormContainer';
 export * from './FormDatePicker'
+export * from './FormMultiSelect'

@@ -32,6 +32,7 @@ const RecordDetails = React.lazy(() => import("../pages/main/home/details/record
 const ExpensesDetails = React.lazy(() => import("../pages/main/home/details/expenses"));
 const RoomDetails = React.lazy(() => import("../pages/main/room/details/RoomDetails"));
 
+const Bookings = React.lazy(() => import("../pages/main/bookings/page"));
 const Analytics = React.lazy(() => import("../pages/main/analytics/page"));
 const Main = React.lazy(() => import("../pages/main/Main"));
 
@@ -66,6 +67,7 @@ const Routes: React.FC = () => {
         <PrivateRoute path="/register/booking/steptwo" exact component={BookingStepTwo} />
         <PrivateRoute path="/register/room/stepone" exact component={RoomStepOne} />
         <PrivateRoute path="/register/room/steptwo" exact component={RoomStepTwo} />
+        <PrivateRoute path="/bookings" exact component={Bookings} />
         <PrivateRoute path="/analytic" exact component={Analytics} />
         <PrivateRoute path="/home" exact component={Main} />
       </div>

@@ -84,8 +84,8 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const balance = useMemo(() => computeBalance(), [records]);
   const activeRooms = useMemo(() => computeActiveRooms(), [records]);
-  const totalRooms = rooms.length || 0;
-  const totalCustomers = customers.length || 0;
+  const totalRooms = rooms?.length || 0;
+  const totalCustomers = customers?.length || 0;
   const totalSales = useMemo(() => computeTotalSales(), [records]);
   const activeUsers = useMemo(() => computeActiveUsers(), [records]);
   const totalExpenses = useMemo(() => computeTotalExpenses(), [records]);

@@ -1,6 +1,6 @@
 interface Response {
   success: true;
-  token: string;
+  message: string;
   data: any
 }
 
@@ -70,9 +70,6 @@ interface RecordState {
 
 
 interface RoomState {
-  rooms: Room[];
-  availableRooms: Room[];
-  currentRoom: Room | null;
   loading: boolean;
   error: string | null;
 
@@ -95,16 +92,15 @@ interface CustomerData {
 }
 
 interface CustomerState {
-  customers: Customer[];
-  customer: Customer | null;
+
   loading: boolean;
   error: string | null;
 
-  fetchCustomer: () => Promise<void>;
-  getCustomerById: (id: string) => Promise<void>;
+  fetchCustomer: () => Promise<Response>;
+  getCustomerById: (id: string) => Promise<Response>;
   createCustomer: (data: Partial<Customer>) => Promise<Response>;
-  updateCustomer: (id: string, data: Partial<Customer>) => Promise<void>;
-  deleteCustomer: (id: string) => Promise<void>;
+  updateCustomer: (id: string, data: Partial<Customer>) => Promise<Response>;
+  deleteCustomer: (id: string) => Promise<Response>;
 }
 
 interface ExpenseState {

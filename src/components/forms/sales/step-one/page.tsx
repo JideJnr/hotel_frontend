@@ -11,6 +11,7 @@ import {
 import Button from "../../../../components/button/button";
 import FormSelect from "../../FormSelect";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";
+import { useRoom } from "../../../../contexts/data/RoomContext";
 
 
 
@@ -27,6 +28,7 @@ export default function SalesStepOne() {
   const router = useIonRouter();
 
   const { fetchCustomers , customers } = useCustomer();
+  const { fetchRooms , rooms:availableRooms } = useRoom();
   const [formData, setFormData] = useState<SalesData>({
     customerId: null,
     customerName: null,
@@ -54,10 +56,8 @@ export default function SalesStepOne() {
   ];
 
   useEffect(() => {
-    fetchCustomers() 
-    setRooms([
-      { id: 101 }, { id: 102 }
-    ]);
+    fetchCustomers();
+    fetchRooms();
   }, []);
 
   const handleNext = () => {
@@ -75,6 +75,7 @@ export default function SalesStepOne() {
     }
   };
 
+  console.log(availableRooms)
   return (
     <IonPage>
       <FormHeader/>
@@ -114,12 +115,12 @@ export default function SalesStepOne() {
             }
             onChange={opt => setFormData(fd => ({
               ...fd,
-              roomNumberId: opt ? Number(opt.value) : null,
+              roomNumberId: opt ? opt.value : null,
               roomNumberLabel: opt ? opt.label : null
             }))}
-            options={rooms.map(r => ({
-              value: r.id,
-              label: `Room ${r.id}`
+            options={availableRooms.map(r => ({
+              value: r.name,
+              label: `Room ${r.name}`
             }))}
             placeholder="Select a room"
             error={errors.roomNumber}
@@ -131,7 +132,7 @@ export default function SalesStepOne() {
             label="Request Type"
             name="requestType"
             value={
-              formData.paymentMethodId != null
+              formData.requestId != null
                 ? { value: formData.requestId, label: formData.requestLabel }
                 : null
             }

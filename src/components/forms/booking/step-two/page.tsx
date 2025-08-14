@@ -3,11 +3,25 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { BackFormContainer, DetailRow, FormContainer, FormHeader } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
+import { useBooking } from "../../../../contexts/data/BookingContext";
 
 
+interface BookingData {
+  customerId: string | null;
+  customerName: string | null;
+  roomId: string | null;
+  roomLabel: string | null;
+  bookingInstruction: string;
+  checkInDate: string;
+  checkOutDate: string;
+  paymentMethodId: string | null;
+  paymentMethodLabel: string | null;
+  price: string;
+}
 
 const BookingStepTwo = () => {
   const router = useIonRouter();
+  const { createBooking } = useBooking(); // Get createBooking from context
   const [formData, setFormData] = useState<BookingData>({
     customerId: null,
     customerName: null,
@@ -21,6 +35,7 @@ const BookingStepTwo = () => {
     price: ''
   });
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const loadBookingData = () => {
@@ -45,21 +60,35 @@ const BookingStepTwo = () => {
   }, []);
 
   const handleConfirm = async () => {
+    if (!formData.customerId || !formData.roomId || !formData.checkInDate || !formData.checkOutDate) {
+      toast.error("Please complete all required booking information");
+      return;
+    }
+
+    setSubmitting(true);
     try {
-      // Here you would typically send the data to your API
-      console.log("Confirming booking:", formData);
+      const bookingPayload = {
+        customerId: formData.customerId,
+        roomId: formData.roomId,
+        checkInDate: formData.checkInDate,
+        checkOutDate: formData.checkOutDate,
+        specialInstructions: formData.bookingInstruction,
+        paymentMethodId: formData.paymentMethodId,
+        totalAmount: parseFloat(formData.price) * getDuration(),
+        status: 'confirmed' // or whatever status you use
+      };
+
+      await createBooking(bookingPayload);
       
-      // Clear session storage after successful submission
-      sessionStorage.removeItem("bookingData");
-      
-      toast.success("Booking confirmed successfully!");
-      router.push("/bookings", "forward", "replace");
+
+
     } catch (error) {
       toast.error("Failed to confirm booking. Please try again.");
       console.error("Booking confirmation error:", error);
+    } finally {
+      setSubmitting(false);
     }
   };
-
 
   if (loading) {
     return (
@@ -85,66 +114,62 @@ const BookingStepTwo = () => {
   };
 
   return (
-  <IonPage>
-    <FormHeader/>
-    <BackFormContainer 
-      title="Confirm Booking Details"
-      subtitle="Please review all information before confirming"
-      className="max-w-2xl"
-    >
-      <div className="space-y-6 pb-12">
-        <div className="">
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <DetailRow label="Customer" value={formData.customerName || 'Not specified'} />
+    <IonPage>
+      <FormHeader/>
+      <BackFormContainer 
+        title="Confirm Booking Details"
+        subtitle="Please review all information before confirming"
+        className="max-w-2xl"
+      >
+        <div className="space-y-6 pb-12">
+          <div className="">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <DetailRow label="Customer" value={formData.customerName || 'Not specified'} />
+              </div>
+              <div className="col-span-1">
+                <DetailRow label="Room" value={formData.roomLabel || 'Not specified'} />
+              </div>
+              <div className="col-span-1">
+                <DetailRow label="Duration" value={`${getDuration()} nights`} />
+              </div>
+              <div className="col-span-1">
+                <DetailRow label="Check-in Date" value={
+                formData.checkInDate ? new Date(formData.checkInDate).toLocaleDateString() : 'Not specified'
+              } />
+              </div>
+              <div className="col-span-1">
+                <DetailRow label="Check-out Date" value={
+                formData.checkOutDate ? new Date(formData.checkOutDate).toLocaleDateString() : 'Not specified'
+              } />
+              </div>
+              <div className="col-span-1">
+                <DetailRow label="Price per night" value={`₦${parseFloat(formData.price || '0').toLocaleString()}`} />
+              </div>
+              <div className="col-span-1">
+                <DetailRow label="Total Amount" value={`₦${getTotalAmount()}`} />
+              </div>
             </div>
-            <div className="col-span-1">
-              <DetailRow label="Room" value={formData.roomLabel || 'Not specified'} />
-            </div>
-            <div className="col-span-1">
-              <DetailRow label="Duration" value={`${getDuration()} nights`} />
-            </div>
-            <div className="col-span-1">
-              <DetailRow label="Check-in Date" value={
-              formData.checkInDate ? new Date(formData.checkInDate).toLocaleDateString() : 'Not specified'
-            } />
-            </div>
-            <div className="col-span-1">
-                          <DetailRow label="Check-out Date" value={
-              formData.checkOutDate ? new Date(formData.checkOutDate).toLocaleDateString() : 'Not specified'
-            } />
             
-
-            </div>
-            <div className="col-span-1">
-              <DetailRow label="Price per night" value={`₦${parseFloat(formData.price || '0').toLocaleString()}`} />
-            </div>
-            <div className="col-span-1">
-              <DetailRow label="Total Amount" value={`₦${getTotalAmount()}`} />
-            </div>
-
+            {formData.bookingInstruction && (
+              <div className="mt-4">
+                <DetailRow label="Special Instructions" value={formData.bookingInstruction} />
+              </div>
+            )}
           </div>
-          
-          {formData.bookingInstruction && (
-            <div className="mt-4">
-              <DetailRow label="Special Instructions" value={formData.bookingInstruction} />
-            </div>
-          )}
-        </div>
 
-        <div className="flex flex-col gap-3 pt-4">
-          <Button 
-            text="Confirm Booking"
-            onClick={handleConfirm}
-            className="w-full"
-          />
+          <div className="flex flex-col gap-3 pt-4">
+            <Button 
+              text={submitting ? "Processing..." : "Confirm Booking"}
+              onClick={handleConfirm}
+              className="w-full"
+              disabled={submitting}
+            />
+          </div>
         </div>
-      </div>
-    </BackFormContainer>
-  </IonPage>
+      </BackFormContainer>
+    </IonPage>
   );
 };
-
-
 
 export default BookingStepTwo;

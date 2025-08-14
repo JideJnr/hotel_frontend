@@ -1,9 +1,16 @@
-import { createContext, useContext, ReactNode, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useActivityStore } from '../../services/stores/ActivityStore';
 
+// Define a proper interface for your Activity type
+interface Activity {
+  id: string;
+  // Add other activity properties here
+  [key: string]: any;
+}
+
 interface ActivityContextType {
-  activity: any[]; // Replace `any` with your Activity type
+  activities: Activity[]; // Changed from singular 'activity' to plural 'activities' for clarity
   loading: boolean;
   error: string | null;
   fetchActivities: () => Promise<void>;
@@ -12,11 +19,15 @@ interface ActivityContextType {
 const ActivityContext = createContext<ActivityContextType | undefined>(undefined);
 
 export const ActivityProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { activity, loading, error, getAvailableActivities } = useActivityStore();
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const { loading, error, getActivities } = useActivityStore();
 
   const wrappedFetchAllActivities = async () => {
     try {
-      await getAvailableActivities();
+      const response = await getActivities();
+      if (response?.data) {
+        setActivities(response.data); // Update local state with fetched activities
+      }
     } catch (err) {
       toast.error('Failed to fetch activities');
       console.error('Fetch error:', err);
@@ -25,12 +36,12 @@ export const ActivityProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const contextValue = useMemo(
     () => ({
-      activity,
+      activities,
       loading,
       error,
       fetchActivities: wrappedFetchAllActivities,
     }),
-    [activity, loading, error]
+    [activities, loading, error]
   );
 
   return (

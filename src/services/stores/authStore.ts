@@ -6,7 +6,7 @@ interface AuthState {
   error: string | null;
   login: (email: string, password: string) => Promise<any>;
   logout: () => Promise<void>;
-  signup: (payload: Record<string, any>) => Promise<any>;
+  signup: (payload: any) => Promise<any>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -38,7 +38,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  signup: async (payload) => {
+  signup: async (payload: any) => {
     set({ loading: true, error: null });
     try {
       const response = await signup(payload);

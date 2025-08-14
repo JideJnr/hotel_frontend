@@ -1,40 +1,46 @@
-import { createContext, useContext, ReactNode, useMemo } from 'react';
+import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { useIonRouter } from '@ionic/react';
 import { useRoomStore } from '../../services/stores/roomStore';
-
 
 const RoomContext = createContext<RoomContextType | undefined>(undefined);
 
 export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const store = useRoomStore();
-  const { rooms, currentRoom, loading, error } = store;
+  const { loading, error } = store;
   const router = useIonRouter();
 
-  const wrappedCreateRoom = async (payload: any) => {
+  // Local state in context
+  const [rooms, setRooms] = useState<RoomData[]>([]);
+  const [availableRooms, setAvailableRooms] = useState<RoomData[]>([]);
+
+  const wrappedCreateRoom = async (payload: Partial<RoomData>) => {
     try {
       const response = await store.createRoom(payload);
-      if (response.success) {
+
+      console.log(response);
+      if (response?.success) {
         toast.success('Room created successfully');
-        router.push(`/room/${response.data.id}`, 'forward')
+        router.push(`/room/${response.room.id}`, 'forward');
+        
+        await wrappedFetchAllRooms();
       } else {
-        toast.error(`Creation failed: ${response.message}`);
+        toast.error(`Creation failed: ${response?.message}`);
       }
-      
     } catch (error) {
       toast.error('Room creation error');
       console.error('Creation error:', error);
     }
   };
 
-  const wrappedUpdateRoom = async (id: string, payload: any) => {
+  const wrappedUpdateRoom = async (id: string, payload: Partial<RoomData>) => {
     try {
       const response = await store.updateRoom(id, payload);
-      if (response.success) {
+      if (response?.success) {
         toast.success('Room updated successfully');
+        await wrappedFetchAllRooms();
       } else {
-        toast.error(`Update failed: ${response.message}`);
+        toast.error(`Update failed: ${response?.message}`);
       }
     } catch (error) {
       toast.error('Room update error');
@@ -44,16 +50,36 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const wrappedFetchAllRooms = async () => {
     try {
-      await store.fetchRooms();
+      const response = await store.fetchRooms();
+      if (response?.success) {
+        setRooms(response.data);
+      } else {
+        toast.error('Failed to fetch rooms');
+      }
     } catch (error) {
       toast.error('Failed to fetch rooms');
       console.error('Fetch error:', error);
     }
   };
 
+  const wrappedFetchAvailableRooms = async () => {
+    try {
+      const response = await store.getAvailableRooms();
+      if (response?.success) {
+        setAvailableRooms(response.data);
+      } else {
+        toast.error('Failed to fetch available rooms');
+      }
+    } catch (error) {
+      toast.error('Failed to fetch available rooms');
+      console.error('Fetch error:', error);
+    }
+  };
+
   const wrappedFetchRoom = async (id: string) => {
     try {
-      await store.fetchRoom(id);
+      const response = await store.getRoomById(id);
+      return response;
     } catch (error) {
       toast.error(`Failed to fetch room ${id}`);
       console.error('Fetch error:', error);
@@ -61,15 +87,16 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const contextValue = useMemo(() => ({
-    rooms,
-    currentRoom,
     loading,
     error,
+    rooms,
+    availableRooms,
     createRoom: wrappedCreateRoom,
     updateRoom: wrappedUpdateRoom,
     fetchRooms: wrappedFetchAllRooms,
+    fetchAvailableRooms: wrappedFetchAvailableRooms,
     fetchRoom: wrappedFetchRoom,
-  }), [rooms, currentRoom, loading, error]);
+  }), [rooms, availableRooms, loading, error]);
 
   return (
     <RoomContext.Provider value={contextValue}>

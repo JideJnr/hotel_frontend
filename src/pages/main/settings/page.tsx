@@ -41,6 +41,17 @@ const Setting = () => {
             >
               <p>Analytics</p>
             </div>
+
+                      
+            <div
+              className="flex w-full items-center justify-between border-y rounded-lg p-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                         onClick={() => router.push('/bookings', 'forward')}
+            >
+              <p>Bookings</p>
+            </div>
+          
+
+            
           
           <div className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50">
             <p>DarkMode</p>

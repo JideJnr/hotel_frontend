@@ -15,27 +15,8 @@ interface Expense {
   updatedAt?: string;
 }
 
-interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data?: T;
-  errors?: Record<string, string>;
-}
 
-interface PaginatedExpenseResponse {
-  count: number;
-  expenses: Expense[];
-  nextPage?: {
-    lastCreatedAt: string;
-    lastId: string;
-  };
-}
 
-interface ExpenseSummary {
-  totalExpenses: number;
-  byCategory: Record<string, number>;
-  count: number;
-}
 
 export const getExpensesByDateRange = async (params?: {
   startDate?: string;
@@ -43,7 +24,7 @@ export const getExpensesByDateRange = async (params?: {
   pageSize?: number;
   lastCreatedAt?: string;
   lastId?: string;
-}): Promise<ApiResponse<PaginatedExpenseResponse>> => {
+}) => {
   const res = await api.get('/expenses/by-date-range', { params });
   return res.data;
 };
@@ -54,7 +35,7 @@ export const getExpensesByCategory = async (category: string, params?: {
   pageSize?: number;
   lastCreatedAt?: string;
   lastId?: string;
-}): Promise<ApiResponse<PaginatedExpenseResponse>> => {
+}) => {
   const res = await api.get('/expenses/by-category', { 
     params: { category, ...params } 
   });
@@ -64,7 +45,7 @@ export const getExpensesByCategory = async (category: string, params?: {
 export const getTodayExpenses = async (params: {
   startDate: string;
   endDate: string;
-}): Promise<ApiResponse<ExpenseSummary>> => {
+}) => {
   const res = await api.get('/expenses', { params });
   return res.data;
 };
@@ -72,27 +53,27 @@ export const getTodayExpenses = async (params: {
 export const getExpenseSummary = async (params: {
   startDate: string;
   endDate: string;
-}): Promise<ApiResponse<ExpenseSummary>> => {
+}) => {
   const res = await api.get('/expenses/summary', { params });
   return res.data;
 };
 
-export const getExpenseById = async (id: string): Promise<ApiResponse<Expense>> => {
+export const getExpenseById = async (id: string) => {
   const res = await api.get(`/expenses/${id}`);
   return res.data;
 };
 
-export const createExpense = async (data: Partial<Expense>): Promise<ApiResponse<{ expenseId: string }>> => {
+export const createExpense = async (data: Partial<Expense>) => {
   const res = await api.post('/expenses', data);
   return res.data;
 };
 
-export const updateExpense = async (id: string, data: Partial<Expense>): Promise<ApiResponse<void>> => {
+export const updateExpense = async (id: string, data: Partial<Expense>) => {
   const res = await api.put(`/expenses/${id}`, data);
   return res.data;
 };
 
-export const deleteExpense = async (id: string): Promise<ApiResponse<void>> => {
+export const deleteExpense = async (id: string) => {
   const res = await api.delete(`/expenses/${id}`);
   return res.data;
 };

@@ -1,23 +1,22 @@
 import { create } from 'zustand';
 import * as bookingApi from '../api/bookingApi';
 
+
 interface BookingState {
-  bookings: any[];
-  booking: any | null;
+
   loading: boolean;
   error: string | null;
 
-  fetchBookingsByDate: (date: string) => Promise<void>;
-  fetchBookingsByDateRange: (startDate: string, endDate: string) => Promise<void>;
-  fetchBookingById: (id: string) => Promise<void>;
-  createBooking: (data: bookingApi.BookingInput) => Promise<void>;
-  updateBooking: (id: string, data: bookingApi.BookingUpdate) => Promise<void>;
-  cancelBooking: (id: string) => Promise<void>;
+  fetchBookingsByDate: (date: string) => Promise<Response>;
+  fetchBookingsByDateRange: (startDate: string, endDate: string) => Promise<Response>;
+  fetchBookingById: (id: string) => Promise<Response>;
+  createBooking: (data: bookingApi.BookingInput) => Promise<Response>;
+  updateBooking: (id: string, data: bookingApi.BookingUpdate) => Promise<Response>;
+  cancelBooking: (id: string) => Promise<Response>;
 }
 
 export const useBookingStore = create<BookingState>((set) => ({
-  bookings: [],
-  booking: null,
+
   loading: false,
   error: null,
 
@@ -25,9 +24,11 @@ export const useBookingStore = create<BookingState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await bookingApi.getBookingsByDate(date);
-      set({ bookings: response.bookings || [], loading: false });
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
@@ -35,9 +36,11 @@ export const useBookingStore = create<BookingState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await bookingApi.getBookingsByDateRange(startDate, endDate);
-      set({ bookings: response.bookings || [], loading: false });
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
@@ -45,19 +48,23 @@ export const useBookingStore = create<BookingState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await bookingApi.getBookingById(id);
-      set({ booking: response.booking || null, loading: false });
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
   createBooking: async (data) => {
     set({ loading: true, error: null });
     try {
-      await bookingApi.createBooking(data);
+      const response = await bookingApi.createBooking(data);
       set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
@@ -65,24 +72,20 @@ export const useBookingStore = create<BookingState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await bookingApi.updateBooking(id, data);
-      const updated = response.booking;
-      set((state) => ({
-        bookings: state.bookings.map((b) => (b.id === id ? updated : b)),
-        loading: false,
-      }));
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
+      throw err;
     }
   },
 
   cancelBooking: async (id) => {
     set({ loading: true, error: null });
     try {
-      await bookingApi.cancelBooking(id);
-      set((state) => ({
-        bookings: state.bookings.filter((b) => b.id !== id),
-        loading: false,
-      }));
+      const response = await bookingApi.cancelBooking(id);
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
     }

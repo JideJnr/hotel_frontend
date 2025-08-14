@@ -6,7 +6,7 @@ export const fetchMyActivity = async (
   lastCreatedAt?: string,
   lastId?: string
 ) => {
-  const res = await api.get('/activity', {
+  const res = await api.get('/activities', {
     params: { pageSize, lastCreatedAt, lastId }
   });
   return res.data;

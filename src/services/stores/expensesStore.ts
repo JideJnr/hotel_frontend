@@ -7,46 +7,45 @@ import {
   getExpensesByCategory,
   getExpenseSummary,
   getTodayExpenses,
-  getExpensesByDateRange // Make sure this exists in your API
+  getExpensesByDateRange
 } from '../api/expenseApi';
 
-import { ApiResponse } from '../api/expenseApi';
+
+interface PaginationParams {
+  pageSize?: number;
+  lastCreatedAt?: string;
+  lastId?: string;
+}
+
+interface DateRangeParams extends PaginationParams {
+  startDate: string;
+  endDate: string;
+}
+
+interface Expense {
+  id: string;
+  category: string;
+  amount: number;
+  description: string;
+  createdAt: string; // ISO format
+  updatedAt?: string; // ISO format
+}
 
 interface ExpenseState {
-  expenses: Expense[];
   loading: boolean;
   error: string | null;
 
-  fetchExpense: (id: string) => Promise<ApiResponse<Expense>>;
-  fetchExpensesByDateRange: (params?: {
-    startDate?: string;
-    endDate?: string;
-    pageSize?: number;
-    lastCreatedAt?: string;
-    lastId?: string;
-  }) => Promise<ApiResponse<{ expenses: Expense[] }>>;
-  fetchTodayExpenses: (params?: {
-    pageSize?: number;
-    lastCreatedAt?: string;
-    lastId?: string;
-  }) => Promise<ApiResponse<{ expenses: Expense[] }>>;
-  fetchExpensesByCategory: (category: string, params?: {
-    pageSize?: number;
-    lastCreatedAt?: string;
-    lastId?: string;
-  }) => Promise<ApiResponse<{ expenses: Expense[] }>>;
-  fetchExpenseSummary: (params: {
-    startDate: string;
-    endDate: string;
-  }) => Promise<ExpenseSummary | undefined>;
-  createExpense: (data: Partial<Expense>) => Promise<ApiResponse<{ expenseId: string }>>;
-  updateExpense: (id: string, data: Partial<Expense>) => Promise<ApiResponse<null>>;
-  deleteExpense: (id: string) => Promise<ApiResponse<null>>;
+  fetchExpense: (id: string) => Promise<Response>;
+  fetchExpensesByDateRange: (params?: DateRangeParams) => Promise<Response>;
+  fetchTodayExpenses?: (params?: PaginationParams) => Promise<Response>;
+  fetchExpensesByCategory: (category: string, params?: PaginationParams) => Promise<Response>;
+  fetchExpenseSummary: (params: { startDate: string; endDate: string }) => Promise<Response>;
+  createExpense: (data: Partial<Expense>) => Promise<Response>;
+  updateExpense: (id: string, data: Partial<Expense>) => Promise<Response>;
+  deleteExpense: (id: string) => Promise<Response>;
 }
 
-
 export const useExpenseStore = create<ExpenseState>((set) => ({
-  expenses: [],
   loading: false,
   error: null,
 
@@ -54,8 +53,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await getExpenseById(id);
-      if (!response.success) throw new Error(response.message || 'Failed to fetch expense');
-      set({ expenses: response.data ? [response.data] : [], loading: false });
+      set({ loading: false });
       return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
@@ -67,8 +65,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await getExpensesByDateRange(params);
-      if (!response.success) throw new Error(response.message || 'Failed to fetch expenses');
-      set({ expenses: response.data?.expenses || [], loading: false });
+      set({ loading: false });
       return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
@@ -76,12 +73,11 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     }
   },
 
-  fetchTodayExpenses: async (params) => {
+  fetchExpensesByDate: async (params:any) => {
     set({ loading: true, error: null });
     try {
       const response = await getTodayExpenses(params);
-      if (!response.success) throw new Error(response.message || 'Failed to fetch today\'s expenses');
-      set({ expenses: response.data?.expenses || [], loading: false });
+      set({ loading: false });
       return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
@@ -93,8 +89,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await getExpensesByCategory(category, params);
-      if (!response.success) throw new Error(response.message || 'Failed to fetch expenses by category');
-      set({ expenses: response.data?.expenses || [], loading: false });
+      set({ loading: false });
       return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
@@ -106,24 +101,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await getExpenseSummary(params);
-      if (!response.success) throw new Error(response.message || 'Failed to fetch expense summary');
       set({ loading: false });
-      return response.data;
-    } catch (err: any) {
-      set({ error: err.message, loading: false });
-      return undefined;
-    }
-  },
-
-  createExpense: async (data) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await createExpense(data);
-      if (!response.success) throw new Error(response.message || 'Failed to create expense');
-      set((state) => ({
-        expenses: [...state.expenses, { ...data, id: response.data?.expenseId } as Expense],
-        loading: false,
-      }));
       return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
@@ -131,15 +109,23 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     }
   },
 
+  createExpense: async (data) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await createExpense(data);
+      set({ loading: false });
+      return response;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    
+    }
+  },
+
   updateExpense: async (id, data) => {
     set({ loading: true, error: null });
     try {
       const response = await updateExpense(id, data);
-      if (!response.success) throw new Error(response.message || 'Failed to update expense');
-      set((state) => ({
-        expenses: state.expenses.map((exp) => (exp.id === id ? { ...exp, ...data } : exp)),
-        loading: false,
-      }));
+      set({ loading: false });
       return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
@@ -151,11 +137,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await deleteExpense(id);
-      if (!response.success) throw new Error(response.message || 'Failed to delete expense');
-      set((state) => ({
-        expenses: state.expenses.filter((exp) => exp.id !== id),
-        loading: false,
-      }));
+      set({ loading: false });
       return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });

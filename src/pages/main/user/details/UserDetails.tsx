@@ -5,6 +5,7 @@ import { BackFormContainer, DetailRow, FormHeader } from "../../../../components
 
 import { useEffect } from "react";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";
+import { getNameInitials } from "../../../../utils/getInitials";
 
 const UserDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,19 +15,20 @@ const UserDetails = () => {
     fetchCustomer(id)
   }, [id]);
 
+  console.log("Customer Data:", customer);
 
   // Dummy user data
   const data = {
     name: "Olivia Benson",
     phone: "+2348012345678",
-    email: "olivia.benson@example.com",
-    address: "23 Admiralty Way, Lekki Phase 1, Lagos",
+    email: customer?.email || "-",
+    address: customer?.address,
     active: true,
     status: "active",
     currentRoom: {
       name: "Room 204 - Sea View Suite",
     },
-    userImg: "https://i.pravatar.cc/150?img=3",
+
     userInitial: "OB",
     clientName: "Olivia Benson",
   };
@@ -44,29 +46,27 @@ const UserDetails = () => {
       <BackFormContainer title="User Details" subtitle="" className="max-w-2xl">
         <div className="w-full flex flex-col  gap-8 text-gray-800">
 
-
-
           {/* Profile Image and Basic Info */}
           <div className="flex items-center gap-6">
-            {data.userImg ? (
+            {customer?.userImg ? (
               <img
                 className="w-20 h-20 rounded-full object-cover border"
-                src={data.userImg}
-                alt={data.clientName}
+                src={customer?.userImg}
+                alt={customer?.fullName}
               />
             ) : (
               <div className="w-24 h-24 flex items-center justify-center rounded-full bg-gray-100 border text-gray-600 font-bold text-xl uppercase">
-                {data.userInitial}
+                {getNameInitials(customer?.fullName )}
               </div>
             )}
 
             <div className="flex flex-col text-sm gap-1">
-              <h2 className="text-2xl font-semibold">{data.name}</h2>
+              <h2 className="text-2xl font-semibold">{customer?.fullName}</h2>
               <span>{data.phone}</span>
             </div>
           </div>
 
-                    <div className="text-black">
+          <div className="text-black">
             <button>
               Edit
             </button>
@@ -80,13 +80,30 @@ const UserDetails = () => {
          
             <div className="text-sm text-gray-600  px-2">
               <h3 className="text-lg font-semibold">Personal Information</h3>
+           
              
 
             </div>
           </div>
 
 
-          {/* Lodge History */}
+
+          {/* Current Guest Info */}
+          {data.active && (
+            <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
+              <h3 className="text-lg font-semibold">Current Stay</h3>
+              <div className="text-sm">
+                <p className="font-semibold">{data.currentRoom.name}</p>
+              </div>
+              {data.status === "active" && (
+                <div className="grid grid-cols-1 gap-2 mt-2">
+                  <Button text="Check Out" className="w-full" />
+                </div>
+              )}
+            </div>
+          )}
+
+                    {/* Lodge History */}
           <div className="flex flex-col gap-2   px-2">
             <h3 className="text-lg font-semibold text-gray-600">Lodge History</h3>
             <div
@@ -101,20 +118,6 @@ const UserDetails = () => {
             </div>
           </div>
 
-                    {/* Current Guest Info */}
-          {data.active && (
-            <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
-              <h3 className="text-lg font-semibold">Current Stay</h3>
-              <div className="text-sm">
-                <p className="font-semibold">{data.currentRoom.name}</p>
-              </div>
-              {data.status === "active" && (
-                <div className="grid grid-cols-1 gap-2 mt-2">
-                  <Button text="Check Out" className="w-full" />
-                </div>
-              )}
-            </div>
-          )}
 
         </div>
       </BackFormContainer>

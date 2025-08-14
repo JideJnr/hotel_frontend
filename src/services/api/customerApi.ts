@@ -10,12 +10,12 @@ export const getCustomerById = async (id: string) => {
   return res.data;
 };
 
-export const createCustomer = async (data: Partial<Customer>) => {
+export const createCustomer = async (data: any) => {
   const res = await api.post('/customers', data);
   return res.data;
 };
 
-export const updateCustomer = async (id: string, data: Partial<Customer>) => {
+export const updateCustomer = async (id: string, data: any) => {
   const res = await api.put(`/customers/${id}`, data);
   return res.data;
 };
