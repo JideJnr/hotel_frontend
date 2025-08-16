@@ -13,17 +13,15 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Local state in context
   const [rooms, setRooms] = useState<RoomData[]>([]);
   const [availableRooms, setAvailableRooms] = useState<RoomData[]>([]);
+  const [currentRoom, setCurrentRoom] = useState<RoomData | null>(null);
 
   const wrappedCreateRoom = async (payload: Partial<RoomData>) => {
     try {
       const response = await store.createRoom(payload);
-
-      console.log(response);
+      console.log(`Room created:`, response);
       if (response?.success) {
         toast.success('Room created successfully');
-        router.push(`/room/${response.room.id}`, 'forward');
-        
-        await wrappedFetchAllRooms();
+        router.push(`/room/${response?.data?.id}`, 'forward');
       } else {
         toast.error(`Creation failed: ${response?.message}`);
       }
@@ -38,7 +36,7 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const response = await store.updateRoom(id, payload);
       if (response?.success) {
         toast.success('Room updated successfully');
-        await wrappedFetchAllRooms();
+        router.push(`/room/${response.room.id}`, 'forward');
       } else {
         toast.error(`Update failed: ${response?.message}`);
       }
@@ -79,7 +77,11 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const wrappedFetchRoom = async (id: string) => {
     try {
       const response = await store.getRoomById(id);
-      return response;
+      console.log("Fetched Room Data:", response);
+      if (response.success) {
+        setCurrentRoom(response.data);
+      }
+
     } catch (error) {
       toast.error(`Failed to fetch room ${id}`);
       console.error('Fetch error:', error);
@@ -91,12 +93,13 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     error,
     rooms,
     availableRooms,
+    currentRoom,
     createRoom: wrappedCreateRoom,
     updateRoom: wrappedUpdateRoom,
     fetchRooms: wrappedFetchAllRooms,
     fetchAvailableRooms: wrappedFetchAvailableRooms,
     fetchRoom: wrappedFetchRoom,
-  }), [rooms, availableRooms, loading, error]);
+  }), [rooms, availableRooms,currentRoom, loading, error]);
 
   return (
     <RoomContext.Provider value={contextValue}>

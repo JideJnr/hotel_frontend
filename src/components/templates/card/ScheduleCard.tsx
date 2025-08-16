@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ScheduleCard: React.FC<any> = ({  name, details, className  }) => {
+const ScheduleCard: React.FC<any> = ({  name, details, className ,children  }) => {
   const cardColors = [
   'bg-pink-100 border-pink-500',
   'bg-orange-100 border-orange-500',
@@ -24,11 +24,18 @@ const getColorForname = (name: string) => {
 const color = React.useMemo(() => getColorForname(name), [name]);
 
   return (
-    <div className={`rounded-lg p-4 shadow-sm border-l-4 ${color} ${className}`}
+    <div className={`rounded-lg p-4 shadow-sm border-l-4 flex ${color} ${className}`}
     
     >
-      <div className="font-semibold text-gray-800 truncate" title={name}>{name}</div>
-      <div className="text-sm text-gray-600">{details}</div>
+      <div>
+        <div className="font-semibold text-gray-800 truncate" title={name}>{name}</div>
+        <div className="text-sm text-gray-600">{details}</div>
+      </div>
+      {children &&
+      <div className='flex ml-auto items-center justify-center'>
+        {children }
+      </div>
+      }
     </div>
   );
 };

@@ -5,11 +5,12 @@ import {
   BackFormContainer,
   FormHeader,
   FormInput,
-  FormTextarea
+  FormTextarea,
+  FormMultiSelect
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
-import FormSelect from "../../FormSelect";
-import FormMultiSelect from "../../FormMultiSelect";
+
+
 
 interface RoomFormData {
   name: string;
@@ -116,6 +117,32 @@ export default function CreateRoomForm() {
             required
           />
 
+          
+          <FormInput
+            label="Price - 1 Hour (₦) *"
+            type="number"
+            name="pricePerNight"
+            value={formData.pricePerNight ?? ""}
+            onChange={(e) =>
+              setFormData((fd) => ({ ...fd, pricePerNight: Number(e.target.value) }))
+            }
+            error={errors.pricePerNight}
+            required
+          />
+
+          
+          <FormInput
+            label="Price - 2 Hours (₦) *"
+            type="number"
+            name="pricePerNight"
+            value={formData.pricePerNight ?? ""}
+            onChange={(e) =>
+              setFormData((fd) => ({ ...fd, pricePerNight: Number(e.target.value) }))
+            }
+            error={errors.pricePerNight}
+            required
+          />
+
           <FormMultiSelect
             label="Amenities"
             name="amenities"
@@ -129,25 +156,6 @@ export default function CreateRoomForm() {
             options={amenitiesOptions}
           />
 
-          <FormSelect
-            label="Availability"
-            name="isAvailable"
-            value={
-              formData.isAvailable
-                ? { value: "true", label: "Available" }
-                : { value: "false", label: "Not Available" }
-            }
-            onChange={(opt) =>
-              setFormData((fd) => ({
-                ...fd,
-                isAvailable: opt?.value === "true"
-              }))
-            }
-            options={[
-              { value: "true", label: "Available" },
-              { value: "false", label: "Not Available" }
-            ]}
-          />
 
           <div className="pt-4">
             <Button text="Create Room" type="submit" className="w-full" />

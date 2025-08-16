@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../..";
 import { useCustomerStore } from "../../../../services/stores/customerStore";
+import { useCustomer } from "../../../../contexts/data/CustomerContext";
 
 interface CustomerData {
   fullName: string;
@@ -14,7 +15,7 @@ interface CustomerData {
 
 const ClientStepTwo = () => {
   const router = useIonRouter();
-  const { createCustomer } = useCustomerStore();
+  const { createCustomer } = useCustomer();
   const [formData, setFormData] = useState<CustomerData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,11 +40,8 @@ const ClientStepTwo = () => {
 
   const handleConfirm = async () => {
     if (!formData) return;
-    
-    setLoading(true);
-    setError(null);
-    
     try {
+
       const customerData = {
         fullName: formData.fullName,
         phone: formData.phone,
@@ -53,13 +51,11 @@ const ClientStepTwo = () => {
       
       await createCustomer(customerData);
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || "Failed to create customer";
-      setError(errorMessage);
-      toast.error(errorMessage);
+    
     } finally {
-      setLoading(false);
+    
     }
-  };
+  };  
 
   if (!formData) {
     return (

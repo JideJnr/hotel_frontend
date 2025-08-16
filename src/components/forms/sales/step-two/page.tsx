@@ -8,14 +8,13 @@ import {
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import { useRecordStore } from "../../../../services/stores/recordStore";
+import { useRecord } from "../../../../contexts/data/RecordContext";
 
 const SalesStepTwo = () => {
   const router = useIonRouter();
   const [formData, setFormData] = useState<SalesData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const { createRecord } = useRecordStore();
+  const { createRecord , loading} = useRecord();
 
   useEffect(() => {
     const stored = sessionStorage.getItem("bookingData");
@@ -38,10 +37,6 @@ const SalesStepTwo = () => {
   
   const handleConfirm = async () => {
     if (!formData) return;
-
-    setLoading(true);
-    setError(null);
-
     try {
       const payload = {
         customerId: formData.customerId,
@@ -52,17 +47,11 @@ const SalesStepTwo = () => {
         paymentMethodId:  formData.paymentMethodId || null,
       };
 
-      const response = await createRecord(payload);
-      {response.success && 
-      sessionStorage.removeItem("bookingData");
-      toast.success("Booking confirmed successfully!");
-      router.push("/sales", "forward", "replace");}
+      await createRecord(payload);
     } catch (err: any) {
-      const errorMessage = err?.message || "Failed to confirm booking";
-      setError(errorMessage);
-      toast.error(errorMessage);
+
     } finally {
-      setLoading(false);
+    
     }
   };
 

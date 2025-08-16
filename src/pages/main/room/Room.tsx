@@ -15,10 +15,12 @@ const Room = () => {
   const [activeTab, setActiveTab] = useState<"all" | "active">("all");
 
   const { fetchRooms, rooms } = useRoom();
-  // const { totalRooms, activeRooms } = useComputation();
+  const {fetchTotalRoomsCount, fetchActiveRoomsCount, totalRoomCount, activeRoomCount } = useComputation();
 
   useEffect(() => {
     fetchRooms();
+    fetchTotalRoomsCount();
+    fetchActiveRoomsCount();
   }, []);
 
   const handleAddNew = () => router.push("/register/room/stepone");
@@ -34,24 +36,22 @@ const Room = () => {
       ? rooms.filter((room) => room.isAvailable) // Adjust filter condition
       : rooms;
 
-      console.log(rooms)
-
   return (
 
     <div className="px-4  py-8 text-black bg-gray-100 w-full h-full flex flex-col gap-6 overflow-y-auto ">
 
-        <div className="flex items-center justify-between gap-4 mb-6">
+      <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Rooms</h1>
             <p className="text-sm text-gray-500">Manage your rooms, availability and details.</p>
           </div>
 
-        </div>
+      </div>
 
       
       <div className="grid gap-4 lg:gap-8 grid-cols-2 md:grid-cols-3 w-full h-fit my-4">
-        <DashboardTile title="Total Rooms" value={1} delta={1} />
-        <DashboardTile title="Active Rooms" value={1} delta={1} />
+        <DashboardTile title="Total Rooms" value={totalRoomCount||0} delta={1} />
+        <DashboardTile title="Active Rooms" value={activeRoomCount||0} delta={1} />
       </div>
 
       <div className="w-fit ml-auto mr-2">

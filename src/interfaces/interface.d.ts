@@ -101,6 +101,10 @@ interface CustomerState {
   createCustomer: (data: Partial<Customer>) => Promise<Response>;
   updateCustomer: (id: string, data: Partial<Customer>) => Promise<Response>;
   deleteCustomer: (id: string) => Promise<Response>;
+  getTotalCustomerCount: () => Promise<Response>;
+  getCustomerRegisteredOnDate:(date: string) => Promise<Response>;
+  getCustomerRegisteredOnDateRange:(params: any) => Promise<Response>;
+
 }
 
 interface ExpenseState {
@@ -263,10 +267,10 @@ interface RoomContextType {
   currentRoom: Room | null;
   loading: boolean;
   error: string | null;
-  createRoom: (payload: any) => Promise<void>;
-  updateRoom: (id: string, payload: any) => Promise<void>;
-  fetchRooms: () => Promise<void>;
-  fetchRoom: (id: string) => Promise<void>;
+  createRoom: (payload: any) => Promise<Response>;
+  updateRoom: (id: string, payload: any) => Promise<Response>;
+  fetchRooms: () => Promise<Response>;
+  fetchRoom: (id: string) => Promise<Response>;
 }
 
 // Add this interface for booking data

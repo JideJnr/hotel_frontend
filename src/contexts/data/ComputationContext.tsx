@@ -1,112 +1,194 @@
-import { createContext, useContext, ReactNode, useMemo } from 'react';
-import { useRecord } from './RecordContext';
-import { toast } from 'react-toastify';
-import { useRoom } from './RoomContext';
-import { useCustomer } from './CustomerContext';
+import { createContext, useContext, ReactNode, useState, useCallback } from "react";
+import { useComputationStore } from "../../services/stores/computationStore";
+
 
 interface ComputationContextType {
-  balance: number;
-  activeRooms: number;
-  totalRooms: number
-  totalSales: number;
-  activeUsers: number;
-  totalExpenses: number;
-  computeBalance: () => number;
-  computeActiveRooms: () => number;
-  computeTotalSales: () => number;
-  computeActiveUsers: () => number;
-  computeTotalExpenses: () => number;
+  newCustomerCount: number | null;
+  recordCount: number | null;
+  activeRoomCount: number | null;
+  roomCount: number | null; 
+  customerCount: number | null;
+  expensesCount: number | null;
+  loading: boolean;
+  error: string | null;
+
+  fetchBalance: () => Promise<void>;
+  fetchActiveRooms: () => Promise<void>;
+  fetchTotalRooms: () => Promise<void>;
+  fetchTotalSales: () => Promise<void>;
+  fetchActiveUsers: () => Promise<void>;
+  fetchTotalExpenses: () => Promise<void>;
 }
 
 const ComputationContext = createContext<ComputationContextType | undefined>(undefined);
 
 export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { records } = useRecord();
-  const {rooms} = useRoom();
-  const {customers} = useCustomer();
+  const [balance, setBalance] = useState<number | null>(null);
+  const [recordCount, setRecordCount] = useState<number | null>(null);
+  const [totalRoomCount, setTotalRoomCount] = useState<number | null>(null);
+  const [activeRoomCount, setActiveRoomCount] = useState<number | null>(null);
+  const [activeCustomerCount, setActiveCustomerCount] = useState<number | null>(null);
+  const [totalCustomerCount, setTotalCustomerCount] = useState<number | null>(null);
+  const [newCustomerCount, setNewCustomerCount] = useState<number | null>(null);
+  const [expensesCount, setExpensesCount] = useState<number | null>(null);
 
-  const computeBalance = () => {
+  const {
+      loading,
+      error,
+      fetchRecordCountForDate: storeFetchRecordCountForDate,
+      fetchRecordCountForDateRange: storeFetchRecordCountForDateRange,
+      fetchActiveRoomCount: storeFetchActiveRoomCount,
+      fetchAllRoomCount: storeFetchAllRoomCount,
+      fetchAllCustomerCount: storeFetchAllCustomerCount,
+      fetchCustomerRegisteredOnDate: storeFetchCustomerRegisteredOnDate,
+      getCustomerRegisteredOnDateRange: storeFetchCustomerRegisteredOnDateRange,
+      fetchActiveCustomerCount: storeFetchActiveCustomerCount,
+      fetchExpensesCountOnDate: storeFetchExpensesCountOnDate,
+      fetchExpensesCountOnDateRange: storeFetchExpensesCountOnDateRange,
+      fetchBookingCountOnDate: storeFetchBookingCountOnDate,
+      fetchBookingCountOnDateRange: storeFetchBookingCountOnDateRange,
+      
+  } = useComputationStore();
+
+  const wrappedFetchRecordCountForDate = useCallback(async (date:string) => {
     try {
-      return records.reduce((sum, record) => sum + (record.amount || 0), 0);
-    } catch (error) {
-      console.error('Balance computation error:', error);
-      toast.error('Failed to compute balance');
-      return 0;
+      const res = await storeFetchRecordCountForDate(date);
+      setRecordCount(res?.data?.count || 0);
+    } catch (err) {
+      
+    } finally {
+    }
+  }, []);
+
+  const wrappedFetchRecordCountForDateRange = useCallback(async (date:string) => {
+    try {
+      const res = await storeFetchRecordCountForDateRange(date);
+      setRecordCount(res?.data?.count || 0);
+    } catch (err) {
+
+    } finally {
+    }
+  
+  }, []);
+
+  const wrappedFetchActiveRooms = useCallback(async () => {
+    try {
+      const res = await storeFetchActiveRoomCount();
+      setActiveRoomCount(res?.data.count || 0);
+    } catch (err) {
+    } finally {
+    }
+  }, []);
+
+  const wrappedFetchTotalRooms = useCallback(async () => {
+    try {
+      const res = await storeFetchAllRoomCount();
+      setTotalRoomCount(res?.data.count || 0);
+    } catch (err) {
+    } finally {
+    }
+  }, []);
+  
+  const wrappedFetchActiveCustomers = useCallback(async () => {
+    try {
+      const res = await storeFetchActiveCustomerCount();
+      setActiveCustomerCount(res?.data.count || 0);
+    } catch (err) {
+    } finally {
+    }
+  }, []);
+
+  const wrappedFetchNewCustomersOnDateCount = useCallback(async (date:string) => {
+    try {
+    
+      setNewCustomerCount( 0);
+    } catch (err) {
+    } finally {
+    }
+  }, []);
+
+  const wrappedFetchNewCustomersOnDateRangeCount = useCallback(async () => {
+    try {
+      const res = await storeFetchActiveCustomerCount();
+      setActiveCustomerCount(res?.data.count || 0);
+    } catch (err) {
+    } finally {
+    }
+  }, []);
+
+  const wrappedFetchTotalExpensesOnDateCount = useCallback(async () => {
+    try {
+      const res = await storeFetchExpensesCountOnDate();
+      setExpensesCount(res?.data.count || 0);
+    } catch (err) {
+    } finally {
+    }
+  }, []);
+
+  const wrappedFetchBalanceOnDate = async (date:string) => {
+    try {
+      const response = await wrappedFetchRecordCountForDate(date);
+      setBalance(response?.data?.balance || 0);
+
+    } catch (err) {
+      console.error("Error fetching balance:", err);
     }
   };
 
-  const computeActiveRooms = () => {
+  const wrappedFetchBalanceOnDateRange = async (payload:any) => {
     try {
-      return records.filter(r => r.type === 'room' && r.status === 'active').length;
-    } catch (error) {
-      console.error('Active room computation error:', error);
-      toast.error('Failed to compute active rooms');
-      return 0;
+      const response = await wrappedFetchRecordCountForDateRange(payload);
+      setBalance(response?.data?.balance || 0);
+
+    } catch (err) {
+      console.error("Error fetching balance:", err);
     }
   };
 
-  const computeTotalSales = () => {
+  const wrappedFetchTotalCustomers = async () => {
     try {
-      return records.filter(r => r.type === 'sale' && r.status === 'completed').length;
-    } catch (error) {
-      console.error('Sales computation error:', error);
-      toast.error('Failed to compute total sales');
-      return 0;
+      const response = await storeFetchAllCustomerCount();
+      setTotalCustomerCount(response?.data?.count || 0);
+    } catch (err) {
+      console.error("Error fetching active users:", err);
     }
   };
-
-  const computeActiveUsers = () => {
+  
+  const wrappedFetchTotalExpensesOnDate = async () => {
     try {
-      const uniqueUsers = new Set(
-        records
-          .filter(r => r.type === 'booking' && r.status === 'active')
-          .map(r => r.userId)
-      );
-      return uniqueUsers.size;
-    } catch (error) {
-      console.error('Active users computation error:', error);
-      toast.error('Failed to compute active users');
-      return 0;
+      await wrappedFetchTotalExpenses();
+    } catch (err) {
+      console.error("Error fetching total expenses:", err);
     }
   };
-
-  const computeTotalExpenses = () => {
-    try {
-      return records
-        .filter(r => r.type === 'expense' && r.status === 'approved')
-        .reduce((sum, r) => sum + (r.amount || 0), 0);
-    } catch (error) {
-      console.error('Total expenses computation error:', error);
-      toast.error('Failed to compute total expenses');
-      return 0;
-    }
-  };
-
-  const balance = useMemo(() => computeBalance(), [records]);
-  const activeRooms = useMemo(() => computeActiveRooms(), [records]);
-  const totalRooms = rooms?.length || 0;
-  const totalCustomers = customers?.length || 0;
-  const totalSales = useMemo(() => computeTotalSales(), [records]);
-  const activeUsers = useMemo(() => computeActiveUsers(), [records]);
-  const totalExpenses = useMemo(() => computeTotalExpenses(), [records]);
-
-  const contextValue: ComputationContextType = useMemo(() => ({
-    balance,
-    activeRooms,
-    totalCustomers,
-    totalRooms,
-    totalSales,
-    activeUsers,
-    totalExpenses,
-    computeBalance,
-    computeActiveRooms,
-    computeTotalSales,
-    computeActiveUsers,
-    computeTotalExpenses
-  }), [balance, activeRooms, totalSales, activeUsers, totalExpenses, records]);
 
   return (
-    <ComputationContext.Provider value={contextValue}>
+    <ComputationContext.Provider
+      value={{
+        balance,
+        recordCount,
+        totalRoomCount,
+        activeRoomCount,
+        totalCustomerCount,
+        activeCustomerCount,
+        expensesCount,
+        newCustomerCount,
+        loading,
+        error,
+        fetchRecordCountOnDate:wrappedFetchRecordCountForDate,
+        fetchRecordCountForDateRange:wrappedFetchRecordCountForDateRange,
+        fetchActiveRoomsCount: wrappedFetchActiveRooms,
+        fetchTotalRoomsCount: wrappedFetchTotalRooms,
+        fetchActiveCustomersCount: wrappedFetchActiveCustomers,
+        fetchNewCustomersOnDateCount: wrappedFetchNewCustomersOnDateCount,
+        fetchNewCustomersOnDateRangeCount: wrappedFetchNewCustomersOnDateRangeCount,
+        fetchTotalCustomersCount: wrappedFetchTotalCustomers,
+        fetchExpensesCountOnDate: wrappedFetchTotalExpensesOnDateCount,
+        fetchBalanceOnDate: wrappedFetchBalanceOnDate,
+        fetchTotalExpensesOnDate: wrappedFetchTotalExpensesOnDate,
+        fetchBalanceOnDateRange: wrappedFetchBalanceOnDateRange,
+      }}
+    >
       {children}
     </ComputationContext.Provider>
   );
@@ -114,6 +196,6 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
 export const useComputation = () => {
   const context = useContext(ComputationContext);
-  if (!context) throw new Error('useComputation must be used within a ComputationProvider');
+  if (!context) throw new Error("useComputation must be used within a ComputationProvider");
   return context;
 };

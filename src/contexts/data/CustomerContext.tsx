@@ -9,21 +9,26 @@ interface Customer {
   [key: string]: any;
 }
 
-interface CustomerResponse {
-  success: boolean;
-  message?: string;
-  data?: Customer | Customer[];
-}
+
 
 interface CustomerContextType {
+  totalCustomerCount: number ;
   customers: Customer[];
   customer: Customer | null;
   loading: boolean;
   error: string | null;
-  createCustomer: (payload: any) => Promise<CustomerResponse>;
-  updateCustomer: (id: string, payload: any) => Promise<CustomerResponse>;
-  fetchCustomers: () => Promise<void>;
-  fetchCustomer: (id: string) => Promise<void>;
+  createCustomer: (payload: any) => Promise<Response>;
+  updateCustomer: (id: string, payload: any) => Promise<Response>;
+  fetchCustomers: () => Promise<Response>;
+  fetchCustomer: (id: string) => Promise<Response>;
+  fetchTotalCustomerCount: () => Promise<Response>;
+  fetchCustomerRegisteredToday:() => Promise<Response>;
+  fetchCustomerRegisterOnDate:() => Promise<Response>;
+  fetchCustomerRegisterOnDateRange: () => Promise<Response>;
+
+
+  
+
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined);
@@ -32,6 +37,9 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
   const router = useIonRouter();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [customer, setCustomer] = useState<Customer | null>(null);
+  const [totalCustomerCount, setTotalCustomerCount] = useState<number>(0);
+  const [customerCount, setCustomerCount] = useState<number>(0);
+  
   
   const {
     loading,
@@ -40,6 +48,9 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     updateCustomer: storeUpdateCustomer,
     fetchCustomer: storeFetchCustomers,
     getCustomerById: storeGetCustomerById,
+    getTotalCustomerCount: storeGetTotalCustomerCount,
+    getCustomerRegisteredOnDate: storeGetCustomerRegisteredOnDate,
+    getCustomerRegisteredOnDateRange: storeGetCustomerRegisteredOnDateRange
   } = useCustomerStore();
 
   const wrappedCreateCustomer = async (payload: any) => {
@@ -47,18 +58,17 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       const response = await storeCreateCustomer(payload);
       console.log('Customer created:', response);
       
-      if (response.success && response.data) {
-        const newCustomer = response.data as Customer;
-        setCustomers(prev => [...prev, newCustomer]);
-        setCustomer(newCustomer);
+      if (response?.success && response.data) {
+      
         toast.success('Customer created successfully');
         sessionStorage.removeItem("customerData");
-        router.push(`/customer/${newCustomer.id}`, 'forward');
+        router.push(`/customer/${response?.data.id}`, 'forward');
         return response;
       } else {
         toast.error(`Creation failed: ${response.message}`);
         return response;
       }
+      
     } catch (error) {
       toast.error('Customer creation error');
       console.error('Creation error:', error);
@@ -92,7 +102,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
   const wrappedFetchCustomers = async () => {
     try {
       const response = await storeFetchCustomers();
-      if (response.success && response.data) {
+      if (response?.success && response?.data) {
         setCustomers(response.data as Customer[]);
       }
     } catch (error) {
@@ -115,7 +125,77 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     }
   };
 
+  const wrappedFetchTotalCustomerCount = async () => {
+    try {
+      const response = await storeGetTotalCustomerCount();
+      if (response.success && response.data) {
+        const totalCustomerCount = response.data.count;
+        setTotalCustomerCount(totalCustomerCount);
+      } else {
+        toast.error(`Creation failed: ${response.message}`);
+       
+      }
+    } catch (error) {
+     
+      console.error('Creation error:', error);
+   
+    }
+  };
+
+  const wrappedFetchTotalCustomerRegisteredOnDate = async (date: string) => {
+    try {
+      const response = await storeGetCustomerRegisteredOnDate(date);
+      if (response.success && response.data) {
+        const customerCount = response.data.count;
+        setCustomerCount(customerCount);
+      } else {
+        toast.error(`Creation failed: ${response.message}`);
+       
+      }
+    } catch (error) {
+     
+      console.error('Creation error:', error);
+   
+    }
+  };
+
+  const wrappedFetchTotalCustomerRegisteredToday = async () => {
+    try {
+      const todayDate = 't'
+      const response = await storeGetCustomerRegisteredOnDate(todayDate);
+      if (response.success && response.data) {
+        const customerCount = response.data.count;
+        setCustomerCount(customerCount);
+      } else {
+        toast.error(`Creation failed: ${response.message}`);
+       
+      }
+    } catch (error) {
+     
+      console.error('Creation error:', error);
+   
+    }
+  };
+
+  const wrappedFetchTotalCustomerRegisteredOnDateRange = async (params: any) => {
+    try {
+      const response = await storeGetCustomerRegisteredOnDateRange(params);
+      if (response.success && response.data) {
+        const customerCount = response.data.count;
+        setCustomerCount(customerCount);
+      } else {
+        toast.error(`Creation failed: ${response.message}`);
+       
+      }
+    } catch (error) {
+     
+      console.error('Creation error:', error);
+   
+    }
+  };
+
   const contextValue = useMemo(() => ({
+    totalCustomerCount,
     customers,
     customer,
     loading,
@@ -124,7 +204,13 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     updateCustomer: wrappedUpdateCustomer,
     fetchCustomers: wrappedFetchCustomers,
     fetchCustomer: wrappedFetchCustomer,
-  }), [customers, customer, loading, error]);
+    fetchTotalCustomerCount: wrappedFetchTotalCustomerCount,
+    fetchCustomerRegisteredToday: wrappedFetchTotalCustomerRegisteredToday,
+    fetchCustomerRegisterOnDate: wrappedFetchTotalCustomerRegisteredOnDate,
+    fetchCustomerRegisterOnDateRange: wrappedFetchTotalCustomerRegisteredOnDateRange
+
+
+  }), [customers,totalCustomerCount,customerCount, customer, loading, error]);
 
   return (
     <CustomerContext.Provider value={contextValue}>

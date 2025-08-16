@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { createCustomer, deleteCustomer, getAllCustomers, getCustomerById, updateCustomer } from '../api/customerApi';
+import { createCustomer, customerRegisteredOnDate, customerRegisteredOnDateRange, deleteCustomer, getAllCustomers, getCustomerById, totalCustomer, updateCustomer } from '../api/customerApi';
 
 
 export const useCustomerStore = create<CustomerState>((set) => ({
@@ -64,5 +64,40 @@ export const useCustomerStore = create<CustomerState>((set) => ({
       set({ error: err.message, loading: false });
     }
   },
+
+  getTotalCustomerCount: async () => {
+    set({ loading: true, error: null });
+    try {
+      const response = await totalCustomer();
+      set({ loading: false });
+      return response;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    }
+  },
+
+  getCustomerRegisteredOnDate: async (date:string) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await customerRegisteredOnDate(date);
+      set({ loading: false });
+      return response;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    }
+  },
+
+  getCustomerRegisteredOnDateRange: async (params:any) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await customerRegisteredOnDateRange(params);
+      set({ loading: false });
+      return response;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    }
+  },
+
+  
   
 }));

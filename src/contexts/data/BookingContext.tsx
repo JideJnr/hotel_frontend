@@ -48,7 +48,6 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const wrappedFetchBookingsByDateRange = async (startDate: string, endDate: string) => {
     try {
-     
       const response = await store.fetchBookingsByDateRange(startDate, endDate);
       if (response.success) {
         setBookings(response.data);
@@ -63,7 +62,6 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const wrappedFetchBookingById = async (id: string) => {
     try {
-     
       const response = await store.fetchBookingById(id);
       if (response.success) {
         setBooking(response.data);
@@ -71,17 +69,16 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
     } catch (error) {
       toast.error(`Failed to fetch booking ${id}`);
       console.error('Fetch error:', error);
+      router.push(`/`, 'forward');
     } finally {
       
     }
   };
 
   const wrappedCreateBooking = async (data: any) => {
-    try {
-     
+    try {   
       const response = await store.createBooking(data);
       if (response.success) {
-
         sessionStorage.removeItem("bookingData");
         toast.success('Booking created successfully');
         router.push(`/bookings/${response.data.id}`, 'forward');
@@ -89,16 +86,13 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
         toast.error(`Creation failed: ${response.message}`);
       }
     } catch (error) {
-      toast.error('Booking creation error');
       console.error('Creation error:', error);
-    } finally {
-      
+    } finally { 
     }
   };
 
   const wrappedUpdateBooking = async (id: string, data: any) => {
     try {
-     
       const response = await store.updateBooking(id, data);
       if (response.success) {
         setBookings(prev => prev.map(b => b.id === id ? response.data : b));

@@ -5,6 +5,7 @@ import { BackFormContainer, DetailRow, FormHeader } from "../../../../components
 import { useRecord } from "../../../../contexts/data/RecordContext";
 import { useEffect } from "react";
 import { useExpenses } from "../../../../contexts/data/ExpensesContext";
+import { getNameInitials } from "../../../../utils/getInitials";
 
 const RecordDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,21 +15,6 @@ const RecordDetails = () => {
           fetchRecord(id)
         }, [id]);
 
-      
-  const data = {
-    name: "Olivia Benson",
-    phone: "+2348012345678",
-    email: "olivia.benson@example.com",
-    address: "23 Admiralty Way, Lekki Phase 1, Lagos",
-    active: true,
-    status: "active",
-    currentRecord: {
-      name: "Record 204 - Sea View Suite",
-    },
-    userImg: "https://i.pravatar.cc/150?img=3",
-    userInitial: "OB",
-    clientName: "Olivia Benson",
-  };
 
 
   return (
@@ -40,37 +26,43 @@ const RecordDetails = () => {
           {/* Profile Image and Basic Info */}
           <div className="flex items-center gap-6">
   
-              <div className="w-24 h-24 flex items-center justify-center rounded-full bg-gray-100 border text-gray-600 font-bold text-xl uppercase">
-                {data.userInitial}
+              <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gray-100 border text-gray-600 font-bold text-xl uppercase">
+                {getNameInitials(record?.customerName || "Guest")}
               </div>
         
 
             <div className="flex flex-col text-sm gap-1">
-              <h2 className="text-2xl font-semibold">{data.name}</h2>
+              <h2 className="text-2xl font-semibold">Room {record?.roomName || "Guest"}</h2>
           
             </div>
           </div>
 
                               {/* Current Guest Info */}
-          {data.active && (
+       
             <div className="flex  bg-gray-50 border rounded-lg p-4">
               <h3 className="text-lg font-semibold h-fit my-auto">Active</h3>
-              {data.status === "active" && (
+             
                 <div className="  ml-auto ">
                   <Button text="Check Out" className="w-full" />
                 </div>
-              )}
+            
             </div>
-          )}
-
+      
 
           {/* Personal Information */}
           <div className="flex flex-col gap-2">
          
-            <div className="text-sm text-gray-600 grid grid-cols-2 px-2">
-             
-              <DetailRow label='Short Rest' value='12th Jan 1990'/>
-              <DetailRow label='Lodge' value='Nigerian'/>
+            <div className="text-sm text-gray-600 grid grid-cols-2 gap-4 px-2">
+
+             <DetailRow label='Teller' value={record?.tellerName || "N/A"} />
+              <DetailRow label='Lodge Type' value='12th Jan 1990'/>
+              <DetailRow label='Payment Method' value={record?.price||0}/>
+              <DetailRow label='Price' value={record?.price||0}/>
+              <DetailRow label='Check In Date ' value={record?.checkInDate || "N/A"} />
+              <DetailRow label='Check Out Date' value={record?.checkOutDate || "N/A"} />
+              <DetailRow label='Booking Instruction' value={record?.bookingInstructions || "N/A"} />
+
+
             </div>
           </div>
 

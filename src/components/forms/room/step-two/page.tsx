@@ -43,17 +43,14 @@ const RoomStepTwo = () => {
 
   const handleSubmit = async () => {
     if (!formData) return;
-    setIsSubmitting(true);
 
     try {
       await createRoom(formData);
-      // toast.success("Room created successfully!");
-      // sessionStorage.removeItem("roomData");
-      // router.push("/rooms", "forward", "replace");
+
     } catch (err: any) {
-      toast.error(err?.message || "Failed to create room.");
+
     } finally {
-      setIsSubmitting(false);
+  
     }
   };
 

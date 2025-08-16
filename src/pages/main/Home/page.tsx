@@ -10,28 +10,62 @@ const Home = () => {
   const router = useIonRouter();
 
   const { fetchRecords, records } = useRecord();
-  console.log(records);
   const {fetchExpenses, expenses} = useExpenses();
-  const { balance ,    activeRooms,
-    totalSales,
-    activeUsers,
-    totalExpenses, } = useComputation();
+
+  const {
+    fetchBalanceOnDate,
+    fetchActiveRoomsCount,
+    fetchNewCustomersOnDateCount,
+    fetchRecordCountOnDate,
+    recordCount,
+    activeRoomCount,
+    newCustomerCount,
+    balance
+  } = useComputation();
 
   
   useEffect(() => {
+    fetchBalanceOnDate('08-12-2025');
+    fetchActiveRoomsCount();
+    fetchNewCustomersOnDateCount('08-12-2025');
+    fetchRecordCountOnDate('08-12-2025');
+    
+
     fetchRecords()
     fetchExpenses()
   }, []);
 
+
+  console.log(records)
   return (
-    <div className="flex flex-col gap-8 px-4 py-8 bg-gray-100 overflow-y-auto h-full w-full">
+    <div className="flex flex-col gap-8 px-4 py-8 bg-gray-100 overflow-y-auto h-full w-full text-black">
+
+              
+        <div>
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Customer</h1>
+          <p className="text-sm text-gray-500">Track your customers, activity and history.</p>
+        </div>
         
           <div className="grid gap-4 lg:gap-8 grid-cols-2 w-full h-fit">
-            <DashboardTile title="Balance" value={balance} delta={1}/>
-            <DashboardTile title="Active Room" value={activeRooms} delta={1}/>
-            <DashboardTile title="Total Sales " value={totalSales} delta={1}/>
-            <DashboardTile title="New Customer" value={2} delta={1}/>
+            <DashboardTile title="Balance" value={balance || 0} delta={1}/>
+            <DashboardTile title="Active Room" value={activeRoomCount||0} delta={1}/>
+            <DashboardTile title="Total Sales " value={recordCount || 0} delta={1}/>
+            <DashboardTile title="New Customer" value={newCustomerCount|| 0} delta={1}/>
           </div>
+
+                  {expenses?.length === 0 ? (
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-white">
+            <IonIcon src="assets/svgs/announce.svg" />
+            <div className="overflow-hidden whitespace-nowrap flex-1">
+              <div className="animate-marquee">
+                <p className="text-sm font-medium text-dark">
+                  You have not
+                  registered any expense today
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : null}
 
           <IonRow className="ion-justify-content-between ion-align-items-center   ion-padding-horizontal">
             <IonCol size="auto">
@@ -109,19 +143,7 @@ const Home = () => {
           </IonRow>
         
 
-        {expenses?.length === 0 ? (
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-white">
-            <IonIcon src="assets/svgs/announce.svg" />
-            <div className="overflow-hidden whitespace-nowrap flex-1">
-              <div className="animate-marquee">
-                <p className="text-sm font-medium text-dark">
-                  You have not
-                  registered any expense today
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : null}
+
 
      
           <div className="space-y-4">
@@ -130,7 +152,10 @@ const Home = () => {
             </p>
             {records?.map((event, index) => (
               <div onClick={() => router.push(`/record/${event.id}`)}>
-              <ScheduleCard key={index} name={event.customerName} details={`Room ${event.roomId}`} />
+                <ScheduleCard key={index} name={event.customerName} details={`Room ${event.roomName}`}>
+                  <div className='w-2 h-2 rounded-full bg-emerald-500 flex items-center justify-center'>
+                  </div>
+                </ScheduleCard>
               </div>
             ))}
           </div>

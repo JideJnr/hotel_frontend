@@ -119,7 +119,7 @@ export default function SalesStepOne() {
               roomNumberLabel: opt ? opt.label : null
             }))}
             options={availableRooms.map(r => ({
-              value: r.name,
+              value: r.id,
               label: `Room ${r.name}`
             }))}
             placeholder="Select a room"

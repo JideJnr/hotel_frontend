@@ -1,18 +1,12 @@
 import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRecordStore } from '../../services/stores/recordStore';
+import { useIonRouter } from '@ionic/react';
 
-// Define types for your Record data
+
 interface Record {
   id: string;
-  // Add other record properties here
   [key: string]: any;
-}
-
-interface RecordResponse {
-  success: boolean;
-  message?: string;
-  data?: Record | Record[];
 }
 
 interface RecordContextType {
@@ -20,15 +14,16 @@ interface RecordContextType {
   record: Record | null;
   loading: boolean;
   error: string | null;
-  createRecord: (payload: any) => Promise<void>;
-  updateRecord: (id: string, payload: any) => Promise<void>;
-  fetchRecords: () => Promise<void>;
-  fetchRecord: (id: string) => Promise<void>;
+  createRecord: (payload: any) => Promise<Response>;
+  updateRecord: (id: string, payload: any) => Promise<Response>;
+  fetchRecords: () => Promise<Response>;
+  fetchRecord: (id: string) => Promise<Response>;
 }
 
 const RecordContext = createContext<RecordContextType | undefined>(undefined);
 
 export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const router = useIonRouter();
   const [records, setRecords] = useState<Record[]>([]);
   const [record, setRecord] = useState<Record | null>(null);
   const store = useRecordStore();
@@ -37,10 +32,10 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const wrappedCreateRecord = async (payload: any) => {
     try {
       const response = await store.createRecord(payload);
+      console.log(`Record created:`, response);
       if (response.success && response.data) {
-        const newRecord = response.data as Record;
-        setRecords(prev => [...prev, newRecord]);
         toast.success('Record created successfully');
+         router.push(`/record/${response.data.recordId}`, 'forward');
       } else {
         toast.error(`Creation failed: ${response.message}`);
       }
@@ -76,9 +71,7 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         setRecords(response.data?.records as Record[]);
       }
     } catch (error) {
-      toast.error('Failed to fetch records');
       console.error('Fetch error:', error);
-    
     }
   };
 

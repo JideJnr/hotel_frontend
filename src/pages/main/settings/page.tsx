@@ -1,12 +1,15 @@
 import { useIonRouter } from "@ionic/react";
 import Button from "../../../components/button/button";
 import { useAuth } from "../../../contexts/auth/AuthContext";
+import { getNameInitials } from "../../../utils/getInitials";
 
 
 
 const Setting = () => {
   const router = useIonRouter();
-    const { logout, loading } = useAuth();
+  localStorage.getItem('user');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const { logout, loading } = useAuth();
 
     const handleLogout = async () => {
       try {
@@ -23,13 +26,15 @@ const Setting = () => {
       <div className="w-full h-fit pt-8 gap-8 flex flex-col overflow-x-none overflow-y-auto text-sm">
         <div className="flex-col flex gap-4  ">
           <div className="w-full flex ">
-            <div className=" mx-auto my-auto  border border-white w-24 h-24 ">
-            
+            <div className=" mx-auto my-auto  border border-white w-24 h-24 uppercase border-gray-200 rounded-full bg-white shadow-md">
+              <p className="text-3xl font-semibold text-gray-600 flex justify-center items-center h-full">
+                {getNameInitials(user?.fullName || `NOT FOUND`) }                          
+              </p>
             </div>
           </div>
 
           <div className="mx-auto w-fit">
-            <p className="font-medium  text-lg"></p>
+            <p className="font-medium  text-lg text-black titlecase ">{user?.fullName}</p>
           </div>
         </div>
 

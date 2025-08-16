@@ -56,7 +56,7 @@ const UserDetails = () => {
               />
             ) : (
               <div className="w-24 h-24 flex items-center justify-center rounded-full bg-gray-100 border text-gray-600 font-bold text-xl uppercase">
-                {getNameInitials(customer?.fullName )}
+                {getNameInitials(customer?.fullName||'guest' )}
               </div>
             )}
 
