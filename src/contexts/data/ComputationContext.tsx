@@ -47,6 +47,8 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
       fetchExpensesCountOnDateRange: storeFetchExpensesCountOnDateRange,
       fetchBookingCountOnDate: storeFetchBookingCountOnDate,
       fetchBookingCountOnDateRange: storeFetchBookingCountOnDateRange,
+      fetchBalanceOnDate: storeFetchBalanceOnDate,
+      fetchBalanceOnDateRange: storeFetchBalanceOnDateRange,
       
   } = useComputationStore();
 
@@ -100,8 +102,8 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const wrappedFetchNewCustomersOnDateCount = useCallback(async (date:string) => {
     try {
-    
-      setNewCustomerCount( 0);
+      const response = await storeFetchCustomerRegisteredOnDate(date);
+      setNewCustomerCount( response?.data?.count);
     } catch (err) {
     } finally {
     }
@@ -127,9 +129,9 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const wrappedFetchBalanceOnDate = async (date:string) => {
     try {
-      const response = await wrappedFetchRecordCountForDate(date);
-      setBalance(response?.data?.balance || 0);
-
+      const response = await storeFetchBalanceOnDate(date);
+      console.log(response);
+      setBalance(response?.data?.totalBalance || 0);
     } catch (err) {
       console.error("Error fetching balance:", err);
     }
@@ -138,7 +140,7 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
   const wrappedFetchBalanceOnDateRange = async (payload:any) => {
     try {
       const response = await wrappedFetchRecordCountForDateRange(payload);
-      setBalance(response?.data?.balance || 0);
+      setBalance(response?.data?.totalBalance || 0);
 
     } catch (err) {
       console.error("Error fetching balance:", err);

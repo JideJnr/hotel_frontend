@@ -37,11 +37,12 @@ interface ExpensesData {
 }
 
 interface SalesData  {
-  customerId: string | null;
-  roomNumberId: string| null;
-  paymentMethodId: string| null;
-  requestId: string | null,
-  bookingInstruction: string;
+  customerId?: string | null;
+  customerName?: string | null;
+  roomNumberId?: string| null;
+  paymentMethodId?: string| null;
+  requestId?: string | null,
+  bookingInstruction?: string;
 };
 
 interface RecordData {

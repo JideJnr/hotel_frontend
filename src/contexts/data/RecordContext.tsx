@@ -2,6 +2,7 @@ import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRecordStore } from '../../services/stores/recordStore';
 import { useIonRouter } from '@ionic/react';
+import { getHotelBusinessDate } from '../../utils/utilities';
 
 
 interface Record {
@@ -18,6 +19,7 @@ interface RecordContextType {
   updateRecord: (id: string, payload: any) => Promise<Response>;
   fetchRecords: () => Promise<Response>;
   fetchRecord: (id: string) => Promise<Response>;
+  checkOutRecord: (id: string) => Promise<Response>;
 }
 
 const RecordContext = createContext<RecordContextType | undefined>(undefined);
@@ -32,10 +34,9 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const wrappedCreateRecord = async (payload: any) => {
     try {
       const response = await store.createRecord(payload);
-      console.log(`Record created:`, response);
       if (response.success && response.data) {
         toast.success('Record created successfully');
-         router.push(`/record/${response.data.recordId}`, 'forward');
+        router.push(`/record/${response.data.recordId}`, 'forward');
       } else {
         toast.error(`Creation failed: ${response.message}`);
       }
@@ -50,9 +51,7 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     try {
       const response = await store.updateRecord(id, payload);
       if (response.success && response.data) {
-        const updatedRecord = response.data as Record;
-        setRecords(prev => prev.map(r => r.id === id ? updatedRecord : r));
-        setRecord(prev => prev?.id === id ? updatedRecord : prev);
+      
         toast.success('Record updated successfully');
       } else {
         toast.error(`Update failed: ${response.message}`);
@@ -64,9 +63,9 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
   };
 
-  const wrappedFetchRecords = async () => {
+  const wrappedFetchRecords = async (date:string) => {
     try {
-      const response = await store.fetchTodayRecords();
+     const response = await store.fetchRecordsOnDate(date);
       if (response?.data?.records) {
         setRecords(response.data?.records as Record[]);
       }
@@ -75,12 +74,45 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
   };
 
+const wrappedFetchTodayRecords = async () => {
+  const businessDate = getHotelBusinessDate();
+  const formattedDate = businessDate.toISOString().split('T')[0];
+
+  
+  try {
+    const response = await store.fetchRecordsOnDate(formattedDate);
+
+  
+    
+    if (response?.success && response?.data?.records) {
+      setRecords(response.data.records);
+    }
+  } catch (error) {
+    console.error('Fetch error:', error);
+  }
+};
+
   const wrappedFetchRecord = async (id: string) => {
     try {
       const response = await store.fetchRecordById(id);
-      if (response?.data) {
-        setRecord(response.data as Record);
+     
+      if (response?.success && response?.data) {
+        setRecord(response.data);
       }
+    } catch (error) {
+      toast.error(`Failed to fetch record ${id}`);
+      console.error('Fetch error:', error);
+     
+    }
+  };
+
+  const wrappedCheckoutRecord = async (id: string) => {
+    try {
+      const response = await store.checkoutRecord(id);
+      if (response?.success) {
+        setRecord(response.data);
+      }
+      return response;
     } catch (error) {
       toast.error(`Failed to fetch record ${id}`);
       console.error('Fetch error:', error);
@@ -97,6 +129,8 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     updateRecord: wrappedUpdateRecord,
     fetchRecords: wrappedFetchRecords,
     fetchRecord: wrappedFetchRecord,
+    fetchTodayRecords: wrappedFetchTodayRecords,
+    checkOutRecord: wrappedCheckoutRecord
   }), [records, record, loading, error]);
 
   return (

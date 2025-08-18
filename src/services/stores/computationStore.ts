@@ -12,6 +12,8 @@ import {
   getExpensesCountOnDateRange,
   getBookingCountOnDate,
   getBookingCountOnDateRange,
+  getBalanceForDate,
+  getBalanceForDateRange,
 } from '../api/computeApi';
 
 export const useComputationStore = create<ComputationState>((set) => ({
@@ -154,4 +156,28 @@ export const useComputationStore = create<ComputationState>((set) => ({
       set({ error: err.message, loading: false });
     }
   },
+
+  fetchBalanceOnDate: async (date: string) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await getBalanceForDate(date);
+      set({ loading: false });
+      return response;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    }
+  },
+
+  fetchBalanceOnDateRange: async (startDate: string, endDate: string) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await getBalanceForDateRange(startDate, endDate);
+      set({ loading: false });
+      return response;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+    }
+  },
+
+
 }));

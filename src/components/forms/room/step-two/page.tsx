@@ -6,13 +6,15 @@ import Button from "../../../../components/button/button";
 import { useRoom } from "../../../../contexts/data/RoomContext";
 
 
-interface RoomFormData {
+export interface RoomFormData {
   name: string;
   description: string;
   capacity: number | null;
   amenities: string[];
   pricePerNight: number | null;
-  isAvailable: boolean;
+  oneHour: number | null;
+  twoHours: number | null;
+ 
 }
 
 const RoomStepTwo = () => {
@@ -75,9 +77,10 @@ const RoomStepTwo = () => {
           <DetailRow label="Description" value={formData.description || "N/A"} />
           <DetailRow label="Capacity" value={String(formData.capacity)} />
           <DetailRow label="Price Per Night (₦)" value={String(formData.pricePerNight)} />
+          <DetailRow label="Price One Hour (₦)" value={String(formData.oneHour)} />
+          <DetailRow label="Price Two Hours (₦)" value={String(formData.twoHours)} />
           <DetailRow label="Amenities" value={formData.amenities.join(", ") || "None"} />
-          <DetailRow label="Availability" value={formData.isAvailable ? "Available" : "Not Available"} />
-
+        
           <div className="flex flex-col gap-3 pt-4">
             <Button
               text="Submit"

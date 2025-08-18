@@ -6,10 +6,9 @@ import {
   deleteExpense,
   getExpensesByCategory,
   getExpenseSummary,
-  getTodayExpenses,
+  getExpensesOnDate,
   getExpensesByDateRange
 } from '../api/expenseApi';
-
 
 interface PaginationParams {
   pageSize?: number;
@@ -36,8 +35,8 @@ interface ExpenseState {
   error: string | null;
 
   fetchExpense: (id: string) => Promise<Response>;
-  fetchExpensesByDateRange: (params?: DateRangeParams) => Promise<Response>;
-  fetchTodayExpenses?: (params?: PaginationParams) => Promise<Response>;
+  fetchExpensesOnDateRange: (params?: any) => Promise<Response>;
+  fetchExpensesOnDate: ( date: string) => Promise<Response>;
   fetchExpensesByCategory: (category: string, params?: PaginationParams) => Promise<Response>;
   fetchExpenseSummary: (params: { startDate: string; endDate: string }) => Promise<Response>;
   createExpense: (data: Partial<Expense>) => Promise<Response>;
@@ -61,7 +60,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     }
   },
 
-  fetchExpensesByDateRange: async (params) => {
+  fetchExpensesOnDateRange: async (params) => {
     set({ loading: true, error: null });
     try {
       const response = await getExpensesByDateRange(params);
@@ -73,10 +72,10 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     }
   },
 
-  fetchExpensesByDate: async (params:any) => {
+  fetchExpensesOnDate: async (date:string) => {
     set({ loading: true, error: null });
     try {
-      const response = await getTodayExpenses(params);
+      const response = await getExpensesOnDate(date);
       set({ loading: false });
       return response;
     } catch (err: any) {
@@ -117,7 +116,7 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
       return response;
     } catch (err: any) {
       set({ error: err.message, loading: false });
-    
+      throw err;
     }
   },
 

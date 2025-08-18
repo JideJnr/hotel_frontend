@@ -56,25 +56,30 @@ export const deleteRecord = async (id: string) => {
 };
 
 // Get today's sales records
-export const getTodayRecords = async (params?: PaginationParams) => {
-  const response = await api.get('/records/today', { params });
+export const getRecordsOnDate = async (date?: string) => {
+  const response = await api.get(`/records/${date}`);
   return response.data;
 };
 
 // Get records within a date range
-export const getRecordsByDateRange = async (params: DateRangeParams) => {
+export const getRecordsOnDateRange = async (params: DateRangeParams) => {
   const response = await api.get('/records/range', { params });
   return response.data;
 };
 
 // Get record by ID
 export const getRecordById = async (id: string) => {
-  const response = await api.get(`/records/${id}`);
+  const response = await api.get(`/records/details/${id}`);
   return response.data;
 };
 
 // Get authenticated user's records
 export const getUserRecords = async (params?: PaginationParams) => {
   const response = await api.get('/records/user', { params });
+  return response.data;
+};
+
+export const checkOut = async (id: string) => {
+  const response = await api.post(`/records/checkout/${id}`);
   return response.data;
 };

@@ -9,6 +9,7 @@ import DashboardTile from "../../../components/templates/dashboardtiles/Dashboar
 import ScheduleCard from "../../../components/templates/card/ScheduleCard";
 import { useRoom } from "../../../contexts/data/RoomContext";
 import { useComputation } from "../../../contexts/data/ComputationContext";
+import Footer from "../../../components/footer/footer";
 
 const Room = () => {
   const router = useIonRouter();
@@ -33,14 +34,14 @@ const Room = () => {
 
   const filteredRooms =
     activeTab === "active"
-      ? rooms.filter((room) => room.isAvailable) // Adjust filter condition
+      ? rooms.filter((room) => room.active) // Adjust filter condition
       : rooms;
 
   return (
 
-    <div className="px-4  py-8 text-black bg-gray-100 w-full h-full flex flex-col gap-6 overflow-y-auto ">
+    <div className="  pt-8 text-black bg-gray-100 w-full h-full flex flex-col gap-6 overflow-y-auto ">
 
-      <div className="flex items-center justify-between gap-4">
+      <div className="px-4 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Rooms</h1>
             <p className="text-sm text-gray-500">Manage your rooms, availability and details.</p>
@@ -49,41 +50,44 @@ const Room = () => {
       </div>
 
       
-      <div className="grid gap-4 lg:gap-8 grid-cols-2 md:grid-cols-3 w-full h-fit my-4">
+      <div className="px-4 grid gap-4 lg:gap-8 grid-cols-2 md:grid-cols-3 w-full h-fit my-4">
         <DashboardTile title="Total Rooms" value={totalRoomCount||0} delta={1} />
         <DashboardTile title="Active Rooms" value={activeRoomCount||0} delta={1} />
       </div>
 
-      <div className="w-fit ml-auto mr-2">
+      <div className=" px-4 w-fit ml-auto mr-2">
         <button className="text-black" onClick={handleAddNew}>
           Add New
         </button>
       </div>
 
-
-      <IonSegment
-        value={activeTab}
-        onIonChange={(e) => setActiveTab(e.detail.value as "all" | "active")}
-        className="mb-2 bg-white shadow-md rounded-lg"
-      >
-        {TABS.map(({ value, label }) => (
-          <IonSegmentButton key={value} value={value}>
-            <IonLabel className="text-black">{label}</IonLabel>
-          </IonSegmentButton>
-        ))}
-      </IonSegment>
-
-
-      <div className="space-y-4">
-        {filteredRooms.map((room, index) => (
-          <div key={room.id || index} onClick={() => handleRoomClick(room.id)}>
-            <ScheduleCard
-              name={room.name||'test'}
-              details={room.description || room.title ||'test' }
-            />
-          </div>
-        ))}
+      <div className="  flex flex-col gap-4 w-full h-full bg-white p-4 rounded-lg shadow-md ">
+        <IonSegment
+          value={activeTab}
+          mode="md"   // 👈 force Material Design look (white + blue)
+          onIonChange={(e) => setActiveTab(e.detail.value as "all" | "active")}
+          className="    rounded-lg"
+        >
+          {TABS.map(({ value, label }) => (
+            <IonSegmentButton key={value} value={value} mode="md"> {/* 👈 keep buttons in md mode too */}
+              <IonLabel className="text-black">{label}</IonLabel>
+            </IonSegmentButton>
+          ))}
+        </IonSegment>
+        <div className="space-y-2">
+          {filteredRooms.map((room, index) => (
+            <div key={room.id || index} onClick={() => handleRoomClick(room.id)}>
+              <ScheduleCard
+                name={room.name||'test'}
+                details={room.description || room.title ||'test' }
+              />
+            </div>
+          ))}
+        </div>
+        <Footer className=''/>
       </div>
+
+
     </div>
   
   );

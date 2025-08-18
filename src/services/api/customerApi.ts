@@ -39,3 +39,10 @@ export const customerRegisteredOnDateRange = async (params:any) => {
   const res = await api.delete(`/customers/${params}`);
   return res.data;
 };
+
+export const searchCustomers = async (query: string) => {
+  const res = await api.get(`/customers/search`, {
+    params: { query }
+  });
+  return res.data;
+};

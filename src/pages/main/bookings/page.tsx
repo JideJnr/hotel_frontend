@@ -2,9 +2,13 @@ import {  IonPage, useIonRouter } from '@ionic/react';
 import ScheduleCard from '../../../components/templates/card/ScheduleCard';
 import { FormHeader } from '../../../components/forms';
 import DashboardTile from '../../../components/templates/dashboardtiles/DashboardTiles';
+import SearchModal from '../../../components/modal/BookingModal';
+import { useState } from 'react';
 
 const Bookings = () => {
   const router = useIonRouter();
+  const [showSearch, setShowSearch] = useState(true); // Modal opens by default
+  
 
   const record = [
     { customerName: 'Dressage Practice', RoomNumber: 2 },
@@ -15,11 +19,12 @@ const Bookings = () => {
 
   return (
     <IonPage>
-      
       <FormHeader />
 
-
-
+      <SearchModal 
+        isOpen={showSearch} 
+        onClose={() => setShowSearch(false)} 
+      />
       <div className="flex flex-col gap-8 px-4 py-8 bg-gray-100 overflow-y-auto h-full w-full text-black  ">
      
         <div>

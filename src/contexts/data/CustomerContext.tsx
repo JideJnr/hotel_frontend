@@ -5,14 +5,11 @@ import { useCustomerStore } from '../../services/stores/customerStore';
 
 interface Customer {
   id: string;
-  // Add other customer properties here
   [key: string]: any;
 }
 
-
-
 interface CustomerContextType {
-  totalCustomerCount: number ;
+  totalCustomerCount: number;
   customers: Customer[];
   customer: Customer | null;
   loading: boolean;
@@ -22,13 +19,10 @@ interface CustomerContextType {
   fetchCustomers: () => Promise<Response>;
   fetchCustomer: (id: string) => Promise<Response>;
   fetchTotalCustomerCount: () => Promise<Response>;
-  fetchCustomerRegisteredToday:() => Promise<Response>;
-  fetchCustomerRegisterOnDate:() => Promise<Response>;
+  fetchCustomerRegisteredToday: () => Promise<Response>;
+  fetchCustomerRegisterOnDate: () => Promise<Response>;
   fetchCustomerRegisterOnDateRange: () => Promise<Response>;
-
-
-  
-
+  searchCustomers: (query: string) => Promise<Response>; // <-- NEW
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined);
@@ -39,8 +33,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [totalCustomerCount, setTotalCustomerCount] = useState<number>(0);
   const [customerCount, setCustomerCount] = useState<number>(0);
-  
-  
+
   const {
     loading,
     error,
@@ -50,16 +43,18 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     getCustomerById: storeGetCustomerById,
     getTotalCustomerCount: storeGetTotalCustomerCount,
     getCustomerRegisteredOnDate: storeGetCustomerRegisteredOnDate,
-    getCustomerRegisteredOnDateRange: storeGetCustomerRegisteredOnDateRange
+    getCustomerRegisteredOnDateRange: storeGetCustomerRegisteredOnDateRange,
+    searchCustomer: storeSearchCustomer, // <-- bring in from zustand
   } = useCustomerStore();
+
+  // =========================
+  // WRAPPERS
+  // =========================
 
   const wrappedCreateCustomer = async (payload: any) => {
     try {
       const response = await storeCreateCustomer(payload);
-      console.log('Customer created:', response);
-      
       if (response?.success && response.data) {
-      
         toast.success('Customer created successfully');
         sessionStorage.removeItem("customerData");
         router.push(`/customer/${response?.data.id}`, 'forward');
@@ -68,10 +63,8 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
         toast.error(`Creation failed: ${response.message}`);
         return response;
       }
-      
     } catch (error) {
       toast.error('Customer creation error');
-      console.error('Creation error:', error);
       throw error;
     }
   };
@@ -81,9 +74,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       const response = await storeUpdateCustomer(id, payload);
       if (response.success && response.data) {
         const updatedCustomer = response.data as Customer;
-        setCustomers(prev => 
-          prev.map(c => c.id === id ? updatedCustomer : c)
-        );
+        setCustomers(prev => prev.map(c => c.id === id ? updatedCustomer : c));
         setCustomer(updatedCustomer);
         toast.success('Customer updated successfully');
         router.push(`/customer/${updatedCustomer.id}`, 'forward');
@@ -94,7 +85,6 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       }
     } catch (error) {
       toast.error('Customer update error');
-      console.error('Update error:', error);
       throw error;
     }
   };
@@ -107,7 +97,6 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       }
     } catch (error) {
       toast.error('Failed to fetch customers');
-      console.error('Fetch error:', error);
       throw error;
     }
   };
@@ -120,7 +109,6 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       }
     } catch (error) {
       toast.error(`Failed to fetch customer ${id}`);
-      console.error('Fetch error:', error);
       throw error;
     }
   };
@@ -129,16 +117,12 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     try {
       const response = await storeGetTotalCustomerCount();
       if (response.success && response.data) {
-        const totalCustomerCount = response.data.count;
-        setTotalCustomerCount(totalCustomerCount);
+        setTotalCustomerCount(response.data.count);
       } else {
-        toast.error(`Creation failed: ${response.message}`);
-       
+        toast.error(`Failed: ${response.message}`);
       }
     } catch (error) {
-     
-      console.error('Creation error:', error);
-   
+      console.error('Error fetching total count:', error);
     }
   };
 
@@ -146,34 +130,26 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     try {
       const response = await storeGetCustomerRegisteredOnDate(date);
       if (response.success && response.data) {
-        const customerCount = response.data.count;
-        setCustomerCount(customerCount);
+        setCustomerCount(response.data.count);
       } else {
-        toast.error(`Creation failed: ${response.message}`);
-       
+        toast.error(`Failed: ${response.message}`);
       }
     } catch (error) {
-     
-      console.error('Creation error:', error);
-   
+      console.error('Error fetching customer count:', error);
     }
   };
 
   const wrappedFetchTotalCustomerRegisteredToday = async () => {
     try {
-      const todayDate = 't'
+      const todayDate = new Date().toISOString().split("T")[0]; // real today
       const response = await storeGetCustomerRegisteredOnDate(todayDate);
       if (response.success && response.data) {
-        const customerCount = response.data.count;
-        setCustomerCount(customerCount);
+        setCustomerCount(response.data.count);
       } else {
-        toast.error(`Creation failed: ${response.message}`);
-       
+        toast.error(`Failed: ${response.message}`);
       }
     } catch (error) {
-     
-      console.error('Creation error:', error);
-   
+      console.error('Error fetching today count:', error);
     }
   };
 
@@ -181,16 +157,26 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     try {
       const response = await storeGetCustomerRegisteredOnDateRange(params);
       if (response.success && response.data) {
-        const customerCount = response.data.count;
-        setCustomerCount(customerCount);
+        setCustomerCount(response.data.count);
       } else {
-        toast.error(`Creation failed: ${response.message}`);
-       
+        toast.error(`Failed: ${response.message}`);
       }
     } catch (error) {
-     
-      console.error('Creation error:', error);
-   
+      console.error('Error fetching date range count:', error);
+    }
+  };
+
+  // 🔍 NEW: wrapper for searching customers
+  const wrappedSearchCustomers = async (query: string) => {
+    try {
+      const results = await storeSearchCustomer(query);
+      if (results && Array.isArray(results)) {
+        setCustomers(results);
+      }
+      return results;
+    } catch (error) {
+      toast.error('Customer search error');
+      throw error;
     }
   };
 
@@ -207,10 +193,16 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     fetchTotalCustomerCount: wrappedFetchTotalCustomerCount,
     fetchCustomerRegisteredToday: wrappedFetchTotalCustomerRegisteredToday,
     fetchCustomerRegisterOnDate: wrappedFetchTotalCustomerRegisteredOnDate,
-    fetchCustomerRegisterOnDateRange: wrappedFetchTotalCustomerRegisteredOnDateRange
-
-
-  }), [customers,totalCustomerCount,customerCount, customer, loading, error]);
+    fetchCustomerRegisterOnDateRange: wrappedFetchTotalCustomerRegisteredOnDateRange,
+    searchCustomers: wrappedSearchCustomers, // <-- exposed in context
+  }), [
+    customers,
+    totalCustomerCount,
+    customerCount,
+    customer,
+    loading,
+    error,
+  ]);
 
   return (
     <CustomerContext.Provider value={contextValue}>

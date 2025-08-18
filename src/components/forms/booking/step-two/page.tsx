@@ -1,10 +1,14 @@
 import { IonPage, useIonRouter } from "@ionic/react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { BackFormContainer, DetailRow, FormContainer, FormHeader } from "../../../../components/forms";
+import {
+  BackFormContainer,
+  DetailRow,
+  FormHeader
+} from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import { useBooking } from "../../../../contexts/data/BookingContext";
-
+import { useRoom } from "../../../../contexts/data/RoomContext";
 
 interface BookingData {
   customerId: string | null;
@@ -16,34 +20,43 @@ interface BookingData {
   checkOutDate: string;
   paymentMethodId: string | null;
   paymentMethodLabel: string | null;
-  price: string;
 }
 
 const BookingStepTwo = () => {
   const router = useIonRouter();
-  const { createBooking } = useBooking(); // Get createBooking from context
+  const { createBooking,loading } = useBooking();
+  const { rooms, fetchRooms } = useRoom();
+
   const [formData, setFormData] = useState<BookingData>({
     customerId: null,
     customerName: null,
     roomId: null,
     roomLabel: null,
-    bookingInstruction: '',
-    checkInDate: '',
-    checkOutDate: '',
+    bookingInstruction: "",
+    checkInDate: "",
+    checkOutDate: "",
     paymentMethodId: null,
-    paymentMethodLabel: null,
-    price: ''
+    paymentMethodLabel: null
   });
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
+
+
+  const [pricePerNight, setPricePerNight] = useState<number>(0);
 
   useEffect(() => {
-    const loadBookingData = () => {
+    const loadBookingData = async () => {
       try {
+        // await fetchRooms();
+
         const savedData = sessionStorage.getItem("bookingData");
         if (savedData) {
           const parsedData = JSON.parse(savedData);
           setFormData(parsedData);
+
+          // find room price
+        //  const room = rooms.find(r => r.id === parsedData.roomId);
+          //if (room) {
+          //  setPricePerNight(room.price);
+         // }
         } else {
           toast.error("No booking data found. Please start over.");
           router.push("/bookings/create/stepone", "back", "push");
@@ -52,20 +65,36 @@ const BookingStepTwo = () => {
         toast.error("Failed to load booking data");
         console.error("Error loading booking data:", error);
       } finally {
-        setLoading(false);
+        
       }
     };
 
     loadBookingData();
   }, []);
 
+  const getDuration = () => {
+    if (!formData.checkInDate || !formData.checkOutDate) return 0;
+    const diff =
+      new Date(formData.checkOutDate).getTime() -
+      new Date(formData.checkInDate).getTime();
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  };
+
+  const getTotalAmount = () => {
+    return 20 * getDuration();
+  };
+
   const handleConfirm = async () => {
-    if (!formData.customerId || !formData.roomId || !formData.checkInDate || !formData.checkOutDate) {
+    if (
+      !formData.customerId ||
+      !formData.roomId ||
+      !formData.checkInDate ||
+      !formData.checkOutDate
+    ) {
       toast.error("Please complete all required booking information");
       return;
     }
 
-    setSubmitting(true);
     try {
       const bookingPayload = {
         customerId: formData.customerId,
@@ -74,96 +103,106 @@ const BookingStepTwo = () => {
         checkOutDate: formData.checkOutDate,
         specialInstructions: formData.bookingInstruction,
         paymentMethodId: formData.paymentMethodId,
-        totalAmount: parseFloat(formData.price) * getDuration(),
-        status: 'confirmed' // or whatever status you use
+        totalAmount: getTotalAmount(),
+        status: "confirmed"
       };
 
       await createBooking(bookingPayload);
-      
-
 
     } catch (error) {
-      toast.error("Failed to confirm booking. Please try again.");
-      console.error("Booking confirmation error:", error);
+
     } finally {
-      setSubmitting(false);
+      
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <p className="text-gray-500">Loading booking details...</p>
-      </div>
-    );
-  }
+  
+    const paymentOptions: Option[] = [
+      { value: "cash",     label: "Cash"     },
+      { value: "card",     label: "Card"     },
+      { value: "transfer", label: "Transfer" },
+    ];
+  
 
-  // Calculate duration of stay
-  const getDuration = () => {
-    if (!formData.checkInDate || !formData.checkOutDate) return 0;
-    const diff = new Date(formData.checkOutDate).getTime() - 
-                 new Date(formData.checkInDate).getTime();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
-  };
-
-  // Calculate total amount
-  const getTotalAmount = () => {
-    const duration = getDuration();
-    const price = parseFloat(formData.price) || 0;
-    return (duration * price).toLocaleString();
-  };
 
   return (
     <IonPage>
-      <FormHeader/>
-      <BackFormContainer 
+      <FormHeader />
+      <BackFormContainer
         title="Confirm Booking Details"
         subtitle="Please review all information before confirming"
         className="max-w-2xl"
       >
         <div className="space-y-6 pb-12">
-          <div className="">
+          <div>
             <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
               <div className="col-span-2">
-                <DetailRow label="Customer" value={formData.customerName || 'Not specified'} />
+                <DetailRow
+                  label="Customer"
+                  value={formData.customerName || "Not specified"}
+                />
               </div>
               <div className="col-span-1">
-                <DetailRow label="Room" value={formData.roomLabel || 'Not specified'} />
+                <DetailRow
+                  label="Room"
+                  value={formData.roomLabel || "Not specified"}
+                />
               </div>
               <div className="col-span-1">
                 <DetailRow label="Duration" value={`${getDuration()} nights`} />
               </div>
               <div className="col-span-1">
-                <DetailRow label="Check-in Date" value={
-                formData.checkInDate ? new Date(formData.checkInDate).toLocaleDateString() : 'Not specified'
-              } />
+                <DetailRow
+                  label="Check-in Date"
+                  value={
+                    formData.checkInDate
+                      ? new Date(formData.checkInDate).toLocaleDateString()
+                      : "Not specified"
+                  }
+                />
               </div>
               <div className="col-span-1">
-                <DetailRow label="Check-out Date" value={
-                formData.checkOutDate ? new Date(formData.checkOutDate).toLocaleDateString() : 'Not specified'
-              } />
+                <DetailRow
+                  label="Check-out Date"
+                  value={
+                    formData.checkOutDate
+                      ? new Date(formData.checkOutDate).toLocaleDateString()
+                      : "Not specified"
+                  }
+                />
               </div>
               <div className="col-span-1">
-                <DetailRow label="Price per night" value={`₦${parseFloat(formData.price || '0').toLocaleString()}`} />
+                <DetailRow
+                  label="Price per night"
+                  value={`₦${pricePerNight.toLocaleString()}`}
+                />
               </div>
               <div className="col-span-1">
-                <DetailRow label="Total Amount" value={`₦${getTotalAmount()}`} />
+                <DetailRow
+                  label="Total Amount"
+                  value={`₦${getTotalAmount().toLocaleString()}`}
+                />
               </div>
             </div>
+
             
+
             {formData.bookingInstruction && (
               <div className="mt-4">
-                <DetailRow label="Special Instructions" value={formData.bookingInstruction} />
+                <DetailRow
+                  label="Special Instructions"
+                  value={formData.bookingInstruction}
+                />
               </div>
             )}
           </div>
 
           <div className="flex flex-col gap-3 pt-4">
-            <Button 
-              text={submitting ? "Processing..." : "Confirm Booking"}
+            <Button
+              text={loading ? "Processing..." : "Confirm Booking"}
               onClick={handleConfirm}
               className="w-full"
-              disabled={submitting}
+              disabled={loading}
             />
           </div>
         </div>

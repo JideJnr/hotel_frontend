@@ -3,10 +3,12 @@ import {
   createRecord as apiCreateRecord,
   updateRecord as apiUpdateRecord,
   deleteRecord as apiDeleteRecord,
-  getTodayRecords,
-  getRecordsByDateRange,
+  
+  getRecordsOnDate,
   getRecordById,
   getUserRecords,
+  getRecordsOnDateRange,
+  checkOut,
 } from '../api/recordApi';
 import type {
   Record,
@@ -19,23 +21,25 @@ import type {
 interface RecordStoreState {
   loading: boolean;
   error: string | null;
-  fetchTodayRecords: (params?: PaginationParams) => Promise<Response>;
-  fetchRecordsByDateRange: (params: DateRangeParams) => Promise<Response>;
+  fetchRecordsOnDateRange: (params: DateRangeParams) => Promise<Response>;
+  fetchRecordsOnDate: (date: any) => Promise<Response>;
   fetchRecordById: (id: string) => Promise<Response>;
   fetchUserRecords: (params?: PaginationParams) => Promise<Response>;
   createRecord: (payload: RecordInput) => Promise<Response>;
   updateRecord: (id: string, payload: RecordInput) => Promise<Response>;
   deleteRecord: (id: string) => Promise<Response>;
+  checkoutRecord: (id: string) => Promise<Response>;
 }
 
 export const useRecordStore = create<RecordStoreState>((set) => ({
   loading: false,
   error: null,
 
-  fetchTodayRecords: async (params) => {
+
+  fetchRecordsOnDateRange: async (params) => {
     set({ loading: true, error: null });
     try {
-      const response = await getTodayRecords(params);
+      const response = await getRecordsOnDateRange(params);
       set({ loading: false });
       return response;
     } catch (err: any) {
@@ -44,10 +48,10 @@ export const useRecordStore = create<RecordStoreState>((set) => ({
     }
   },
 
-  fetchRecordsByDateRange: async (params) => {
+  fetchRecordsOnDate: async (date:string) => {
     set({ loading: true, error: null });
     try {
-      const response = await getRecordsByDateRange(params);
+      const response = await getRecordsOnDate(date);
       set({ loading: false });
       return response;
     } catch (err: any) {
@@ -108,6 +112,18 @@ export const useRecordStore = create<RecordStoreState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await apiDeleteRecord(id);
+      set({ loading: false });
+      return response;
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
+      throw err;
+    }
+  },
+
+    checkoutRecord: async (id:string) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await checkOut(id);
       set({ loading: false });
       return response;
     } catch (err: any) {

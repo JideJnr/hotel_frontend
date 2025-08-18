@@ -6,14 +6,33 @@ import { useRecord } from "../../../../contexts/data/RecordContext";
 import { useEffect } from "react";
 import { useExpenses } from "../../../../contexts/data/ExpensesContext";
 import { getNameInitials } from "../../../../utils/getInitials";
+import { formatDate } from "../../../../utils/utilities";
+import Footer from "../../../../components/footer/footer";
+import { toast } from "react-toastify";
 
 const RecordDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const { fetchRecord , checkOutRecord ,record } = useRecord();
+
+
+  useEffect(() => {
+    fetchRecord(id)
+  }, [id]);
+
+    const handleCheckout = async () => {
+      if (!record?.active) return;
   
-  const { fetchRecord , record } = useRecord();
-        useEffect(() => {
+      try {
+        const res = await checkOutRecord(record.id); // call context checkout
+        if (res?.success) {  
           fetchRecord(id)
-        }, [id]);
+        } else {
+          toast.error(res?.message || "Checkout failed");
+        }
+      } catch (err) {
+        toast.error("Checkout failed");
+      }
+    };
 
 
 
@@ -21,7 +40,7 @@ const RecordDetails = () => {
     <IonPage>
       <FormHeader />
       <BackFormContainer title="Record Details" subtitle="" className="max-w-2xl">
-        <div className="w-full flex flex-col  gap-8 text-gray-800">
+        <div className="w-full flex flex-col  gap-8 text-gray-800 capitalize">
 
           {/* Profile Image and Basic Info */}
           <div className="flex items-center gap-6">
@@ -37,34 +56,42 @@ const RecordDetails = () => {
             </div>
           </div>
 
-                              {/* Current Guest Info */}
+            {record && record.active && 
        
-            <div className="flex  bg-gray-50 border rounded-lg p-4">
-              <h3 className="text-lg font-semibold h-fit my-auto">Active</h3>
-             
-                <div className="  ml-auto ">
-                  <Button text="Check Out" className="w-full" />
+                            
+            <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
+              <h3 className="text-lg font-semibold">Current Stay</h3>
+              <div className="text-sm flex items-center gap-4">
+                <span className="flex w-8 h-8 flex-shrink-0 justify-center items-center size-4 bg-white border border-gray-200 text-[10px] font-semibold uppercase text-gray-600 rounded-full ">
+                            {getNameInitials(record?.customerName|| "Guest")}
+              </span>
+                <p className="font-semibold text-lg">{record?.customerName|| 'Guest'}</p>
+              </div>
+              
+                <div className="grid grid-cols-1 gap-2 mt-2">
+                  <Button text="Check Out" onClick={handleCheckout} className="w-full" />
                 </div>
             
             </div>
-      
+            }
 
           {/* Personal Information */}
           <div className="flex flex-col gap-2">
          
-            <div className="text-sm text-gray-600 grid grid-cols-2 gap-4 px-2">
+            <div className="text-sm text-gray-600 grid grid-cols-1 gap-4 px-2">
 
-             <DetailRow label='Teller' value={record?.tellerName || "N/A"} />
-              <DetailRow label='Lodge Type' value='12th Jan 1990'/>
-              <DetailRow label='Payment Method' value={record?.price||0}/>
+              <DetailRow label='Teller' value={record?.tellerName || "N/A"} />
+              <DetailRow label='Lodge Type' value={record?.requestId}/>
+              <DetailRow label='Payment Method' value={record?.paymentMethodId||0}/>
               <DetailRow label='Price' value={record?.price||0}/>
-              <DetailRow label='Check In Date ' value={record?.checkInDate || "N/A"} />
-              <DetailRow label='Check Out Date' value={record?.checkOutDate || "N/A"} />
+             
               <DetailRow label='Booking Instruction' value={record?.bookingInstructions || "N/A"} />
 
 
             </div>
           </div>
+
+          <Footer/>
 
 
 

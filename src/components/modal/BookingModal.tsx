@@ -1,11 +1,12 @@
 // SearchModal.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonModal,
   IonButton,
 } from "@ionic/react";
 import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms"; 
 import { useAnalytics } from "../../contexts/data/AnalyticsContext"; // adjust path
+import { useRoom } from "../../contexts/data/RoomContext";
 
 // Option type used by FormMultiSelect
 interface Option {
@@ -20,7 +21,7 @@ const options: Option[] = [
   { value: "bookings", label: "Bookings" },
 ];
 
-const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
+const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
   onClose,
 }) => {
@@ -28,7 +29,13 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const [endDate, setEndDate] = useState<string>("");
   const [selected, setSelected] = useState<Option[]>([]);
 
-  const { fetchOverview, loading } = useAnalytics(); // get context fn + loading
+  const { fetchOverview, loading } = useAnalytics();
+  const { fetchRooms, rooms } = useRoom();
+  
+  useEffect(() => {
+    fetchRooms()
+  }, []);
+
 
   const handleSearch = async () => {
     await fetchOverview({
@@ -43,6 +50,14 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const handleClose = () => {
     onClose();
   };
+
+  const options = [
+  { value: "all", label: "All" },
+    ...rooms.map((room) => ({
+      value: room.id,
+      label: `ROOM ${room.name}`,
+    })),
+  ];
 
   return (
     <IonModal isOpen={isOpen} onDidDismiss={handleClose}>
@@ -74,14 +89,25 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
             {/* Category / Tag filters */}
             <div>
-              <FormMultiSelect
-                label=""
-                name="tags"
-                value={selected}
-                onChange={(s) => setSelected(s)}
-                options={options}
-                placeholder="Choose tags…"
-              />
+<FormMultiSelect
+  label=""
+  name="tags"
+  value={selected}
+  onChange={(s) => {
+    if (s.some((opt) => opt.value === "all")) {
+      // If "All" is selected, keep only All
+      setSelected([{ value: "all", label: "All" }]);
+    } else {
+      // If user picks something else while All was selected, remove All
+      const filtered = s.filter((opt) => opt.value !== "all");
+      setSelected(filtered);
+    }
+  }}
+  options={options}
+  placeholder="Choose tags…"
+/>
+
+
             </div>
 
             {/* Footer */}
@@ -105,4 +131,4 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   );
 };
 
-export default AnalyticsModal;
+export default BookingModal;

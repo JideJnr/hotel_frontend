@@ -9,17 +9,11 @@ import {
   FormMultiSelect
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
+import { RoomFormData } from "../step-two/page";
 
 
 
-interface RoomFormData {
-  name: string;
-  description: string;
-  capacity: number | null;
-  amenities: string[];
-  pricePerNight: number | null;
-  isAvailable: boolean;
-}
+
 
 export default function CreateRoomForm() {
   const router = useIonRouter();
@@ -29,7 +23,8 @@ export default function CreateRoomForm() {
     capacity: null,
     amenities: [],
     pricePerNight: null,
-    isAvailable: true
+    oneHour: null,
+    twoHours: null
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof RoomFormData, string>>>({});
@@ -38,7 +33,7 @@ export default function CreateRoomForm() {
     { value: "WiFi", label: "WiFi" },
     { value: "TV", label: "Television" },
     { value: "AC", label: "Air Conditioning" },
-    { value: "Parking", label: "Parking" }
+ 
   ];
 
   const validateForm = () => {
@@ -56,7 +51,6 @@ export default function CreateRoomForm() {
       toast.error("Please fix the errors before submitting.");
       return;
     }
-
     sessionStorage.setItem("roomData", JSON.stringify(formData));
     router.push("/register/room/steptwo", "forward", "push");
   };
@@ -121,10 +115,10 @@ export default function CreateRoomForm() {
           <FormInput
             label="Price - 1 Hour (₦) *"
             type="number"
-            name="pricePerNight"
-            value={formData.pricePerNight ?? ""}
+            name="oneHour"
+            value={formData.oneHour ?? ""}
             onChange={(e) =>
-              setFormData((fd) => ({ ...fd, pricePerNight: Number(e.target.value) }))
+              setFormData((fd) => ({ ...fd, oneHour: Number(e.target.value) }))
             }
             error={errors.pricePerNight}
             required
@@ -134,10 +128,10 @@ export default function CreateRoomForm() {
           <FormInput
             label="Price - 2 Hours (₦) *"
             type="number"
-            name="pricePerNight"
-            value={formData.pricePerNight ?? ""}
+            name="twoHours"
+            value={formData.twoHours ?? ""}
             onChange={(e) =>
-              setFormData((fd) => ({ ...fd, pricePerNight: Number(e.target.value) }))
+              setFormData((fd) => ({ ...fd, twoHours: Number(e.target.value) }))
             }
             error={errors.pricePerNight}
             required

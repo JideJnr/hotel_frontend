@@ -5,30 +5,24 @@ import { toast } from "react-toastify";
 import {
   FormHeader,
   BackFormContainer,
-  Option,
   FormTextarea
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import FormSelect from "../../FormSelect";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";
 import { useRoom } from "../../../../contexts/data/RoomContext";
-
-
-
+import { paymentOptions , requestOption } from "../../../../utils/enum";
 
 type Errors = {
   customer?: string;
   roomNumber?: string;
 };
 
-type Client = { id: number; name: string; };
-type Room   = { id: number; };
-
 export default function SalesStepOne() {
   const router = useIonRouter();
 
   const { fetchCustomers , customers } = useCustomer();
-  const { fetchRooms , rooms:availableRooms } = useRoom();
+  const { fetchAvailableRooms , availableRooms } = useRoom();
   const [formData, setFormData] = useState<SalesData>({
     customerId: null,
     customerName: null,
@@ -41,23 +35,12 @@ export default function SalesStepOne() {
     bookingInstruction: "",
   });
   const [errors, setErrors] = useState<Errors>({});
-  const [clients, setClients] = useState<Client[]>([]);
-  const [rooms, setRooms]     = useState<Room[]>([]);
-  const paymentOptions: Option[] = [
-    { value: "cash",     label: "Cash"     },
-    { value: "card",     label: "Card"     },
-    { value: "transfer", label: "Transfer" },
-  ];
 
-  const requestOption: Option[] = [
-    { value: "oneHour",     label: "Short Rest (One Hour)"     },
-    { value: "twoHours",     label: "Short Rest (Two Hours)"     },
-    { value: "lodge", label: "Lodge" },
-  ];
+
 
   useEffect(() => {
     fetchCustomers();
-    fetchRooms();
+    fetchAvailableRooms();
   }, []);
 
   const handleNext = () => {
@@ -74,8 +57,7 @@ export default function SalesStepOne() {
       toast.error("Please fix the errors before continuing.");
     }
   };
-
-  console.log(availableRooms)
+  
   return (
     <IonPage>
       <FormHeader/>
@@ -98,7 +80,7 @@ export default function SalesStepOne() {
     customerId: opt ? opt.value : null,
     customerName: opt ? opt.label : null
   }))}
-  options={customers.map(c => ({ value: c.id, label: c.fullName }))}
+  options={customers.map(c => ({ value: c.id, label: c.userName }))}
   placeholder="Select a customer"
   error={errors.customer}
   required

@@ -13,6 +13,18 @@ export const getRecordCountForDateRange = async (startDate: string, endDate: str
   return res.data;
 };
 
+export const getBalanceForDate = async (date: string) => {
+  const res = await api.get(`/computations/balance/${date}`);
+  return res.data;
+};
+
+export const getBalanceForDateRange = async (startDate: string, endDate: string) => {
+  const res = await api.get(`/computations/balance/range`, {
+    params: { startDate, endDate },
+  });
+  return res.data;
+};
+
 // ===== Rooms =====
 export const getActiveRoomCount = async () => {
   const res = await api.get(`/computations/room-count/active`);

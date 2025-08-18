@@ -34,7 +34,7 @@ const Setting = () => {
           </div>
 
           <div className="mx-auto w-fit">
-            <p className="font-medium  text-lg text-black titlecase ">{user?.fullName}</p>
+            <p className="font-medium  text-lg text-black capitalize ">{user?.fullName}</p>
           </div>
         </div>
 

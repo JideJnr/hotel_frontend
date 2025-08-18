@@ -11,6 +11,7 @@ interface CustomerData {
   phone: string;
   email?: string;
   address: string;
+  userName: string
 }
 
 const ClientStepTwo = () => {
@@ -46,7 +47,8 @@ const ClientStepTwo = () => {
         fullName: formData.fullName,
         phone: formData.phone,
         email: formData.email,
-        address: formData.address
+        address: formData.address,
+        userName: formData.userName
       };
       
       await createCustomer(customerData);
@@ -76,6 +78,7 @@ const ClientStepTwo = () => {
         <div className="space-y-6">
         <div className="space-y-4">
           <DetailRow label="Full Name" value={formData.fullName} />
+          <DetailRow label="Username" value={formData.userName} />
           <DetailRow label="Phone Number" value={formData.phone} />
           {formData.email && <DetailRow label="Email" value={formData.email} />}
           <DetailRow label="Address" value={formData.address} />

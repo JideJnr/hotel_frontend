@@ -9,6 +9,7 @@ const ClientStepOne = () => {
 
   const [formData, setFormData] = useState({
     fullName: '',
+    userName: '',
     phone: '',
     address: '',
     email: ''
@@ -16,6 +17,7 @@ const ClientStepOne = () => {
 
   const [errors, setErrors] = useState({
     fullName: '',
+    userName: '',
     phone: '',
     address: '',
     email: ''
@@ -28,6 +30,7 @@ const ClientStepOne = () => {
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
     if (!formData.address.trim()) newErrors.address = "Address is required";
+    if (!formData.userName.trim()) newErrors.userName = "Username is required";
     
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
@@ -76,6 +79,15 @@ const ClientStepOne = () => {
               required
             />
 
+            <FormInput
+              label="Username *"
+              name="userName"
+              value={formData.userName}
+              onChange={handleChange}
+              placeholder="John Doe"
+              error={errors.userName}
+              required
+            />
             <FormInput
               label="Phone Number *"
               name="phone"

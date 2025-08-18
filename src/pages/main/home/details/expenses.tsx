@@ -4,6 +4,7 @@ import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import { useEffect } from "react";
 import { useExpenses } from "../../../../contexts/data/ExpensesContext";
+import Footer from "../../../../components/footer/footer";
 
 const ExpensesDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -64,12 +65,10 @@ const ExpensesDetails = () => {
               <DetailRow label='Date' value='Nigerian'/>
             </div>
 
-            <div>
-              <img />
-            </div>
+          
           </div>
 
-
+          <Footer/>
         </div>
       </BackFormContainer>
     </IonPage>

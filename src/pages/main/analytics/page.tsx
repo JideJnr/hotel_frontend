@@ -56,19 +56,6 @@ const Analytics = () => {
           <DashboardTile title="Customer Registered" value={2} delta={1} />
         </div>
 
-        {expenses.length === 0 ? (
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-white">
-            <IonIcon src="assets/svgs/announce.svg" />
-            <div className="overflow-hidden whitespace-nowrap flex-1">
-              <div className="animate-marquee">
-                <p className="text-sm font-medium text-dark">
-                  You have not registered any expense today
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : null}
-
         <div className="space-y-4">
           <p className="text-black text-xl">Room Sales</p>
           {record.map((event, index) => (
@@ -84,6 +71,20 @@ const Analytics = () => {
         {expenses.length > 0 && (
           <div className="space-y-4">
             <p className="text-black text-xl">Expenses</p>
+            {expenses.map((expenses, index) => (
+              <div key={index} onClick={() => router.push(`/expenses/a`)}>
+                <ScheduleCard
+                  name={expenses.expenseType}
+                  details={`N ${expenses.price}`}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {expenses.length > 0 && (
+          <div className="space-y-4">
+            <p className="text-black text-xl">Customer</p>
             {expenses.map((expenses, index) => (
               <div key={index} onClick={() => router.push(`/expenses/a`)}>
                 <ScheduleCard

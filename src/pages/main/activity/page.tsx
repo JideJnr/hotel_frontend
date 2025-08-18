@@ -1,30 +1,31 @@
 import { IonContent } from "@ionic/react";
 import { useEffect } from "react";
 import { useActivity } from "../../../contexts/data/ActivityContext";
+import { formatDate } from "../../../utils/utilities";
+import Footer from "../../../components/footer/footer";
 
-const Activity = () => {
-  const user = {
-    role: "admin",
-  };
-
-  const { fetchActivities, activity, loading } = useActivity();
+const activities = () => {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const { fetchActivities, activities, loading } = useActivity();
 
   useEffect(() => {
     fetchActivities();
   }, []);
 
+  console.log( activities)
+
   return (
-    <div className="p-4 bg-white text-gray-800 w-full h-full flex flex-col gap-4">
+    <div className="p-4 bg-gray-100 text-gray-800 w-full h-full flex flex-col gap-4 overflow-y-auto">
       <div>Filters</div>
 
       {loading ? (
         <div className="text-gray-500 text-sm">Loading...</div>
-      ) : activity?.length > 0 ? (
-        activity?.map((act, index) => (
+      ) : activities?.length > 0 ? (
+        activities?.map((act, index) => (
           <div key={index} className="grid grid-cols-12 gap-x-3">
-            <div className="col-span-3 text-end">
-              <span className="text-xs text-gray-500">
-                {act.time?.toDate().toLocaleString()}
+            <div className="col-span-3 text-end my-auto ">
+              <span className="text-xs text-gray-500 ">
+                {formatDate(act.createdAt)}
               </span>
             </div>
             <div className="col-span-1 relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200">
@@ -34,15 +35,15 @@ const Activity = () => {
             </div>
             <div className="col-span-8 p-1.5 pb-4">
               <p className="flex gap-x-1.5 font-semibold text-gray-800">
-                {user.role === "admin" ? act.hostName : "You"}{" "}
-                {act.details === "User Created" && "Created Your Profile"}
-                {act.details === "Ran Expenses" && "Ran Expenses for "}
-                {act.details === "Sold Room" &&
+                {user.role === "ADMIN" ? act.hostName : "You"}{" "}
+                {act.type === "User Created" && "Created Your Profile"}
+                {act.type === "Ran Expenses" && "Ran Expenses for "}
+                {act.type === "record_created" &&
                   `Sold room ${act.room} for N${act.price}`}
               </p>
 
-              {act.note && (
-                <p className="mt-1 text-sm text-gray-600">{act.note}</p>
+              {act.description && (
+                <p className="mt-1 text-sm text-gray-600">{act.description}</p>
               )}
 
               {act.userImg ? (
@@ -74,8 +75,9 @@ const Activity = () => {
       ) : (
         <div className="text-gray-500 text-sm">No activities found</div>
       )}
+      <Footer className='!bg-gray-100 mt-auto'/>
     </div>
   );
 };
 
-export default Activity;
+export default activities;
