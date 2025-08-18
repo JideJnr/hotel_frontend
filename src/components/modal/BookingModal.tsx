@@ -58,7 +58,7 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
   const handleCloseModal = () => {
     onClose();
-    router.goBack();
+    
   };
 
 

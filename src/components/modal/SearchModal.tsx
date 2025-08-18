@@ -54,7 +54,7 @@ const SearchModal: React.FC<{
     router.push(`/customer/${customer.id}`, "forward");
   };
 
-    const handleCloseModal = () => {
+  const handleCloseModal = () => {
     onClose();
     
   };
