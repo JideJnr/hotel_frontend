@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   IonModal,
   IonButton,
+  useIonRouter,
 } from "@ionic/react";
 import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms"; 
 import { useAnalytics } from "../../contexts/data/AnalyticsContext"; // adjust path
@@ -24,6 +25,7 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
   onClose,
 }) => {
+  const router = useIonRouter();
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [selected, setSelected] = useState<Option[]>([]);
@@ -31,21 +33,28 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const { fetchOverview, loading } = useAnalytics(); // get context fn + loading
 
   const handleSearch = async () => {
-    await fetchOverview({
+    const response = await fetchOverview({
       startDate,
       endDate,
-      category: selected.find((s) => s.value === "expenses")?.value as string, 
-      roomType: undefined, // you can extend this later if needed
+      category: selected
     });
-    onClose();
+    if (response.success) {
+      onClose();
+    }
+    
   };
 
   const handleClose = () => {
+      router.goBack();
+  };
+
+    const handleCloseModal = () => {
     onClose();
+    
   };
 
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={handleClose}>
+    <IonModal isOpen={isOpen} onDidDismiss={handleCloseModal}>
       <div className="bg-gray-50 min-h-screen flex flex-col ">
         {/* Form header (back button) */}
         <FormHeader className="mb-4 bg-white rounded-lg" />

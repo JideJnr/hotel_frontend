@@ -12,14 +12,17 @@ export const getRecordCountForDateRange = async (startDate: string, endDate: str
   });
   return res.data;
 };
-
+// ✅ Single-day balance
 export const getBalanceForDate = async (date: string) => {
-  const res = await api.get(`/computations/balance/${date}`);
+  const res = await api.get(`/computations/balance`, {
+    params: { startDate: date }   // backend expects startDate, not "date"
+  });
   return res.data;
 };
 
+// ✅ Date-range balance
 export const getBalanceForDateRange = async (startDate: string, endDate: string) => {
-  const res = await api.get(`/computations/balance/range`, {
+  const res = await api.get(`/computations/balance`, {
     params: { startDate, endDate },
   });
   return res.data;

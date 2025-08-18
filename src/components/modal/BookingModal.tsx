@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   IonModal,
   IonButton,
+  useIonRouter,
 } from "@ionic/react";
 import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms"; 
 import { useAnalytics } from "../../contexts/data/AnalyticsContext"; // adjust path
@@ -25,6 +26,7 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
   onClose,
 }) => {
+  const router = useIonRouter();
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [selected, setSelected] = useState<Option[]>([]);
@@ -38,18 +40,27 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
 
   const handleSearch = async () => {
-    await fetchOverview({
+    const response = await fetchOverview({
       startDate,
       endDate,
-      category: selected.find((s) => s.value === "expenses")?.value as string, 
-      roomType: undefined, // you can extend this later if needed
+      category: selected 
+     
     });
-    onClose();
+    if (response.success) {
+      onClose();
+    }
+  
   };
 
   const handleClose = () => {
-    onClose();
+    router.goBack();
   };
+
+  const handleCloseModal = () => {
+    onClose();
+    router.goBack();
+  };
+
 
   const options = [
   { value: "all", label: "All" },
@@ -60,7 +71,7 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   ];
 
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={handleClose}>
+    <IonModal isOpen={isOpen} onDidDismiss={handleCloseModal}>
       <div className="bg-gray-50 min-h-screen flex flex-col ">
         {/* Form header (back button) */}
         <FormHeader className="mb-4 bg-white rounded-lg" />

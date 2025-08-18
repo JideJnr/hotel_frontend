@@ -16,9 +16,9 @@ interface CustomerData {
 
 const ClientStepTwo = () => {
   const router = useIonRouter();
-  const { createCustomer } = useCustomer();
+  const { createCustomer ,loading} = useCustomer();
   const [formData, setFormData] = useState<CustomerData | null>(null);
-  const [loading, setLoading] = useState(false);
+ 
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

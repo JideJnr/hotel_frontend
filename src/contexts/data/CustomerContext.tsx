@@ -57,7 +57,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       if (response?.success && response.data) {
         toast.success('Customer created successfully');
         sessionStorage.removeItem("customerData");
-        router.push(`/customer/${response?.data.id}`, 'forward');
+        router.push(`/customer/${response?.data.id}`, 'root');
         return response;
       } else {
         toast.error(`Creation failed: ${response.message}`);

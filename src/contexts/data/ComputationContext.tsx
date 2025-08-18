@@ -1,23 +1,30 @@
 import { createContext, useContext, ReactNode, useState, useCallback } from "react";
 import { useComputationStore } from "../../services/stores/computationStore";
 
-
 interface ComputationContextType {
-  newCustomerCount: number | null;
+  balance: number | null;
   recordCount: number | null;
+  totalRoomCount: number | null;
   activeRoomCount: number | null;
-  roomCount: number | null; 
-  customerCount: number | null;
+  totalCustomerCount: number | null;
+  activeCustomerCount: number | null;
+  newCustomerCount: number | null;
   expensesCount: number | null;
   loading: boolean;
   error: string | null;
 
-  fetchBalance: () => Promise<void>;
-  fetchActiveRooms: () => Promise<void>;
-  fetchTotalRooms: () => Promise<void>;
-  fetchTotalSales: () => Promise<void>;
-  fetchActiveUsers: () => Promise<void>;
-  fetchTotalExpenses: () => Promise<void>;
+  fetchRecordCountOnDate: (date: string) => Promise<void>;
+  fetchRecordCountForDateRange: (range: any) => Promise<void>;
+  fetchActiveRoomsCount: () => Promise<void>;
+  fetchTotalRoomsCount: () => Promise<void>;
+  fetchActiveCustomersCount: () => Promise<void>;
+  fetchTotalCustomersCount: () => Promise<void>;
+  fetchNewCustomersOnDateCount: (date: string) => Promise<void>;
+  fetchNewCustomersOnDateRangeCount: () => Promise<void>;
+  fetchExpensesCountOnDate: (date: string) => Promise<void>;
+  fetchExpensesCountOnDateRange: (range: any) => Promise<void>;
+  fetchBalanceOnDate: (date: string) => Promise<void>;
+  fetchBalanceOnDateRange: (range: any) => Promise<void>;
 }
 
 const ComputationContext = createContext<ComputationContextType | undefined>(undefined);
@@ -33,137 +40,84 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [expensesCount, setExpensesCount] = useState<number | null>(null);
 
   const {
-      loading,
-      error,
-      fetchRecordCountForDate: storeFetchRecordCountForDate,
-      fetchRecordCountForDateRange: storeFetchRecordCountForDateRange,
-      fetchActiveRoomCount: storeFetchActiveRoomCount,
-      fetchAllRoomCount: storeFetchAllRoomCount,
-      fetchAllCustomerCount: storeFetchAllCustomerCount,
-      fetchCustomerRegisteredOnDate: storeFetchCustomerRegisteredOnDate,
-      getCustomerRegisteredOnDateRange: storeFetchCustomerRegisteredOnDateRange,
-      fetchActiveCustomerCount: storeFetchActiveCustomerCount,
-      fetchExpensesCountOnDate: storeFetchExpensesCountOnDate,
-      fetchExpensesCountOnDateRange: storeFetchExpensesCountOnDateRange,
-      fetchBookingCountOnDate: storeFetchBookingCountOnDate,
-      fetchBookingCountOnDateRange: storeFetchBookingCountOnDateRange,
-      fetchBalanceOnDate: storeFetchBalanceOnDate,
-      fetchBalanceOnDateRange: storeFetchBalanceOnDateRange,
-      
+    loading,
+    error,
+    fetchRecordCountForDate,
+    fetchRecordCountForDateRange,
+    fetchActiveRoomCount,
+    fetchAllRoomCount,
+    fetchAllCustomerCount,
+    fetchCustomerRegisteredOnDate,
+    getCustomerRegisteredOnDateRange,
+    fetchActiveCustomerCount,
+    fetchExpensesCountOnDate,
+    fetchExpensesCountOnDateRange,
+    fetchBalanceOnDate,
+    fetchBalanceOnDateRange,
   } = useComputationStore();
 
-  const wrappedFetchRecordCountForDate = useCallback(async (date:string) => {
-    try {
-      const res = await storeFetchRecordCountForDate(date);
-      setRecordCount(res?.data?.count || 0);
-    } catch (err) {
-      
-    } finally {
-    }
-  }, []);
+  // ---- WRAPPERS ----
+  const wrappedFetchRecordCountForDate = useCallback(async (date: string) => {
+    const res = await fetchRecordCountForDate(date);
+    setRecordCount(res?.data?.count || 0);
+  }, [fetchRecordCountForDate]);
 
-  const wrappedFetchRecordCountForDateRange = useCallback(async (date:string) => {
-    try {
-      const res = await storeFetchRecordCountForDateRange(date);
-      setRecordCount(res?.data?.count || 0);
-    } catch (err) {
-
-    } finally {
-    }
-  
-  }, []);
+  const wrappedFetchRecordCountForDateRange = useCallback(async (range: any) => {
+    const res = await fetchRecordCountForDateRange(range);
+    setRecordCount(res?.data?.count || 0);
+  }, [fetchRecordCountForDateRange]);
 
   const wrappedFetchActiveRooms = useCallback(async () => {
-    try {
-      const res = await storeFetchActiveRoomCount();
-      setActiveRoomCount(res?.data.count || 0);
-    } catch (err) {
-    } finally {
-    }
-  }, []);
+    const res = await fetchActiveRoomCount();
+    setActiveRoomCount(res?.data?.count || 0);
+  }, [fetchActiveRoomCount]);
 
   const wrappedFetchTotalRooms = useCallback(async () => {
-    try {
-      const res = await storeFetchAllRoomCount();
-      setTotalRoomCount(res?.data.count || 0);
-    } catch (err) {
-    } finally {
-    }
-  }, []);
-  
-  const wrappedFetchActiveCustomers = useCallback(async () => {
-    try {
-      const res = await storeFetchActiveCustomerCount();
-      setActiveCustomerCount(res?.data.count || 0);
-    } catch (err) {
-    } finally {
-    }
-  }, []);
+    const res = await fetchAllRoomCount();
+    setTotalRoomCount(res?.data?.count || 0);
+  }, [fetchAllRoomCount]);
 
-  const wrappedFetchNewCustomersOnDateCount = useCallback(async (date:string) => {
-    try {
-      const response = await storeFetchCustomerRegisteredOnDate(date);
-      setNewCustomerCount( response?.data?.count);
-    } catch (err) {
-    } finally {
-    }
-  }, []);
+  const wrappedFetchActiveCustomers = useCallback(async () => {
+    const res = await fetchActiveCustomerCount();
+    setActiveCustomerCount(res?.data?.count || 0);
+  }, [fetchActiveCustomerCount]);
+
+  const wrappedFetchNewCustomersOnDateCount = useCallback(async (date: string) => {
+    const res = await fetchCustomerRegisteredOnDate(date);
+    setNewCustomerCount(res?.data?.count || 0);
+  }, [fetchCustomerRegisteredOnDate]);
 
   const wrappedFetchNewCustomersOnDateRangeCount = useCallback(async () => {
-    try {
-      const res = await storeFetchActiveCustomerCount();
-      setActiveCustomerCount(res?.data.count || 0);
-    } catch (err) {
-    } finally {
-    }
-  }, []);
+    const res = await getCustomerRegisteredOnDateRange();
+    setTotalCustomerCount(res?.data?.count || 0);
+  }, [getCustomerRegisteredOnDateRange]);
 
-  const wrappedFetchTotalExpensesOnDateCount = useCallback(async () => {
-    try {
-      const res = await storeFetchExpensesCountOnDate();
-      setExpensesCount(res?.data.count || 0);
-    } catch (err) {
-    } finally {
-    }
-  }, []);
+  const wrappedFetchExpensesOnDate = useCallback(async (date: string) => {
+    const res = await fetchExpensesCountOnDate(date);
+    setExpensesCount(res?.data?.count || 0);
+  }, [fetchExpensesCountOnDate]);
 
-  const wrappedFetchBalanceOnDate = async (date:string) => {
-    try {
-      const response = await storeFetchBalanceOnDate(date);
-      console.log(response);
-      setBalance(response?.data?.totalBalance || 0);
-    } catch (err) {
-      console.error("Error fetching balance:", err);
-    }
-  };
+  const wrappedFetchExpensesOnDateRange = useCallback(async (range: any) => {
+    const res = await fetchExpensesCountOnDateRange(range);
+    setExpensesCount(res?.data?.count || 0);
+  }, [fetchExpensesCountOnDateRange]);
 
-  const wrappedFetchBalanceOnDateRange = async (payload:any) => {
-    try {
-      const response = await wrappedFetchRecordCountForDateRange(payload);
-      setBalance(response?.data?.totalBalance || 0);
+  const wrappedFetchBalanceOnDate = useCallback(async (startDate: string) => {
+    const res = await fetchBalanceOnDate(startDate);
+    setBalance(res?.data?.totalBalance || 0);
+  }, [fetchBalanceOnDate]);
 
-    } catch (err) {
-      console.error("Error fetching balance:", err);
-    }
-  };
+  const wrappedFetchBalanceOnDateRange = useCallback(async (range: any) => {
+    const res = await fetchBalanceOnDateRange(range);
+    setBalance(res?.data?.totalBalance || 0);
+  }, [fetchBalanceOnDateRange]);
 
-  const wrappedFetchTotalCustomers = async () => {
-    try {
-      const response = await storeFetchAllCustomerCount();
-      setTotalCustomerCount(response?.data?.count || 0);
-    } catch (err) {
-      console.error("Error fetching active users:", err);
-    }
-  };
-  
-  const wrappedFetchTotalExpensesOnDate = async () => {
-    try {
-      await wrappedFetchTotalExpenses();
-    } catch (err) {
-      console.error("Error fetching total expenses:", err);
-    }
-  };
+  const wrappedFetchTotalCustomers = useCallback(async () => {
+    const res = await fetchAllCustomerCount();
+    setTotalCustomerCount(res?.data?.count || 0);
+  }, [fetchAllCustomerCount]);
 
+  // ---- PROVIDER ----
   return (
     <ComputationContext.Provider
       value={{
@@ -177,17 +131,17 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
         newCustomerCount,
         loading,
         error,
-        fetchRecordCountOnDate:wrappedFetchRecordCountForDate,
-        fetchRecordCountForDateRange:wrappedFetchRecordCountForDateRange,
+        fetchRecordCountOnDate: wrappedFetchRecordCountForDate,
+        fetchRecordCountForDateRange: wrappedFetchRecordCountForDateRange,
         fetchActiveRoomsCount: wrappedFetchActiveRooms,
         fetchTotalRoomsCount: wrappedFetchTotalRooms,
         fetchActiveCustomersCount: wrappedFetchActiveCustomers,
+        fetchTotalCustomersCount: wrappedFetchTotalCustomers,
         fetchNewCustomersOnDateCount: wrappedFetchNewCustomersOnDateCount,
         fetchNewCustomersOnDateRangeCount: wrappedFetchNewCustomersOnDateRangeCount,
-        fetchTotalCustomersCount: wrappedFetchTotalCustomers,
-        fetchExpensesCountOnDate: wrappedFetchTotalExpensesOnDateCount,
+        fetchExpensesCountOnDate: wrappedFetchExpensesOnDate,
+        fetchExpensesCountOnDateRange: wrappedFetchExpensesOnDateRange,
         fetchBalanceOnDate: wrappedFetchBalanceOnDate,
-        fetchTotalExpensesOnDate: wrappedFetchTotalExpensesOnDate,
         fetchBalanceOnDateRange: wrappedFetchBalanceOnDateRange,
       }}
     >

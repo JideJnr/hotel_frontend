@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import {
   FormHeader,
   BackFormContainer,
+
   FormTextarea
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
@@ -148,7 +149,7 @@ export default function SalesStepOne() {
           <FormTextarea
             label="Booking Note"
             name="bookingInstruction"
-            value={formData.bookingInstruction}
+            value={formData.bookingInstruction|| ''}
             onChange={e => setFormData(fd => ({
               ...fd,
               bookingInstruction: e.target.value

@@ -42,6 +42,7 @@ interface SalesData  {
   roomNumberId?: string| null;
   paymentMethodId?: string| null;
   requestId?: string | null,
+  requestLabel?: string | null,
   bookingInstruction?: string;
 };
 
@@ -258,19 +259,17 @@ interface RecordContextType {
   fetchRecord: (id: string) => Promise<void>;
 }
 
-interface Room {
-  id: string;
-  // Add other room properties here
-}
 
 interface RoomContextType {
   rooms: Room[];
   currentRoom: Room | null;
+  availableRooms: Room[];
   loading: boolean;
   error: string | null;
   createRoom: (payload: any) => Promise<Response>;
   updateRoom: (id: string, payload: any) => Promise<Response>;
   fetchRooms: () => Promise<Response>;
+  fetchAvailableRooms: () => Promise<Response>;
   fetchRoom: (id: string) => Promise<Response>;
 }
 
@@ -305,26 +304,3 @@ interface UpdateBookingInput {
   bookingInstruction?: string;
 }
 
-interface PaginatedBookingsResponse {
-  success: boolean;
-  message: string;
-  data: {
-    count: number;
-    bookings: Booking[];
-    nextPage?: {
-      lastCreatedAt: string;
-      lastId: string;
-    };
-  };
-}
-
-interface SingleBookingResponse {
-  success: boolean;
-  message: string;
-  data: Booking;
-}
-
-interface BasicResponse {
-  success: boolean;
-  message: string;
-}

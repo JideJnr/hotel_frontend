@@ -9,6 +9,7 @@ import { getNameInitials } from "../../../../utils/getInitials";
 import { formatDate } from "../../../../utils/utilities";
 import Footer from "../../../../components/footer/footer";
 import { toast } from "react-toastify";
+import { formatNaira } from "../../../../utils/formatNaira";
 
 const RecordDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -83,7 +84,7 @@ const RecordDetails = () => {
               <DetailRow label='Teller' value={record?.tellerName || "N/A"} />
               <DetailRow label='Lodge Type' value={record?.requestId}/>
               <DetailRow label='Payment Method' value={record?.paymentMethodId||0}/>
-              <DetailRow label='Price' value={record?.price||0}/>
+              <DetailRow label='Price' value={formatNaira(record?.price||0)}/>
              
               <DetailRow label='Booking Instruction' value={record?.bookingInstructions || "N/A"} />
 

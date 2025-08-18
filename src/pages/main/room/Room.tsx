@@ -13,7 +13,7 @@ import Footer from "../../../components/footer/footer";
 
 const Room = () => {
   const router = useIonRouter();
-  const [activeTab, setActiveTab] = useState<"all" | "active">("all");
+  const [activeTab, setActiveTab] = useState<"available" | "active">("available");
 
   const { fetchRooms, rooms } = useRoom();
   const {fetchTotalRoomsCount, fetchActiveRoomsCount, totalRoomCount, activeRoomCount } = useComputation();
@@ -28,14 +28,20 @@ const Room = () => {
   const handleRoomClick = (id?: string) => id && router.push(`/room/${id}`);
 
   const TABS = [
-    { value: "all", label: "All Rooms" },
-    { value: "active", label: "Active Rooms" },
+    { value: "available", label: "Available" },
+    { value: "active", label: "Active" },
   ] as const;
 
-  const filteredRooms =
-    activeTab === "active"
-      ? rooms.filter((room) => room.active) // Adjust filter condition
-      : rooms;
+
+const filteredRooms = (() => {
+  switch (activeTab) {
+    case "active":
+      return rooms.filter((room) => room.active);
+    default: // "all"
+      return rooms.filter((room) => !room.active); // 👈 correct usage
+  }
+})();
+
 
   return (
 
@@ -65,7 +71,7 @@ const Room = () => {
         <IonSegment
           value={activeTab}
           mode="md"   // 👈 force Material Design look (white + blue)
-          onIonChange={(e) => setActiveTab(e.detail.value as "all" | "active")}
+          onIonChange={(e) => setActiveTab(e.detail.value as "available" | "active")}
           className="    rounded-lg"
         >
           {TABS.map(({ value, label }) => (

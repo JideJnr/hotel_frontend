@@ -4,7 +4,7 @@ import React from 'react';
 
 interface DashboardCardProps {
   title: string;
-  value: number;
+  value: number|string;
   delta: number;
   subtitle?: string;
 }

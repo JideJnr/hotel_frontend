@@ -54,6 +54,10 @@ const SearchModal: React.FC<{
     router.push(`/customer/${customer.id}`, "forward");
   };
 
+    const handleCloseModal = () => {
+    onClose();
+    
+  };
   return (
     <IonModal isOpen={isOpen} onDidDismiss={onClose}>
       <div className="bg-gray-50 min-h-screen flex flex-col">

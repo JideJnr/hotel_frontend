@@ -18,7 +18,7 @@ interface AnalyticsContextType {
     startDate?: string;
     endDate?: string;
     category?: string[];
-  }) => Promise<void>;
+  }) => Promise<Response>;
 }
 
 const AnalyticsContext = createContext<AnalyticsContextType | undefined>(undefined);
@@ -35,9 +35,10 @@ export const AnalyticsProvider: React.FC<{ children: ReactNode }> = ({ children 
   }) => {
     try {
       const response = await getOverviewData(params);
-      if (response?.data) {
+      if (response?.success) {
         setOverview(response.data); // Save overview response into local state
       }
+      return response;
     } catch (err) {
       toast.error('Failed to fetch analytics overview');
       console.error('Fetch error:', err);

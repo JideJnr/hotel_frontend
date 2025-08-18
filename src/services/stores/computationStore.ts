@@ -157,10 +157,10 @@ export const useComputationStore = create<ComputationState>((set) => ({
     }
   },
 
-  fetchBalanceOnDate: async (date: string) => {
+  fetchBalanceOnDate: async (startDate: string) => {
     set({ loading: true, error: null });
     try {
-      const response = await getBalanceForDate(date);
+      const response = await getBalanceForDate(startDate);
       set({ loading: false });
       return response;
     } catch (err: any) {

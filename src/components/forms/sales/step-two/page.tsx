@@ -7,7 +7,6 @@ import {
   BackFormContainer
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
-import { useRecordStore } from "../../../../services/stores/recordStore";
 import { useRecord } from "../../../../contexts/data/RecordContext";
 
 const SalesStepTwo = () => {

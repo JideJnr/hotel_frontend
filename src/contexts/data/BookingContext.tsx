@@ -38,6 +38,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       if (response.success) {
         setBookings(response.data);
       }
+      return response;
     } catch (error) {
       toast.error('Failed to fetch bookings by date');
       console.error('Fetch error:', error);
@@ -52,6 +53,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       if (response.success) {
         setBookings(response.data);
       }
+      return response;
     } catch (error) {
       toast.error('Failed to fetch bookings by date range');
       console.error('Fetch error:', error);
@@ -66,10 +68,11 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       if (response.success) {
         setBooking(response.data);
       }
+      return response;
     } catch (error) {
       toast.error(`Failed to fetch booking ${id}`);
       console.error('Fetch error:', error);
-      router.push(`/`, 'forward');
+  
     } finally {
       
     }
@@ -81,7 +84,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       if (response.success) {
         sessionStorage.removeItem("bookingData");
         toast.success('Booking created successfully');
-        router.push(`/bookings/${response.data.id}`, 'forward');
+        router.push(`/bookings/${response.data.bookingId}`, 'root');
       } else {
         toast.error(`Creation failed: ${response.message}`);
       }
@@ -95,10 +98,9 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
     try {
       const response = await store.updateBooking(id, data);
       if (response.success) {
-        setBookings(prev => prev.map(b => b.id === id ? response.data : b));
-        setBooking(prev => prev?.id === id ? response.data : prev);
+        sessionStorage.removeItem("bookingData");
+        router.push(`/bookings/${id}`, 'root');
         toast.success('Booking updated successfully');
-        router.push(`/bookings/${id}`, 'forward');
       } else {
         toast.error(`Update failed: ${response.message}`);
       }
@@ -115,10 +117,9 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
      
       const response = await store.cancelBooking(id);
       if (response.success) {
-        setBookings(prev => prev.filter(b => b.id !== id));
-        setBooking(prev => prev?.id === id ? null : prev);
+        
         toast.success('Booking cancelled successfully');
-        router.push('/bookings', 'forward');
+        router.push(`/bookings/${id}`, 'forward');
       } else {
         toast.error(`Cancellation failed: ${response.message}`);
       }

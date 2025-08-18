@@ -18,6 +18,9 @@ const UserDetails = () => {
     fetchCustomer(id)
   }, [id]);
 
+  const bookings = customer?.bookings || [];
+
+
   return (
     <IonPage>
       <FormHeader />
@@ -43,23 +46,23 @@ const UserDetails = () => {
               <span>{customer?.phone}</span>
             </div>
           </div>
-<div className="flex items-center gap-4 w-full">
-  {/* Edit Button (secondary / gray outline) */}
-  <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2">
-    <Edit3 size={16} />
-    Edit
-  </a>
 
-  {/* Contact Button (primary / filled blue) */}
-  <a
-    href="tel:+2348105200066"
-    className="flex items-center justify-center gap-2 px-4 py-2 text-black border border-gray-800 rounded-lg text-sm font-medium hover:bg-blue-700 transition w-1/2"
-  >
-    <Phone size={16} />
-    Contact
-  </a>
-</div>
+          <div className="flex items-center gap-4 w-full">
+            {/* Edit Button (secondary / gray outline) */}
+            <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2">
+              <Edit3 size={16} />
+              Edit
+            </a>
 
+            {/* Contact Button (primary / filled blue) */}
+            <a
+              href="tel:+2348105200066"
+              className="flex items-center justify-center gap-2 px-4 py-2 text-black border border-gray-800 rounded-lg text-sm font-medium hover:bg-blue-700 transition w-1/2"
+            >
+              <Phone size={16} />
+              Contact
+            </a>
+          </div>
 
           {/* Personal Information */}
           <div className="flex flex-col gap-2">
@@ -74,8 +77,6 @@ const UserDetails = () => {
 
             </div>
           </div>
-
-
 
           {/* Current Guest Info */}
           {customer?.active && (
@@ -92,20 +93,28 @@ const UserDetails = () => {
             </div>
           )}
 
-                    {/* Lodge History */}
-          <div className="flex flex-col gap-2   px-2">
+          {/* Lodge History */}
+          <div className="flex flex-col gap-2 px-2">
             <h3 className="text-lg font-semibold text-gray-600">Lodge History</h3>
-            <div
-              key={customer?.id}
-              className="flex justify-between items-center px-4 py-2 border rounded-md text-sm"
-            >
-              <div>
-                <p className="font-semibold">{customer?.roomNumber}</p>
-                <p className="text-gray-500">Host: {customer?.hostName}</p>
-              </div>
-              <div className="text-xs text-gray-500">{customer?.date}</div>
-            </div>
+
+            {bookings?.length > 0 ? (
+              bookings.map((booking:any) => (
+                <div
+                  key={booking.id}
+                  className="flex justify-between items-center px-4 py-2 border rounded-md text-sm"
+                >
+                  <div>
+                    <p className="font-semibold">Room {booking.name}</p>
+                    <p className="text-gray-500">Host: {booking.tellerName}</p>
+                  </div>
+                  <div className="text-xs text-gray-500">{booking.date}</div>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-gray-400 italic">No lodge history yet</p>
+            )}
           </div>
+
 
           <Footer/>
 

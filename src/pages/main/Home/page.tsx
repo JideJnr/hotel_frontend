@@ -7,6 +7,7 @@ import { useExpenses } from '../../../contexts/data/ExpensesContext';
 import { useComputation } from '../../../contexts/data/ComputationContext';
 import Footer from '../../../components/footer/footer';
 import { getTodayDate } from '../../../utils/utilities';
+import { formatNaira } from '../../../utils/formatNaira';
 
 const Home = () => {
   const router = useIonRouter();
@@ -22,7 +23,9 @@ const Home = () => {
     recordCount,
     activeRoomCount,
     newCustomerCount,
-    balance
+    balance,
+    expensesCount,
+    fetchExpensesCountOnDate
   } = useComputation();
 
   const todaysDate = getTodayDate();
@@ -32,8 +35,10 @@ const Home = () => {
     fetchActiveRoomsCount();
     fetchNewCustomersOnDateCount(todaysDate);
     fetchRecordCountOnDate(todaysDate);
+    fetchExpensesCountOnDate(todaysDate);
     fetchTodayRecords()
     fetchTodayExpenses()
+
   }, []);
 
   return (
@@ -46,9 +51,9 @@ const Home = () => {
         </div>
         
         <div className=" px-4 grid gap-4 lg:gap-8 grid-cols-2 w-full h-fit">
-            <DashboardTile title="Balance" value={balance || 0} delta={1}/>
-            <DashboardTile title="Active Room" value={activeRoomCount||0} delta={1}/>
-            <DashboardTile title="Total Sales " value={recordCount || 0} delta={1}/>
+            <DashboardTile title="Balance" value={formatNaira(balance|| 0) } delta={1}/>
+            <DashboardTile title="Active Sales" value={recordCount||0} delta={1}/>
+            <DashboardTile title="Total Expense " value={expensesCount || 0} delta={1}/>
             <DashboardTile title="New Customer" value={newCustomerCount|| 0} delta={1}/>
         </div>
 
@@ -141,7 +146,13 @@ const Home = () => {
             </IonCol>
         </IonRow>
       
-        <div className={`px-4 pt-4  h-full space-y-4   ${records?.length > 0 || expenses?.length > 0 ? "bg-white" : "" }`} >
+
+          <div
+  className={`flex flex-col gap-4 w-full h-full p-4 rounded-lg shadow-md 
+    ${records?.length > 0 || expenses?.length > 0 ? "bg-white" : ""}`}
+>
+
+            <div className={`  h-full space-y-4   `} >
           {records && records?.length > 0 && (
             <div className="space-y-4">
               <p className='text-black text-xl font-medium'>
@@ -151,7 +162,7 @@ const Home = () => {
                 {records?.map((event, index) => (
                   <div onClick={() => router.push(`/record/${event.id}`)}>
                     <ScheduleCard key={index} name={event.customerName} details={`Room ${event.roomName}`}>
-                      <div className='w-2 h-2 rounded-full bg-emerald-500 flex items-center justify-center'>
+                      <div className={`w-2 h-2 rounded-full {record.active ? 'bg-emerald-500':''} flex items-center justify-center`}>
                       </div>
                     </ScheduleCard>
                   </div>
@@ -176,8 +187,14 @@ const Home = () => {
       
         </div> 
         
-        <Footer className={`${records?.length == 0 || expenses?.length == 0 && "!bg-white" }`}/>
-  
+        
+   
+        <Footer className=''/>
+      </div>
+
+
+   
+      
       </div>
 
   );

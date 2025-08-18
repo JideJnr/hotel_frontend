@@ -18,7 +18,7 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const wrappedCreateRoom = async (payload: Partial<RoomData>) => {
     try {
       const response = await store.createRoom(payload);
-      console.log(`Room created:`, response);
+   
       if (response?.success) {
         toast.success('Room created successfully');
         router.push(`/room/${response?.data?.id}`, 'forward');

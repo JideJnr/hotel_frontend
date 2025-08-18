@@ -20,6 +20,7 @@ interface RecordContextType {
   fetchRecords: () => Promise<Response>;
   fetchRecord: (id: string) => Promise<Response>;
   checkOutRecord: (id: string) => Promise<Response>;
+  fetchTodayRecords: () => Promise<void>;
 }
 
 const RecordContext = createContext<RecordContextType | undefined>(undefined);

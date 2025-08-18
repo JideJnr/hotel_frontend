@@ -66,12 +66,12 @@ const Setting = () => {
             <p>Check For Update</p>
           </div>
 
-          <div
+          <a
             className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-          onClick={() => router.push('/support', 'forward')}
+            href="tel:+2348105200066"
           >
             <p>Contact Support</p>
-          </div>
+          </a>
         </div>
 
         <div className="flex justify-center p-4">
