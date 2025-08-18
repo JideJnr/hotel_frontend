@@ -57,6 +57,24 @@ const RecordDetails = () => {
             </div>
           </div>
 
+
+          {/* Personal Information */}
+          <div className="flex flex-col gap-2">
+         
+            <div className="text-sm text-gray-600 grid grid-cols-1 gap-4 px-2">
+
+              <DetailRow label='Teller' value={record?.tellerName || "N/A"} />
+              <DetailRow label='Lodge Type' value={record?.requestId}/>
+              <DetailRow label='Payment Method' value={record?.paymentMethodId||0}/>
+              <DetailRow label='Price' value={formatNaira(record?.price||0)}/>
+             
+              <DetailRow label='Booking Instruction' value={record?.bookingInstructions || "N/A"} />
+
+
+            </div>
+          </div>
+
+          
             {record && record.active && 
        
                             
@@ -75,22 +93,6 @@ const RecordDetails = () => {
             
             </div>
             }
-
-          {/* Personal Information */}
-          <div className="flex flex-col gap-2">
-         
-            <div className="text-sm text-gray-600 grid grid-cols-1 gap-4 px-2">
-
-              <DetailRow label='Teller' value={record?.tellerName || "N/A"} />
-              <DetailRow label='Lodge Type' value={record?.requestId}/>
-              <DetailRow label='Payment Method' value={record?.paymentMethodId||0}/>
-              <DetailRow label='Price' value={formatNaira(record?.price||0)}/>
-             
-              <DetailRow label='Booking Instruction' value={record?.bookingInstructions || "N/A"} />
-
-
-            </div>
-          </div>
 
           <Footer/>
 
