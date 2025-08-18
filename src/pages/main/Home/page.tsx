@@ -12,8 +12,8 @@ import { formatNaira } from '../../../utils/formatNaira';
 const Home = () => {
   const router = useIonRouter();
 
-  const {fetchTodayRecords, records } = useRecord();
-  const {fetchTodayExpenses, expenses} = useExpenses();
+  const {fetchRecords, records } = useRecord();
+  const {fetchExpensesOnDate, expenses} = useExpenses();
 
   const {
     fetchBalanceOnDate,
@@ -36,10 +36,10 @@ const Home = () => {
     fetchNewCustomersOnDateCount(todaysDate);
     fetchRecordCountOnDate(todaysDate);
     fetchExpensesCountOnDate(todaysDate);
-    fetchTodayRecords()
-    fetchTodayExpenses()
+    fetchRecords(todaysDate)
+    fetchExpensesOnDate(todaysDate)
 
-  }, []);
+  }, [todaysDate]);
 
   return (
     <div className="flex flex-col gap-8  pt-8 bg-gray-100 overflow-y-auto h-full w-full text-black">

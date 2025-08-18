@@ -99,7 +99,7 @@ const RoomDetails = () => {
           {currentRoom?.bookings &&
             <div className="flex flex-col gap-2">
               <h3 className="text-lg font-semibold">Booking History</h3>
-              {currentRoom?.bookings?.map((booking, index) => (
+              {currentRoom?.bookings?.map((booking:any, index:any) => (
                 <div
                   key={index}
                   className="flex gap-4 items-center px-4 py-2 border rounded-md text-sm"

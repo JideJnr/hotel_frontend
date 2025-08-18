@@ -15,12 +15,12 @@ export const getRoomById = async (id: string) => {
   return res.data;
 };
 
-export const createRoom = async (data: Partial<Room>) => {
+export const createRoom = async (data: any) => {
   const res = await api.post('/rooms', data);
   return res.data;
 };
 
-export const updateRoom = async (id: string, data: Partial<Room>) => {
+export const updateRoom = async (id: string, data: any) => {
   const res = await api.put(`/rooms/${id}`, data);
   return res.data;
 };

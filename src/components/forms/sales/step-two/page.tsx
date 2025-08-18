@@ -74,10 +74,10 @@ const SalesStepTwo = () => {
       >
         <div className="space-y-6">
           <div className="space-y-4">
-            <DetailRow label="Customer" value={formData.customerName} />
-            <DetailRow label="Room" value={formData.roomNumberLabel} />
-            <DetailRow label="Request" value={formData.requestLabel} />
-            <DetailRow label="Payment Method" value={formData.paymentMethodLabel} />
+            <DetailRow label="Customer" value={formData.customerName||'-'} />
+            <DetailRow label="Room" value={formData.roomNumberLabel||'-'} />
+            <DetailRow label="Request" value={formData.requestLabel||'-'} />
+            <DetailRow label="Payment Method" value={formData.paymentMethodLabel||'-'} />
             {formData.bookingInstruction && (
               <DetailRow label="Booking Note" value={formData.bookingInstruction} />
             )}

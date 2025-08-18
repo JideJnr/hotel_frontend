@@ -43,7 +43,7 @@ const Users = () => {
             <DashboardTile title="Active Customers" value={activeCustomerCount || 0} delta={1} />
           </div>
 
-          <div className="px-4 flex flex-col gap-4  bg-white rounded-lg shadow-md p-4 h-full">
+          <div className="p-8 flex flex-col gap-4  bg-white rounded-lg shadow-md p-4 h-full">
 
             <div className="flex ">
             
@@ -80,7 +80,7 @@ const Users = () => {
           
             <Footer/>
   
-        </div>
+          </div>
         
         
       </div>

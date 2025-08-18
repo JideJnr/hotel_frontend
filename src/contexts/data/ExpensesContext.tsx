@@ -25,7 +25,7 @@ interface ExpenseContextType {
   deleteExpense: (id: string) => Promise<any>;
   fetchExpenses: (params?: { startDate?: string; endDate?: string; pageSize?: number }) => Promise<Expense[]>;
   fetchTodayExpenses: () => Promise<Expense[]>;
-  fetchExpense: (id: string) => Promise<Expense>;
+  fetchExpensesOnDate: (id: string) => Promise<Expense>;
   fetchExpensesByCategory: (category: string, params?: { pageSize?: number }) => Promise<Expense[]>;
   fetchExpenseSummary: (params: { startDate: string; endDate: string }) => Promise<any>;
 }
@@ -119,7 +119,6 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
       
     }
   };
-
 
   // 🔹 Fetch Single Expense
   const wrappedFetchExpense = async (id: string) => {

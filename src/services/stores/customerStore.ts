@@ -102,13 +102,8 @@ export const useCustomerStore = create<CustomerState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await searchCustomers(query);
-
-      set({
-        customers: response.data, // assuming response has { success, message, data }
-        loading: false,
-      });
-
-      return response.data;
+      set({ loading: false });
+      return response;
     } catch (err: any) {
       set({ error: err.message || "Something went wrong", loading: false });
     }

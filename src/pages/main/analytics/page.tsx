@@ -5,22 +5,14 @@ import DashboardTile from "../../../components/templates/dashboardtiles/Dashboar
 import ScheduleCard from "../../../components/templates/card/ScheduleCard";
 import { FormHeader } from "../../../components/forms";
 import SearchModal from "../../../components/modal/AnalyticsModal";
+import { useAnalytics } from "../../../contexts/data/AnalyticsContext";
 
 const Analytics = () => {
   const router = useIonRouter();
-  const [showSearch, setShowSearch] = useState(true); // Modal opens by default
+  const [showSearch, setShowSearch] = useState(true); 
+  const { overview, loading } = useAnalytics();
 
-  const expenses = [
-    { expenseType: "Cleaning Supplies", price: "45.00" },
-    { expenseType: "Toiletries", price: "120.50" },
-    { expenseType: "Maintenance", price: "75.25" },
-  ];
-
-  const record = [
-    { customerName: "Dressage Practice", RoomNumber: 2 },
-    { customerName: "Polo", RoomNumber: 2 },
-    { customerName: "Barrel Racing Practice", RoomNumber: 2 },
-  ];
+  console.log("Overview Data:", overview);
 
   return (
     <IonPage>
@@ -56,22 +48,24 @@ const Analytics = () => {
           <DashboardTile title="Customer Registered" value={2} delta={1} />
         </div>
 
-        <div className="space-y-4">
-          <p className="text-black text-xl">Room Sales</p>
-          {record.map((event, index) => (
-            <div key={index} onClick={() => router.push(`/record/a`)}>
-              <ScheduleCard
-                name={event.customerName}
-                details={`Room ${event.RoomNumber}`}
-              />
-            </div>
-          ))}
-        </div>
+        {overview?.customers && (
+          <div className="space-y-4">
+            <p className="text-black text-xl">Room Sales</p>
+            {overview?.customers.map((event, index) => (
+              <div key={index} onClick={() => router.push(`/record/a`)}>
+                <ScheduleCard
+                  name={event.customerName}
+                  details={`Room ${event.RoomNumber}`}
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
-        {expenses.length > 0 && (
+        {overview?.expenses && (
           <div className="space-y-4">
             <p className="text-black text-xl">Expenses</p>
-            {expenses.map((expenses, index) => (
+            {overview?.expenses.map((expenses, index) => (
               <div key={index} onClick={() => router.push(`/expenses/a`)}>
                 <ScheduleCard
                   name={expenses.expenseType}
@@ -82,19 +76,7 @@ const Analytics = () => {
           </div>
         )}
 
-        {expenses.length > 0 && (
-          <div className="space-y-4">
-            <p className="text-black text-xl">Customer</p>
-            {expenses.map((expenses, index) => (
-              <div key={index} onClick={() => router.push(`/expenses/a`)}>
-                <ScheduleCard
-                  name={expenses.expenseType}
-                  details={`N ${expenses.price}`}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+    
       </div>
     </IonPage>
   );

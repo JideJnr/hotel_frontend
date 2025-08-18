@@ -109,7 +109,7 @@ const SearchModal: React.FC<{
                       className="text-black bg-white"
                       lines="none"
                     >
-                      <IonLabel>
+                      <IonLabel className="bg-whites">
                         <h2 className="capitalize text-black font-medium">{c.fullName}</h2>
                         <p className="text-gray-500">@{c.userName}</p>
                         {c.email && <p className="text-gray-500">{c.email}</p>}

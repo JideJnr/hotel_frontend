@@ -2,9 +2,7 @@ import { useParams } from "react-router-dom";
 import { IonPage, useIonRouter } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
-import DashboardTile from '../../../../components/templates/dashboardtiles/DashboardTiles';
 import { useEffect } from "react";
-
 import { getNameInitials } from "../../../../utils/getInitials";
 import Footer from "../../../../components/footer/footer";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";

@@ -35,6 +35,7 @@ export const AnalyticsProvider: React.FC<{ children: ReactNode }> = ({ children 
   }) => {
     try {
       const response = await getOverviewData(params);
+      console.log("Analytics Overview Response:", response);
       if (response?.success) {
         setOverview(response.data); // Save overview response into local state
       }

@@ -2,7 +2,7 @@ import { IonContent, IonPage, useIonRouter } from '@ionic/react'
 import Button from '../../../components/button/button'
 
 const Welcome = () => {
-    const { user } = []
+
     const router = useIonRouter();
     
     
@@ -25,7 +25,7 @@ const Welcome = () => {
           <div className="h-fit mt-auto flex flex-col gap-4 mb-8 p-4">
             <Button
               className="!w-full !rounded-3xl"
-              onClick={() => router.push(!user ? "/sign-in" : "/main")}
+              onClick={() => router.push("/main")}
               text="Continue"
             />
           </div>

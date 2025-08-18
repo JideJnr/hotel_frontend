@@ -70,7 +70,7 @@ const handleNext = () => {
   const errs: Errors = {};
 
   // ✅ Basic validations
-  if (!formData.customerId) errs.customerId = "Customer is required";
+  if (!formData.customerId) errs.customer = "Customer is required";
   if (!formData.roomId) errs.roomId = "Room is required";
   if (!formData.checkInDate) errs.checkInDate = "Check-in date is required";
   if (!formData.checkOutDate) {

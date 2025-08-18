@@ -76,12 +76,12 @@ interface RoomState {
   error: string | null;
 
   // Actions
-  fetchRooms: () => Promise<void>;
-  getAvailableRooms: () => Promise<void>;
-  getRoomById: (id: string) => Promise<void>;
-  createRoom: (data: Partial<Room>) => Promise<void>;
-  updateRoom: (id: string, data: Partial<Room>) => Promise<void>;
-  deleteRoom: (id: string) => Promise<void>;
+  fetchRooms: () => Promise<Response>;
+  getAvailableRooms: () => Promise<Response>;
+  getRoomById: (id: string) => Promise<Response>;
+  createRoom: (data: Partial<Room>) => Promise<Response>;
+  updateRoom: (id: string, data: Partial<Room>) => Promise<Response>;
+  deleteRoom: (id: string) => Promise<Response>;
 }
 
 interface CustomerData {

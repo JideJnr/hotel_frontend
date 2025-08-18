@@ -17,8 +17,8 @@ interface RecordContextType {
   error: string | null;
   createRecord: (payload: any) => Promise<Response>;
   updateRecord: (id: string, payload: any) => Promise<Response>;
-  fetchRecords: () => Promise<Response>;
   fetchRecord: (id: string) => Promise<Response>;
+  fetchRecords: (id: string) => Promise<Response>;
   checkOutRecord: (id: string) => Promise<Response>;
   fetchTodayRecords: () => Promise<void>;
 }

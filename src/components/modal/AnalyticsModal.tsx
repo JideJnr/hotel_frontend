@@ -6,9 +6,8 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms"; 
-import { useAnalytics } from "../../contexts/data/AnalyticsContext"; // adjust path
+import { useAnalytics } from "../../contexts/data/AnalyticsContext";
 
-// Option type used by FormMultiSelect
 interface Option {
   value: string | number;
   label: string;
@@ -30,40 +29,39 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const [endDate, setEndDate] = useState<string>("");
   const [selected, setSelected] = useState<Option[]>([]);
 
-  const { fetchOverview, loading } = useAnalytics(); // get context fn + loading
+  const { fetchOverview, loading } = useAnalytics();
 
   const handleSearch = async () => {
-    const response = await fetchOverview({
+    // Extract only the values from selected options
+    const categoryValues = selected.map(opt => String(opt.value));
+    
+    const payload = {
       startDate,
       endDate,
-      category: selected
-    });
+      categories: categoryValues.join(",") // Convert array to comma-separated string
+    };
+    
+    const response = await fetchOverview(payload);
     if (response.success) {
       onClose();
     }
-    
   };
 
   const handleClose = () => {
-      router.goBack();
+    router.goBack();
   };
 
-    const handleCloseModal = () => {
+  const handleCloseModal = () => {
     onClose();
-    
   };
 
   return (
     <IonModal isOpen={isOpen} onDidDismiss={handleCloseModal}>
       <div className="bg-gray-50 min-h-screen flex flex-col ">
-        {/* Form header (back button) */}
         <FormHeader className="mb-4 bg-white rounded-lg" />
 
-        {/* Card */}
         <div className="w-full max-w-2xl mx-auto">
-          {/* Body */}
           <div className="px-6 py-6 space-y-5 text-gray-800">
-            {/* Date filters */}
             <div className="grid grid-cols-2 gap-3">
               <FormDatePicker
                 label="Start date"
@@ -81,7 +79,6 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
               />
             </div>
 
-            {/* Category / Tag filters */}
             <div>
               <FormMultiSelect
                 label=""
@@ -93,7 +90,6 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
               />
             </div>
 
-            {/* Footer */}
             <div className="flex justify-end gap-3 pt-2 border-t mt-2">
               <IonButton size="small" color="medium" onClick={handleClose}>
                 Close
@@ -102,7 +98,7 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
                 size="small"
                 color="primary"
                 onClick={handleSearch}
-                disabled={loading}
+                disabled={loading || !startDate || !endDate}
               >
                 {loading ? "Searching..." : "Search"}
               </IonButton>
