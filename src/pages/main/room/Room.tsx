@@ -3,6 +3,8 @@ import {
   IonSegmentButton,
   IonLabel,
   useIonRouter,
+  IonRefresher,
+  IonRefresherContent,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
@@ -19,10 +21,22 @@ const Room = () => {
   const {fetchTotalRoomsCount, fetchActiveRoomsCount, totalRoomCount, activeRoomCount } = useComputation();
 
   useEffect(() => {
-    fetchRooms();
-    fetchTotalRoomsCount();
-    fetchActiveRoomsCount();
+    refresh()
   }, []);
+
+      const refresh = async (e: CustomEvent) => {
+      try {
+        await Promise.all([
+          fetchRooms(),
+          fetchTotalRoomsCount(),
+          fetchActiveRoomsCount()
+        ]);
+      } catch (err) {
+        console.error("Refresh error:", err);
+      } finally {
+        e.detail.complete();
+      }
+    };
 
   const handleAddNew = () => router.push("/register/room/stepone");
   const handleRoomClick = (id?: string) => id && router.push(`/room/${id}`);
@@ -46,7 +60,10 @@ const filteredRooms = (() => {
   return (
 
     <div className="  pt-8 text-black bg-gray-100 w-full h-full flex flex-col gap-6 overflow-y-auto ">
-
+      <IonRefresher slot="fixed" onIonRefresh={refresh} className="text-gray-800">
+        <IonRefresherContent />
+      </IonRefresher>
+               
       <div className="px-4 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Rooms</h1>

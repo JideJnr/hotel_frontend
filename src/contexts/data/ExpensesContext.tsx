@@ -23,6 +23,7 @@ interface ExpenseContextType {
   createExpense: (payload: Partial<Expense>) => Promise<Expense>;
   updateExpense: (id: string, payload: Partial<Expense>) => Promise<Expense>;
   deleteExpense: (id: string) => Promise<any>;
+  fetchExpense: (id: string) => Promise<any>;
   fetchExpenses: (params?: { startDate?: string; endDate?: string; pageSize?: number }) => Promise<Expense[]>;
   fetchTodayExpenses: () => Promise<Expense[]>;
   fetchExpensesOnDate: (id: string) => Promise<Expense>;

@@ -1,13 +1,8 @@
 import { useParams } from "react-router-dom";
 import { IonPage } from "@ionic/react";
-import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
-import { useRoom } from "../../../../contexts/data/RoomContext";
 import { useEffect } from "react";
 import { getNameInitials } from "../../../../utils/getInitials";
-import Footer from "../../../../components/footer/footer";
-import { useRecord } from "../../../../contexts/data/RecordContext";
-import { toast } from "react-toastify";
 import { useBooking } from "../../../../contexts/data/BookingContext";
 import { Edit3, Phone } from "lucide-react";
 
@@ -19,9 +14,7 @@ const BookingDetails = () => {
     fetchBookingById(id);
   }, [id]);
 
-  console.log("Booking Details:", booking);
 
-    
   return (
     <IonPage>
       <FormHeader /> 
@@ -32,28 +25,27 @@ const BookingDetails = () => {
             <div className="w-24 h-24 flex items-center justify-center rounded-full bg-gray-100 border text-gray-600 font-bold text-xl uppercase">
               {getNameInitials('Room')}
             </div>
-
             <div className="flex flex-col text-sm gap-1">
-              <h2 className="text-2xl font-semibold">Room { ""}</h2>
+              <h2 className="text-2xl font-semibold">Room  { ""}</h2>
             </div>
           </div>
 
           <div className="flex items-center gap-4 w-full">
-  {/* Edit Button (secondary / gray outline) */}
-  <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2">
-    <Edit3 size={16} />
-    Update
-  </a>
+            {/* Edit Button (secondary / gray outline) */}
+            <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2">
+              <Edit3 size={16} />
+              Update
+            </a>
 
-  {/* Contact Button (primary / filled blue) */}
-  <a
-    href="tel:+2348105200066"
-    className="flex items-center justify-center gap-2 px-4 py-2 text-black border border-gray-800 rounded-lg text-sm font-medium hover:bg-blue-700 transition w-1/2"
-  >
-    <Phone size={16} />
-    Cancel
-  </a>
-</div>
+            {/* Contact Button (primary / filled blue) */}
+            <a
+              href="tel:+2348105200066"
+              className="flex items-center justify-center gap-2 px-4 py-2 text-black border border-gray-800 rounded-lg text-sm font-medium hover:bg-blue-700 transition w-1/2"
+            >
+              <Phone size={16} />
+              Cancel
+            </a>
+          </div>
 
           <div className="flex flex-col gap-2">
             <div className="text-sm text-gray-600 grid grid-cols-1 gap-4 px-2">
@@ -63,14 +55,9 @@ const BookingDetails = () => {
               <DetailRow label='Teller' value={booking?.userId||'-'}/>
             </div>
           </div>
-
-
-
           
         </div>
       </BackFormContainer>
-      
-   
     </IonPage>
   );
 };

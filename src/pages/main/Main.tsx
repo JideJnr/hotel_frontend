@@ -25,11 +25,13 @@ function classNames(...classes: string[]) {
 
 function Main() {
 
-  
+    
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+  {/*
     const { fetchRecords } = useRecord();
     const {fetchExpenses} = useExpenses();
     const { fetchRooms } = useRoom();
-    const { fetchActivities, activity, loading } = useActivity();
+    const { fetchActivities } = useActivity();
     const {fetchCustomers} = useCustomer();
 
 
@@ -45,14 +47,15 @@ function Main() {
       } catch (err) {
         console.error("Refresh error:", err);
       } finally {
-        e.detail.complete(); // Always complete, success or failure
+        e.detail.complete();
       }
     };
-
+*/}
   const renderTabs = () => (
     <Tab.Panels className="h-full w-full flex ">
+
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
-        <Home  />
+          <Home  />
       </Tab.Panel>
       <Tab.Panel className="w-full h-full flex overflow-x-none overflow-y-auto">
         <Room  />
@@ -201,9 +204,7 @@ function Main() {
   return (
     <IonPage className="bg-white">
       <IonContent fullscreen>
-        <IonRefresher slot="fixed" onIonRefresh={refresh} className="text-gray-800">
-          <IonRefresherContent />
-        </IonRefresher>
+
 
         <TabGroup
           as="div"

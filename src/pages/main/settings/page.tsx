@@ -7,7 +7,6 @@ import { getNameInitials } from "../../../utils/getInitials";
 
 const Setting = () => {
   const router = useIonRouter();
-  localStorage.getItem('user');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const { logout, loading } = useAuth();
 

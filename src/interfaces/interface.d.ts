@@ -39,8 +39,10 @@ interface ExpensesData {
 interface SalesData  {
   customerId?: string | null;
   customerName?: string | null;
-  roomNumberId?: string| null;
+  roomName?: string| null;
+  roomId?: string| null;
   paymentMethodId?: string| null;
+  paymentMethodLabel?: string| null;
   requestId?: string | null,
   requestLabel?: string | null,
   bookingInstruction?: string;
@@ -106,6 +108,7 @@ interface CustomerState {
   getTotalCustomerCount: () => Promise<Response>;
   getCustomerRegisteredOnDate:(date: string) => Promise<Response>;
   getCustomerRegisteredOnDateRange:(params: any) => Promise<Response>;
+  searchCustomer:(query: string) => Promise<Response>;
 
 }
 
@@ -203,7 +206,7 @@ interface FormTextareaProps {
 interface FormInputProps {
   label: string;
   name: string;
-  value: string;
+  value: any;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
   type?: string;

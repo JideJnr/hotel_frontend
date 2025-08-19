@@ -17,10 +17,22 @@ const Users = () => {
   const { totalCustomerCount, activeCustomerCount , fetchActiveCustomersCount, fetchTotalCustomersCount} = useComputation();
 
     useEffect(() => {
-      fetchCustomers();
-      fetchActiveCustomersCount();
-      fetchTotalCustomersCount();  
+      refresh();
     }, []);
+
+       const refresh = async (e: CustomEvent) => {
+      try {
+        await Promise.all([
+          fetchCustomers(),
+          fetchActiveCustomersCount(),
+          fetchTotalCustomersCount(), 
+        ]);
+      } catch (err) {
+        console.error("Refresh error:", err);
+      } finally {
+        e.detail.complete();
+      }
+    };
 
 
 

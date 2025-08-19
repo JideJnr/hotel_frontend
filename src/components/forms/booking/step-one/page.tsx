@@ -51,8 +51,8 @@ export default function BookingStepOne() {
     roomId: null,
     roomLabel: null,
     bookingInstruction: "",
-    checkInDate: tomorrow.toISOString().split("T")[0], // defaults to tomorrow
-    checkOutDate: "",
+    checkInDate: today.toISOString().split("T")[0], 
+    checkOutDate: tomorrow.toISOString().split("T")[0], 
     paymentMethodId: null,
     paymentMethodLabel: null,
     price: ""
@@ -66,36 +66,36 @@ export default function BookingStepOne() {
   // -------------------
   // Validation + Next
   // -------------------
-const handleNext = () => {
-  const errs: Errors = {};
+  const handleNext = () => {
+    const errs: Errors = {};
 
-  // ✅ Basic validations
-  if (!formData.customerId) errs.customer = "Customer is required";
-  if (!formData.roomId) errs.roomId = "Room is required";
-  if (!formData.checkInDate) errs.checkInDate = "Check-in date is required";
-  if (!formData.checkOutDate) {
-    errs.checkOutDate = "Check-out date is required";
-  } else if (
-    new Date(formData.checkOutDate) <= new Date(formData.checkInDate)
-  ) {
-    errs.checkOutDate = "Check-out must be after check-in";
-  }
+    // ✅ Basic validations
+    if (!formData.customerId) errs.customer = "Customer is required";
+    if (!formData.roomId) errs.roomId = "Room is required";
+    if (!formData.checkInDate) errs.checkInDate = "Check-in date is required";
+    if (!formData.checkOutDate) {
+      errs.checkOutDate = "Check-out date is required";
+    } else if (
+      new Date(formData.checkOutDate) <= new Date(formData.checkInDate)
+    ) {
+      errs.checkOutDate = "Check-out must be after check-in";
+    }
 
-  setErrors(errs);
+    setErrors(errs);
 
-  // ✅ If no errors → save & navigate
-  if (Object.keys(errs).length === 0) {
-    const updatedData: BookingData = {
-      ...formData, // only booking info, no price calculation here
-    };
+    // ✅ If no errors → save & navigate
+    if (Object.keys(errs).length === 0) {
+      const updatedData: BookingData = {
+        ...formData, // only booking info, no price calculation here
+      };
 
-    sessionStorage.setItem("bookingData", JSON.stringify(updatedData));
+      sessionStorage.setItem("bookingData", JSON.stringify(updatedData));
 
-    router.push("/register/booking/steptwo", "forward", "replace");
-  } else {
-    toast.error("Please fix the errors before continuing.");
-  }
-};
+      router.push("/register/booking/steptwo", "forward", "replace");
+    } else {
+      toast.error("Please fix the errors before continuing.");
+    }
+  };
 
   // -------------------
   // Fetch data
@@ -134,9 +134,10 @@ const handleNext = () => {
                 : null
             }
             onChange={opt =>
+
               setFormData(fd => ({
                 ...fd,
-                customerId: opt ? opt.value : null,
+                customerId: opt ? (opt.value) : null,
                 customerName: opt ? opt.label : null
               }))
             }

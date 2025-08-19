@@ -92,7 +92,8 @@ export default function CreateRoomForm() {
           <FormInput
             label="Capacity *"
             type="number"
-            name="capacity"
+            name="Capacity"
+            placeholder="capacity"
             value={formData.capacity ?? ""}
             onChange={(e) => setFormData((fd) => ({ ...fd, capacity: Number(e.target.value) }))}
             error={errors.capacity}
@@ -103,6 +104,7 @@ export default function CreateRoomForm() {
             label="Price Per Night (₦) *"
             type="number"
             name="pricePerNight"
+            placeholder="Price Per Night (₦) *"
             value={formData.pricePerNight ?? ""}
             onChange={(e) =>
               setFormData((fd) => ({ ...fd, pricePerNight: Number(e.target.value) }))
@@ -116,6 +118,7 @@ export default function CreateRoomForm() {
             label="Price - 1 Hour (₦) *"
             type="number"
             name="oneHour"
+            placeholder="Price - 1 Hour (₦) *"
             value={formData.oneHour ?? ""}
             onChange={(e) =>
               setFormData((fd) => ({ ...fd, oneHour: Number(e.target.value) }))
@@ -128,6 +131,7 @@ export default function CreateRoomForm() {
           <FormInput
             label="Price - 2 Hours (₦) *"
             type="number"
+            placeholder="Price - 2 Hours (₦) *"
             name="twoHours"
             value={formData.twoHours ?? ""}
             onChange={(e) =>

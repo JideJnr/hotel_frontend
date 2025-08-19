@@ -11,11 +11,13 @@ const Support = React.lazy(() => import("../pages/main/support/Support"));
 const SalesStepOne = React.lazy(() => import("../components/forms/sales/step-one/page"));
 const SalesStepTwo = React.lazy(() => import("../components/forms/sales/step-two/page"));
 
+
 const ClientStepOne = React.lazy(() => import("../components/forms/client/step-one/page"));
 const ClientStepTwo = React.lazy(() => import("../components/forms/client/step-two/page"));
 
 const ExpenseStepOne = React.lazy(() => import("../components/forms/expenses/step-one/page"));
 const ExpenseStepTwo = React.lazy(() => import("../components/forms/expenses/step-two/page"));
+
 
 const BookingStepOne = React.lazy(() => import("../components/forms/booking/step-one/page"));
 const BookingStepTwo = React.lazy(() => import("../components/forms/booking/step-two/page"));
@@ -58,6 +60,9 @@ const Routes: React.FC = () => {
         <PrivateRoute path="/record/:id" exact component={RecordDetails} />
         <PrivateRoute path="/user/:id" exact component={UserDetails} />
         <PrivateRoute path="/room/:id" exact component={RoomDetails} />
+        <PrivateRoute path="/user/edit/:id" exact component={ClientStepOne} />
+        <PrivateRoute path="/room/edit/:id" exact component={RoomStepOne} />
+        <PrivateRoute path="/bookings/edit/:id" exact component={BookingStepOne} />
         <PrivateRoute path="/sales/stepone" exact component={SalesStepOne} />
         <PrivateRoute path="/sales/steptwo" exact component={SalesStepTwo} />
         <PrivateRoute path="/register/customer/stepone" exact component={ClientStepOne} />

@@ -40,7 +40,7 @@ const SalesStepTwo = () => {
       const payload = {
         customerId: formData.customerId,
         customerName: formData.customerName,
-        roomId: formData.roomNumberId,
+        roomId: formData.roomId,
         requestId: formData.requestId || null,
         bookingInstruction: formData.bookingInstruction || 'No Instruction Given',
         paymentMethodId:  formData.paymentMethodId || null,
@@ -75,7 +75,7 @@ const SalesStepTwo = () => {
         <div className="space-y-6">
           <div className="space-y-4">
             <DetailRow label="Customer" value={formData.customerName||'-'} />
-            <DetailRow label="Room" value={formData.roomNumberLabel||'-'} />
+            <DetailRow label="Room" value={formData.roomName||'-'} />
             <DetailRow label="Request" value={formData.requestLabel||'-'} />
             <DetailRow label="Payment Method" value={formData.paymentMethodLabel||'-'} />
             {formData.bookingInstruction && (

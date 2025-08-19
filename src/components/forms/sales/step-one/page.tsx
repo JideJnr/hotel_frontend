@@ -29,8 +29,8 @@ export default function SalesStepOne() {
     customerName: null,
     requestId: null,
     requestLabel: null,
-    roomNumberId: null,
-    roomNumberLabel: null,
+    roomName: null,
+    roomId: null,
     paymentMethodId: null,
     paymentMethodLabel: null,
     bookingInstruction: "",
@@ -47,11 +47,10 @@ export default function SalesStepOne() {
   const handleNext = () => {
     const errs: Errors = {};
     if (!formData.customerId)   errs.customer = "Customer is required.";
-    if (!formData.roomNumberId) errs.roomNumber = "Room number is required.";
+    if (!formData.roomId) errs.roomNumber = "Room number is required.";
 
     setErrors(errs);
     if (Object.keys(errs).length === 0) {
-      // now sessionStorage has flat ids+labels
       sessionStorage.setItem("bookingData", JSON.stringify(formData));
       router.push("/sales/steptwo", "forward", "replace");
     } else {
@@ -69,37 +68,37 @@ export default function SalesStepOne() {
       >
         <form onSubmit={e => { e.preventDefault(); handleNext(); }} className="space-y-6">
           <FormSelect
-  label="Customer *"
-  name="customer"
-  value={
-    formData.customerId != null
-      ? { value: formData.customerId, label: formData.customerName! }
-      : null
-  }
-  onChange={opt => setFormData(fd => ({
-    ...fd,
-    customerId: opt ? opt.value : null,
-    customerName: opt ? opt.label : null
-  }))}
-  options={customers.map(c => ({ value: c.id, label: c.userName }))}
-  placeholder="Select a customer"
-  error={errors.customer}
-  required
-/>
+            label="Customer *"
+            name="customer"
+            value={
+              formData.customerId != null
+                ? { value: formData.customerId, label: formData.customerName! }
+                : null
+            }
+            onChange={opt => setFormData(fd => ({
+              ...fd,
+              customerId: opt ? opt.value : null,
+              customerName: opt ? opt.label : null
+            }))}
+            options={customers.map(c => ({ value: c.id, label: c.userName }))}
+            placeholder="Select a customer"
+            error={errors.customer}
+            required
+          />
 
 
           <FormSelect
             label="Room *"
             name="roomNumber"
             value={
-              formData.roomNumberId != null
-                ? { value: formData.roomNumberId, label: formData.roomNumberLabel! }
+              formData.roomId != null
+                ? { value: formData.roomId, label: formData.roomName! }
                 : null
             }
             onChange={opt => setFormData(fd => ({
               ...fd,
-              roomNumberId: opt ? opt.value : null,
-              roomNumberLabel: opt ? opt.label : null
+              roomId: opt ? opt.value : null,
+              roomName: opt ? opt.label : null
             }))}
             options={availableRooms.map(r => ({
               value: r.id,
@@ -116,7 +115,7 @@ export default function SalesStepOne() {
             name="requestType"
             value={
               formData.requestId != null
-                ? { value: formData.requestId, label: formData.requestLabel }
+                ? { value: formData.requestId, label: formData.requestLabel! }
                 : null
             }
             onChange={opt => setFormData(fd => ({

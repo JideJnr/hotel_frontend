@@ -1,4 +1,4 @@
-import { IonButton, IonCol,  IonIcon, IonRow, IonText, useIonRouter } from '@ionic/react';
+import { IonButton, IonCol,  IonIcon, IonRefresher, IonRefresherContent, IonRow, IonText, useIonRouter } from '@ionic/react';
 import DashboardTile from '../../../components/templates/dashboardtiles/DashboardTiles';
 import ScheduleCard from '../../../components/templates/card/ScheduleCard';
 import { useRecord } from '../../../contexts/data/RecordContext';
@@ -17,11 +17,9 @@ const Home = () => {
 
   const {
     fetchBalanceOnDate,
-    fetchActiveRoomsCount,
     fetchNewCustomersOnDateCount,
     fetchRecordCountOnDate,
     recordCount,
-    activeRoomCount,
     newCustomerCount,
     balance,
     expensesCount,
@@ -31,19 +29,31 @@ const Home = () => {
   const todaysDate = getTodayDate();
   
   useEffect(() => {
-    fetchBalanceOnDate(todaysDate);
-    fetchActiveRoomsCount();
-    fetchNewCustomersOnDateCount(todaysDate);
-    fetchRecordCountOnDate(todaysDate);
-    fetchExpensesCountOnDate(todaysDate);
-    fetchRecords(todaysDate)
-    fetchExpensesOnDate(todaysDate)
-
+    refresh();
   }, [todaysDate]);
+
+    const refresh = async (e: CustomEvent) => {
+      try {
+        await Promise.all([
+              fetchBalanceOnDate(todaysDate),
+              fetchNewCustomersOnDateCount(todaysDate),
+              fetchRecordCountOnDate(todaysDate),
+              fetchExpensesCountOnDate(todaysDate),
+              fetchRecords(todaysDate),
+              fetchExpensesOnDate(todaysDate)
+        ]);
+      } catch (err) {
+        console.error("Refresh error:", err);
+      } finally {
+        e.detail.complete();
+      }
+    };
 
   return (
     <div className="flex flex-col gap-8  pt-8 bg-gray-100 overflow-y-auto h-full w-full text-black">
-
+        <IonRefresher slot="fixed" onIonRefresh={refresh} className="text-gray-800">
+          <IonRefresherContent />
+        </IonRefresher>
               
         <div className='px-4'>
           <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Customer</h1>

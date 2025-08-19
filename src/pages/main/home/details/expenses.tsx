@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { IonPage } from "@ionic/react";
-import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import { useEffect } from "react";
 import { useExpenses } from "../../../../contexts/data/ExpensesContext";
@@ -27,11 +26,9 @@ const ExpensesDetails = () => {
   
   const { fetchExpense , expense } = useExpenses();
   
-    useEffect(() => {
+  useEffect(() => {
       fetchExpense(id)
-    }, [id]);
-  
-
+  }, [id]);
 
 
   return (

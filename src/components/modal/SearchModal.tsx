@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   IonModal,
-  IonContent,
   IonInput,
-  IonButton,
   IonItem,
   IonLabel,
   IonIcon,
@@ -15,13 +13,7 @@ import { useCustomer } from "../../contexts/data/CustomerContext";
 import { FormHeader } from "../forms";
 
 
-interface Customer {
-  id: string;
-  fullName: string;
-  email?: string;
-  userName: string;
-  [key: string]: any;
-}
+
 
 const SearchModal: React.FC<{
   isOpen: boolean;
@@ -109,7 +101,7 @@ const SearchModal: React.FC<{
                       className="text-black bg-white"
                       lines="none"
                     >
-                      <IonLabel className="bg-whites">
+                      <IonLabel className="bg-white">
                         <h2 className="capitalize text-black font-medium">{c.fullName}</h2>
                         <p className="text-gray-500">@{c.userName}</p>
                         {c.email && <p className="text-gray-500">{c.email}</p>}
