@@ -8,6 +8,7 @@ import {
 import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms"; 
 import { useAnalytics } from "../../contexts/data/AnalyticsContext"; // adjust path
 import { useRoom } from "../../contexts/data/RoomContext";
+import { useBooking } from "../../contexts/data/BookingContext";
 
 // Option type used by FormMultiSelect
 interface Option {
@@ -25,7 +26,7 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const [endDate, setEndDate] = useState<string>("");
   const [selected, setSelected] = useState<Option[]>([]);
 
-  const { fetchOverview, loading } = useAnalytics();
+  const { fetchBookingsByFilter , loading } = useBooking();
   const { fetchRooms, rooms } = useRoom();
   
   useEffect(() => {
@@ -33,18 +34,24 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   }, []);
 
 
-  const handleSearch = async () => {
-    const response = await fetchOverview({
-      startDate,
-      endDate,
-      category: selected.map(opt => opt.value as string)
-     
-    });
-    if (response.success) {
-      onClose();
-    }
-  
-  };
+const handleSearch = async () => {
+  let roomValues: string[] = [];
+
+  if (selected.length > 0 && !selected.some(opt => opt.value === "all")) {
+    roomValues = selected.map(opt => String(opt.value));
+  }
+
+  const response = await fetchBookingsByFilter(
+    startDate,
+    endDate,
+    roomValues.length > 0 ? roomValues.join(",") : undefined // omit if "All"
+  );
+
+  if (response.success) {
+    onClose();
+  }
+};
+
 
   const handleClose = () => {
     router.goBack();
@@ -54,7 +61,6 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     onClose();
     
   };
-
 
   const options = [
   { value: "all", label: "All" },

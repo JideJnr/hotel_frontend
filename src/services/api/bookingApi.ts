@@ -57,7 +57,7 @@ export const getBookingsByDateRange = async (
   lastCreatedAt?: string,
   lastId?: string
 ) => {
-  const res = await api.get('/bookings/by-date-range', {
+  const res = await api.get('/bookings/filter', {
     params: { startDate, endDate, pageSize, lastCreatedAt, lastId }
   });
   return res.data;

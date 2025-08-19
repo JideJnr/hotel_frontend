@@ -8,7 +8,7 @@ interface BookingState {
   error: string | null;
 
   fetchBookingsByDate: (date: string) => Promise<Response>;
-  fetchBookingsByDateRange: (startDate: string, endDate: string) => Promise<Response>;
+  fetchBookingsByDateRange: (startDate: string, endDate: string , rooms:any) => Promise<Response>;
   fetchBookingById: (id: string) => Promise<Response>;
   createBooking: (data: bookingApi.BookingInput) => Promise<Response>;
   updateBooking: (id: string, data: bookingApi.BookingUpdate) => Promise<Response>;

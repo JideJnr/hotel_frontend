@@ -4,10 +4,16 @@ import { useAnalyticsStore } from '../../services/stores/analyticStore';
 
 // Define proper types for Analytics data
 interface AnalyticsOverview {
-  customers: any[];
-  records: any[];
-  expenses: any[];
-  bookings: any[];
+  sum: {
+    totalSales: number;
+    totalExpenses: number;
+  };
+  count: {
+    customers: number;
+    sales: number;
+    expenses: number;
+  };
+  data: any; 
 }
 
 interface AnalyticsContextType {
@@ -24,7 +30,7 @@ interface AnalyticsContextType {
 const AnalyticsContext = createContext<AnalyticsContextType | undefined>(undefined);
 
 export const AnalyticsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [overview, setOverview] = useState<AnalyticsOverview | null>(null);
+  const [overview, setOverview] = useState<any | null>(null);
   const { loading, error, getOverviewData } = useAnalyticsStore();
 
   const wrappedFetchOverview = async (params?: {
@@ -35,11 +41,11 @@ export const AnalyticsProvider: React.FC<{ children: ReactNode }> = ({ children 
   }): Promise<Response> => {
     try {
       const response = await getOverviewData(params);
-      console.log("Analytics Overview Response:", response);
+  
       if (response?.success) {
-        setOverview(response.data); // Save overview response into local state
+        setOverview(response); 
       }
-      // If response is undefined, throw an error to be caught below
+    
       if (!response) {
         throw new Error('No response from getOverviewData');
       }

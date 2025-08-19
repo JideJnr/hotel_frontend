@@ -40,7 +40,7 @@ export const getExpensesByCategory = async (category: string, params?: Paginatio
 
 /** 🔹 Get expenses for a specific date (single-day) */
 export const getExpensesOnDate = async (date: string) => {
-  const res = await api.get(`/expenses/${date}`);
+  const res = await api.get(`/expenses/date`,{ params: { date } });
   return res.data ;
 };
 

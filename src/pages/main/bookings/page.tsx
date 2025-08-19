@@ -27,14 +27,12 @@ const Bookings = () => {
           <p className="text-sm text-gray-500">Track your room bookings.</p>
         </div>
 
-        <div className=" px-4 grid gap-4 w-full h-fit">
-          
+        <div className=" px-4 grid gap-4 w-full h-fit">  
           <DashboardTile title="Active Bookings " value={2} delta={1}/>
         </div>
 
 
         <div className='bg-white h-full w-full px-4 pt-8 gap-8 flex flex-col'>
-
           
             <div className="space-y-4">
                 <p className='text-black text-xl'>

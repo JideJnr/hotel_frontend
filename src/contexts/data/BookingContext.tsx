@@ -16,7 +16,7 @@ interface BookingContextType {
   loading: boolean;
   error: string | null;
   fetchBookingsByDate: (date: string) => Promise<void>;
-  fetchBookingsByDateRange: (startDate: string, endDate: string) => Promise<void>;
+  fetchBookingsByFilter: (startDate: string, endDate: string , rooms:any) => Promise<Response>;
   fetchBookingById: (id: string) => Promise<void>;
   createBooking: (data: any) => Promise<void>;
   updateBooking: (id: string, data: any) => Promise<void>;
@@ -47,12 +47,13 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
     }
   };
 
-  const wrappedFetchBookingsByDateRange = async (startDate: string, endDate: string) => {
+  const wrappedFetchBookingsByFilter = async (startDate: string, endDate: string , rooms: any) => {
     try {
-      const response = await store.fetchBookingsByDateRange(startDate, endDate);
+      const response = await store.fetchBookingsByDateRange(startDate, endDate , rooms);
       if (response.success) {
         setBookings(response.data);
       }
+      return response;
       
     } catch (error) {
       toast.error('Failed to fetch bookings by date range');
@@ -137,7 +138,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
     loading: store.loading,
     error: store.error,
     fetchBookingsByDate: wrappedFetchBookingsByDate,
-    fetchBookingsByDateRange: wrappedFetchBookingsByDateRange,
+    fetchBookingsByFilter: wrappedFetchBookingsByFilter,
     fetchBookingById: wrappedFetchBookingById,
     createBooking: wrappedCreateBooking,
     updateBooking: wrappedUpdateBooking,

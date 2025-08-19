@@ -162,14 +162,14 @@ const handleRefresh = async (e: CustomEvent) => {
       
 
           <div
-  className={`flex flex-col gap-4 w-full h-full p-4 rounded-lg shadow-md 
-    ${records?.length > 0 || expenses?.length > 0 ? "bg-white" : ""}`}
->
+            className={`flex flex-col gap-4 w-full h-full p-4 rounded-lg shadow-md 
+            ${records?.length > 0 || expenses?.length > 0 ? "bg-white" : ""}`}
+            >
 
             <div className={`  h-full space-y-4   `} >
           {records && records?.length > 0 && (
             <div className="space-y-4">
-              <p className='text-black text-xl font-medium'>
+              <p className='text-lg font-semibold text-black'>
                 Room Sales
               </p>
               <div className=' flex flex-col space-y-2'>
@@ -187,7 +187,7 @@ const handleRefresh = async (e: CustomEvent) => {
           
           {expenses &&  expenses?.length > 0 && (
               <div className="space-y-4">
-                <p className='text-black text-xl'>
+                <p className='text-lg font-semibold text-black'>
                     Expenses
                 </p>
                 {expenses.map((expenses, index) => (
