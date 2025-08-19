@@ -1,7 +1,7 @@
 import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useIonRouter } from '@ionic/react';
-import { useBookingStore } from '../../services/stores/BookingStore';
+import { useBookingStore } from '../../services/stores/bookingStore';
 
 
 interface Booking {
