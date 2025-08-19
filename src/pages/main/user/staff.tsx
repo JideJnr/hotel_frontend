@@ -3,15 +3,17 @@ import { useEffect, useState } from "react";
 import { useStaff } from "../../../contexts/data/StaffContext";
 import { getNameInitials } from "../../../utils/getInitials";
 import {  IonPage, useIonRouter } from "@ionic/react";
-import SearchModal from "../../../components/modal/SearchModal";
 import Footer from "../../../components/footer/footer";
 import ScheduleCard from "../../../components/templates/card/ScheduleCard";
 import { FormHeader } from "../../../components/forms";
+import StaffAnalyticsModal from "../../../components/modal/StaffModal";
 
 
 const Users = () => {
   const router = useIonRouter();
   const { fetchStaffs, staffs } = useStaff();
+      const [showSearch, setShowSearch] = useState(false);
+
  
     useEffect(() => {
       refresh();
@@ -31,6 +33,11 @@ const Users = () => {
   return (
   <IonPage>
     <FormHeader />
+
+            <StaffAnalyticsModal 
+          isOpen={showSearch} 
+          onClose={() => setShowSearch(false)} 
+        />
 
     <div className="w-full h-full flex flex-col  pt-8 gap-4 bg-gray-100 overflow-y-auto text-black">
 
