@@ -275,11 +275,11 @@ interface RoomContextType {
   availableRooms: Room[];
   loading: boolean;
   error: string | null;
-  createRoom: (payload: any) => Promise<Response>;
-  updateRoom: (id: string, payload: any) => Promise<Response>;
-  fetchRooms: () => Promise<Response>;
-  fetchAvailableRooms: () => Promise<Response>;
-  fetchRoom: (id: string) => Promise<Response>;
+  createRoom: (payload: any) => Promise<void>;
+  updateRoom: (id: string, payload: any) => Promise<void>;
+  fetchRooms: () => Promise<void>;
+  fetchAvailableRooms: () => Promise<void>;
+  fetchRoom: (id: string) => Promise<void>;
 }
 
 interface Booking {
@@ -329,13 +329,13 @@ interface ExpenseContextType {
   loading: boolean;
   error: string | null;
 
-  createExpense: (payload: Partial<Expense>) => Promise<Expense>;
-  updateExpense: (id: string, payload: Partial<Expense>) => Promise<Expense>;
+  createExpense: (payload: Partial<Expense>) => Promise<void>;
+  updateExpense: (id: string, payload: Partial<Expense>) => Promise<void>;
   deleteExpense: (id: string) => Promise<any>;
   fetchExpense: (id: string) => Promise<any>;
-  fetchExpenses: (params?: { startDate?: string; endDate?: string; pageSize?: number }) => Promise<Expense[]>;
-  fetchTodayExpenses: () => Promise<Expense[]>;
-  fetchExpensesOnDate: (id: string) => Promise<Expense>;
-  fetchExpensesByCategory: (category: string, params?: { pageSize?: number }) => Promise<Expense[]>;
+  fetchExpenses: (params?: { startDate?: string; endDate?: string; pageSize?: number }) => Promise<void>;
+  fetchTodayExpenses: () => Promise<void>;
+  fetchExpensesOnDate: (id: string) => Promise<void>;
+  fetchExpensesByCategory: (category: string, params?: { pageSize?: number }) => Promise<void>;
   fetchExpenseSummary: (params: { startDate: string; endDate: string }) => Promise<any>;
 }

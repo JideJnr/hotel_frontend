@@ -19,24 +19,26 @@ const Room = () => {
 
   const { fetchRooms, rooms } = useRoom();
   const {fetchTotalRoomsCount, fetchActiveRoomsCount, totalRoomCount, activeRoomCount } = useComputation();
+useEffect(() => {
+  loadData(); // clean initial load
+}, []);
 
-  useEffect(() => {
-    refresh()
-  }, []);
+const loadData = async () => {
+  try {
+    await Promise.all([
+      fetchRooms(),
+      fetchTotalRoomsCount(),
+      fetchActiveRoomsCount(),
+    ]);
+  } catch (err) {
+    console.error("Load data error:", err);
+  }
+};
 
-      const refresh = async (e: CustomEvent) => {
-      try {
-        await Promise.all([
-          fetchRooms(),
-          fetchTotalRoomsCount(),
-          fetchActiveRoomsCount()
-        ]);
-      } catch (err) {
-        console.error("Refresh error:", err);
-      } finally {
-        e.detail.complete();
-      }
-    };
+const handleRefresh = async (e: CustomEvent) => {
+  await loadData();
+  e.detail.complete();
+};
 
   const handleAddNew = () => router.push("/register/room/stepone");
   const handleRoomClick = (id?: string) => id && router.push(`/room/${id}`);
@@ -60,7 +62,7 @@ const filteredRooms = (() => {
   return (
 
     <div className="  pt-8 text-black bg-gray-100 w-full h-full flex flex-col gap-6 overflow-y-auto ">
-      <IonRefresher slot="fixed" onIonRefresh={refresh} className="text-gray-800">
+      <IonRefresher slot="fixed" onIonRefresh={handleRefresh} className="text-gray-800">
         <IonRefresherContent />
       </IonRefresher>
                

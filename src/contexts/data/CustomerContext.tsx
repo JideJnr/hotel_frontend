@@ -14,14 +14,14 @@ interface CustomerContextType {
   customer: Customer | null;
   loading: boolean;
   error: string | null;
-  createCustomer: (payload: any) => Promise<Response>;
-  updateCustomer: (id: string, payload: any) => Promise<Response>;
-  fetchCustomers: () => Promise<Response>;
-  fetchCustomer: (id: string) => Promise<Response>;
-  fetchTotalCustomerCount: () => Promise<Response>;
-  fetchCustomerRegisteredToday: () => Promise<Response>;
-  fetchCustomerRegisterOnDate: () => Promise<Response>;
-  fetchCustomerRegisterOnDateRange: () => Promise<Response>;
+  createCustomer: (payload: any) => Promise<void>;
+  updateCustomer: (id: string, payload: any) => Promise<void>;
+  fetchCustomers: () => Promise<void>;
+  fetchCustomer: (id: string) => Promise<void>;
+  fetchTotalCustomerCount: () => Promise<void>;
+  fetchCustomerRegisteredToday: () => Promise<void>;
+  fetchCustomerRegisterOnDate: (date:string) => Promise<void>;
+  fetchCustomerRegisterOnDateRange: (startDate:string, endDate:string) => Promise<void>;
   searchCustomers: (query: string) => Promise<Response>; // <-- NEW
 }
 
@@ -58,10 +58,10 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
         toast.success('Customer created successfully');
         sessionStorage.removeItem("customerData");
         router.push(`/customer/${response?.data.id}`, 'root');
-        return response;
+        
       } else {
         toast.error(`Creation failed: ${response.message}`);
-        return response;
+        
       }
     } catch (error) {
       toast.error('Customer creation error');
@@ -78,10 +78,10 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
         setCustomer(updatedCustomer);
         toast.success('Customer updated successfully');
         router.push(`/customer/${updatedCustomer.id}`, 'forward');
-        return response;
+       
       } else {
         toast.error(`Update failed: ${response.message}`);
-        return response;
+        
       }
     } catch (error) {
       toast.error('Customer update error');

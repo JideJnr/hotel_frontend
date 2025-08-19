@@ -80,7 +80,7 @@ const Analytics = () => {
           <div className="space-y-4">
             <p className="text-black text-xl">Room Sales</p>
             {overview?.customers.map((event, index) => (
-              <div key={index} onClick={() => router.push(`/customer/${id}`)}>
+              <div key={index} onClick={() => router.push(`/customer/${event.id}`)}>
                 <ScheduleCard
                   name={event.customerName}
                   details={`Room ${event.RoomNumber}`}

@@ -16,6 +16,39 @@ import {
   getBalanceForDateRange,
 } from '../api/computeApi';
 
+// types/computation.d.ts or inside same file
+export interface ComputationState {
+  loading: boolean;
+  error: string | null;
+
+  // ===== Records =====
+  fetchRecordCountForDate: (date: string) => Promise<Response>;
+  fetchRecordCountForDateRange: (startDate: string, endDate: string) => Promise<Response>;
+
+  // ===== Rooms =====
+  fetchActiveRoomCount: () => Promise<Response>;
+  fetchAllRoomCount: () => Promise<Response>;
+
+  // ===== Customers =====
+  fetchAllCustomerCount: () => Promise<Response>;
+  fetchCustomerRegisteredOnDate: (date: string) => Promise<Response>;
+  fetchCustomerRegisteredOnDateRange: (startDate: string, endDate: string) => Promise<Response>;
+  fetchActiveCustomerCount: () => Promise<Response>;
+
+  // ===== Expenses =====
+  fetchExpensesCountOnDate: (date: string) => Promise<Response>;
+  fetchExpensesCountOnDateRange: (startDate: string, endDate: string) => Promise<Response>;
+
+  // ===== Bookings =====
+  fetchBookingCountOnDate: (date: string) => Promise<Response>;
+  fetchBookingCountOnDateRange: (startDate: string, endDate: string) => Promise<Response>;
+
+  // ===== Balance =====
+  fetchBalanceOnDate: (date: string) => Promise<Response>;
+  fetchBalanceOnDateRange: (startDate: string, endDate: string) => Promise<Response>;
+}
+
+
 export const useComputationStore = create<ComputationState>((set) => ({
   loading: false,
   error: null,

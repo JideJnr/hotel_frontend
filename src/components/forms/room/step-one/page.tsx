@@ -144,7 +144,7 @@ export default function CreateRoomForm() {
             onChange={(opts) =>
               setFormData((fd) => ({
                 ...fd,
-                amenities: opts.map((o) => o.value)
+                amenities: opts.map((o) => String(o.value))
               }))
             }
             options={amenitiesOptions}

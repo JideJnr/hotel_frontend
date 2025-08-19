@@ -77,7 +77,7 @@ export default function SalesStepOne() {
             }
             onChange={opt => setFormData(fd => ({
               ...fd,
-              customerId: opt ? opt.value : null,
+              customerId: opt ? String(opt.value) : null,
               customerName: opt ? opt.label : null
             }))}
             options={customers.map(c => ({ value: c.id, label: c.userName }))}
@@ -97,7 +97,7 @@ export default function SalesStepOne() {
             }
             onChange={opt => setFormData(fd => ({
               ...fd,
-              roomId: opt ? opt.value : null,
+              roomId: opt ? String(opt.value) : null,
               roomName: opt ? opt.label : null
             }))}
             options={availableRooms.map(r => ({

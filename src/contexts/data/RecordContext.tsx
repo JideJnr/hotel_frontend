@@ -15,11 +15,11 @@ interface RecordContextType {
   record: Record | null;
   loading: boolean;
   error: string | null;
-  createRecord: (payload: any) => Promise<Response>;
-  updateRecord: (id: string, payload: any) => Promise<Response>;
-  fetchRecord: (id: string) => Promise<Response>;
-  fetchRecords: (id: string) => Promise<Response>;
-  checkOutRecord: (id: string) => Promise<Response>;
+  createRecord: (payload: any) => Promise<void>;
+  updateRecord: (id: string, payload: any) => Promise<void>;
+  fetchRecord: (id: string) => Promise<void>;
+  fetchRecords: (id: string) => Promise<void>;
+  checkOutRecord: (id: string) => Promise<Response | undefined>;
   fetchTodayRecords: () => Promise<void>;
 }
 

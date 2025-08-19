@@ -1,4 +1,5 @@
-import { createContext, useContext, ReactNode, useState, useCallback } from "react";
+import { createContext, useContext, ReactNode, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import { useComputationStore } from "../../services/stores/computationStore";
 
 interface ComputationContextType {
@@ -14,17 +15,17 @@ interface ComputationContextType {
   error: string | null;
 
   fetchRecordCountOnDate: (date: string) => Promise<void>;
-  fetchRecordCountForDateRange: (range: any) => Promise<void>;
+  fetchRecordCountForDateRange: (startDate:string, endDate:string) => Promise<void>;
   fetchActiveRoomsCount: () => Promise<void>;
   fetchTotalRoomsCount: () => Promise<void>;
   fetchActiveCustomersCount: () => Promise<void>;
   fetchTotalCustomersCount: () => Promise<void>;
   fetchNewCustomersOnDateCount: (date: string) => Promise<void>;
-  fetchNewCustomersOnDateRangeCount: () => Promise<void>;
+  fetchNewCustomersOnDateRangeCount: (startDate:string, endDate:string) => Promise<void>;
   fetchExpensesCountOnDate: (date: string) => Promise<void>;
-  fetchExpensesCountOnDateRange: (range: any) => Promise<void>;
+  fetchExpensesCountOnDateRange: (startDate:string, endDate:string) => Promise<void>;
   fetchBalanceOnDate: (date: string) => Promise<void>;
-  fetchBalanceOnDateRange: (range: any) => Promise<void>;
+  fetchBalanceOnDateRange: (startDate:string, endDate:string) => Promise<void>;
 }
 
 const ComputationContext = createContext<ComputationContextType | undefined>(undefined);
@@ -39,112 +40,219 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [newCustomerCount, setNewCustomerCount] = useState<number | null>(null);
   const [expensesCount, setExpensesCount] = useState<number | null>(null);
 
-  const {
-    loading,
-    error,
-    fetchRecordCountForDate,
-    fetchRecordCountForDateRange,
-    fetchActiveRoomCount,
-    fetchAllRoomCount,
-    fetchAllCustomerCount,
-    fetchCustomerRegisteredOnDate,
-    getCustomerRegisteredOnDateRange,
-    fetchActiveCustomerCount,
-    fetchExpensesCountOnDate,
-    fetchExpensesCountOnDateRange,
-    fetchBalanceOnDate,
-    fetchBalanceOnDateRange,
-  } = useComputationStore();
+  const store = useComputationStore();
 
   // ---- WRAPPERS ----
-  const wrappedFetchRecordCountForDate = useCallback(async (date: string) => {
-    const res = await fetchRecordCountForDate(date);
-    setRecordCount(res?.data?.count || 0);
-  }, [fetchRecordCountForDate]);
+  const wrappedFetchRecordCountForDate = async (date: string) => {
+    try {
+      const response = await store.fetchRecordCountForDate(date);
+      if (response.success) {
+        setRecordCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Record count for date"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch record count for date");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchRecordCountForDateRange = useCallback(async (range: any) => {
-    const res = await fetchRecordCountForDateRange(range);
-    setRecordCount(res?.data?.count || 0);
-  }, [fetchRecordCountForDateRange]);
+  const wrappedFetchRecordCountForDateRange = async (startDate:string, endDate:string) => {
+    try {
+      const response = await store.fetchRecordCountForDateRange(startDate, endDate);
+      if (response.success) {
+        setRecordCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Record count for date range"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch record count for date range");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchActiveRooms = useCallback(async () => {
-    const res = await fetchActiveRoomCount();
-    setActiveRoomCount(res?.data?.count || 0);
-  }, [fetchActiveRoomCount]);
+  const wrappedFetchActiveRooms = async () => {
+    try {
+      const response = await store.fetchActiveRoomCount();
+      if (response.success) {
+        setActiveRoomCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Active rooms"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch active rooms");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchTotalRooms = useCallback(async () => {
-    const res = await fetchAllRoomCount();
-    setTotalRoomCount(res?.data?.count || 0);
-  }, [fetchAllRoomCount]);
+  const wrappedFetchTotalRooms = async () => {
+    try {
+      const response = await store.fetchAllRoomCount();
+      if (response.success) {
+        setTotalRoomCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Total rooms"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch total rooms");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchActiveCustomers = useCallback(async () => {
-    const res = await fetchActiveCustomerCount();
-    setActiveCustomerCount(res?.data?.count || 0);
-  }, [fetchActiveCustomerCount]);
+  const wrappedFetchActiveCustomers = async () => {
+    try {
+      const response = await store.fetchActiveCustomerCount();
+      if (response.success) {
+        setActiveCustomerCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Active customers"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch active customers");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchNewCustomersOnDateCount = useCallback(async (date: string) => {
-    const res = await fetchCustomerRegisteredOnDate(date);
-    setNewCustomerCount(res?.data?.count || 0);
-  }, [fetchCustomerRegisteredOnDate]);
+  const wrappedFetchTotalCustomers = async () => {
+    try {
+      const response = await store.fetchAllCustomerCount();
+      if (response.success) {
+        setTotalCustomerCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Total customers"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch total customers");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchNewCustomersOnDateRangeCount = useCallback(async () => {
-    const res = await getCustomerRegisteredOnDateRange();
-    setTotalCustomerCount(res?.data?.count || 0);
-  }, [getCustomerRegisteredOnDateRange]);
+  const wrappedFetchNewCustomersOnDateCount = async (date: string) => {
+    try {
+      const response = await store.fetchCustomerRegisteredOnDate(date);
+      if (response.success) {
+        setNewCustomerCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "New customers on date"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch new customers on date");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchExpensesOnDate = useCallback(async (date: string) => {
-    const res = await fetchExpensesCountOnDate(date);
-    setExpensesCount(res?.data?.count || 0);
-  }, [fetchExpensesCountOnDate]);
+  const wrappedFetchNewCustomersOnDateRangeCount = async (startDate:string, endDate:string) => {
+    try {
+      const response = await store.fetchCustomerRegisteredOnDateRange(startDate, endDate);
+      if (response.success) {
+        setTotalCustomerCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "New customers in date range"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch new customers in date range");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchExpensesOnDateRange = useCallback(async (range: any) => {
-    const res = await fetchExpensesCountOnDateRange(range);
-    setExpensesCount(res?.data?.count || 0);
-  }, [fetchExpensesCountOnDateRange]);
+  const wrappedFetchExpensesOnDate = async (date: string) => {
+    try {
+      const response = await store.fetchExpensesCountOnDate(date);
+      if (response.success) {
+        setExpensesCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Expenses on date"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch expenses on date");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchBalanceOnDate = useCallback(async (startDate: string) => {
-    const res = await fetchBalanceOnDate(startDate);
-    setBalance(res?.data?.totalBalance || 0);
-  }, [fetchBalanceOnDate]);
+  const wrappedFetchExpensesOnDateRange = async (startDate: string, endDate: string) => {
+    try {
+      const response = await store.fetchExpensesCountOnDateRange(startDate, endDate);
+      if (response.success) {
+        setExpensesCount(response.data?.count || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Expenses in date range"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch expenses in date range");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchBalanceOnDateRange = useCallback(async (range: any) => {
-    const res = await fetchBalanceOnDateRange(range);
-    setBalance(res?.data?.totalBalance || 0);
-  }, [fetchBalanceOnDateRange]);
+  const wrappedFetchBalanceOnDate = async (date: string) => {
+    try {
+      const response = await store.fetchBalanceOnDate(date);
+      if (response.success) {
+        setBalance(response.data?.totalBalance || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Balance on date"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch balance on date");
+      console.error("Error:", error);
+    }
+  };
 
-  const wrappedFetchTotalCustomers = useCallback(async () => {
-    const res = await fetchAllCustomerCount();
-    setTotalCustomerCount(res?.data?.count || 0);
-  }, [fetchAllCustomerCount]);
+  const wrappedFetchBalanceOnDateRange = async (startDate: string, endDate: string) => {
+    try {
+      const response = await store.fetchBalanceOnDateRange(startDate,endDate);
+      if (response.success) {
+        setBalance(response.data?.totalBalance || 0);
+      } else {
+        toast.error(`Failed: ${response.message || "Balance in date range"}`);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch balance in date range");
+      console.error("Error:", error);
+    }
+  };
 
-  // ---- PROVIDER ----
+  // ---- CONTEXT VALUE ----
+  const contextValue = useMemo(
+    () => ({
+      balance,
+      recordCount,
+      totalRoomCount,
+      activeRoomCount,
+      totalCustomerCount,
+      activeCustomerCount,
+      newCustomerCount,
+      expensesCount,
+      loading: store.loading,
+      error: store.error,
+      fetchRecordCountOnDate: wrappedFetchRecordCountForDate,
+      fetchRecordCountForDateRange: wrappedFetchRecordCountForDateRange,
+      fetchActiveRoomsCount: wrappedFetchActiveRooms,
+      fetchTotalRoomsCount: wrappedFetchTotalRooms,
+      fetchActiveCustomersCount: wrappedFetchActiveCustomers,
+      fetchTotalCustomersCount: wrappedFetchTotalCustomers,
+      fetchNewCustomersOnDateCount: wrappedFetchNewCustomersOnDateCount,
+      fetchNewCustomersOnDateRangeCount: wrappedFetchNewCustomersOnDateRangeCount,
+      fetchExpensesCountOnDate: wrappedFetchExpensesOnDate,
+      fetchExpensesCountOnDateRange: wrappedFetchExpensesOnDateRange,
+      fetchBalanceOnDate: wrappedFetchBalanceOnDate,
+      fetchBalanceOnDateRange: wrappedFetchBalanceOnDateRange,
+    }),
+    [
+      balance,
+      recordCount,
+      totalRoomCount,
+      activeRoomCount,
+      totalCustomerCount,
+      activeCustomerCount,
+      newCustomerCount,
+      expensesCount,
+      store.loading,
+      store.error,
+    ]
+  );
+
   return (
-    <ComputationContext.Provider
-      value={{
-        balance,
-        recordCount,
-        totalRoomCount,
-        activeRoomCount,
-        totalCustomerCount,
-        activeCustomerCount,
-        expensesCount,
-        newCustomerCount,
-        loading,
-        error,
-        fetchRecordCountOnDate: wrappedFetchRecordCountForDate,
-        fetchRecordCountForDateRange: wrappedFetchRecordCountForDateRange,
-        fetchActiveRoomsCount: wrappedFetchActiveRooms,
-        fetchTotalRoomsCount: wrappedFetchTotalRooms,
-        fetchActiveCustomersCount: wrappedFetchActiveCustomers,
-        fetchTotalCustomersCount: wrappedFetchTotalCustomers,
-        fetchNewCustomersOnDateCount: wrappedFetchNewCustomersOnDateCount,
-        fetchNewCustomersOnDateRangeCount: wrappedFetchNewCustomersOnDateRangeCount,
-        fetchExpensesCountOnDate: wrappedFetchExpensesOnDate,
-        fetchExpensesCountOnDateRange: wrappedFetchExpensesOnDateRange,
-        fetchBalanceOnDate: wrappedFetchBalanceOnDate,
-        fetchBalanceOnDateRange: wrappedFetchBalanceOnDateRange,
-      }}
-    >
+    <ComputationContext.Provider value={contextValue}>
       {children}
     </ComputationContext.Provider>
   );

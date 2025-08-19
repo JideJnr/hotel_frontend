@@ -118,7 +118,12 @@ const ExpenseStepOne = () => {
             name="category"
             value={formData.category}
             onChange={opt =>
-              setFormData(fd => ({ ...fd, category: opt }))
+              setFormData(fd => ({
+                ...fd,
+                category: opt
+                  ? { value: String(opt.value), label: opt.label }
+                  : null
+              }))
             }
             options={expenseCategories.map(cat => ({
               value: cat.id,

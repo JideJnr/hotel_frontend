@@ -1,8 +1,7 @@
-import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
-import { toast } from 'react-toastify';
-import { useIonRouter } from '@ionic/react';
-import { useExpenseStore } from '../../services/stores/expensesStore';
-
+import { createContext, useContext, ReactNode, useMemo, useState } from "react";
+import { toast } from "react-toastify";
+import { useIonRouter } from "@ionic/react";
+import { useExpenseStore } from "../../services/stores/expensesStore";
 
 const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
 
@@ -15,55 +14,62 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
   // 🔹 Create Expense
   const wrappedCreateExpense = async (payload: Partial<Expense>) => {
     try {
-      const created = await store.createExpense(payload);
-      toast.success('Expense created successfully');
-      sessionStorage.removeItem('expenseData');
-      router.push('/', 'forward');
-      return created;
+      const res = await store.createExpense(payload);
+      if (res?.success) {
+        toast.success("Expense created successfully");
+        sessionStorage.removeItem("expenseData");
+        router.push("/", "forward");
+      } else {
+        toast.error(res?.message || "Expense creation failed");
+      }
     } catch (error) {
-      toast.error('Expense creation failed');
-      
+      toast.error("Expense creation failed");
     }
   };
 
   // 🔹 Update Expense
   const wrappedUpdateExpense = async (id: string, payload: Partial<Expense>) => {
     try {
-      const updated = await store.updateExpense(id, payload);
-      toast.success('Expense updated successfully');
-      sessionStorage.removeItem('expenseData');
-      router.push('/expenses', 'forward');
-     
+      const res = await store.updateExpense(id, payload);
+      if (res?.success) {
+        toast.success("Expense updated successfully");
+        sessionStorage.removeItem("expenseData");
+        router.push("/expenses", "forward");
+      } else {
+        toast.error(res?.message || "Expense update failed");
+      }
     } catch (error) {
-      toast.error('Expense update failed');
-    
+      toast.error("Expense update failed");
     }
   };
 
   // 🔹 Delete Expense
   const wrappedDeleteExpense = async (id: string) => {
     try {
-      await store.deleteExpense(id);
-      
-      toast.success('Expense deleted successfully');
-      sessionStorage.removeItem('expenseData');
-      router.push('/expenses', 'forward');
-    
+      const res = await store.deleteExpense(id);
+      if (res?.success) {
+        toast.success("Expense deleted successfully");
+        sessionStorage.removeItem("expenseData");
+        router.push("/expenses", "forward");
+      } else {
+        toast.error(res?.message || "Expense deletion failed");
+      }
     } catch (error) {
-      toast.error('Expense deletion failed');
-     
+      toast.error("Expense deletion failed");
     }
   };
 
   // 🔹 Fetch Expenses by Range
   const wrappedFetchExpenses = async (params?: { startDate?: string; endDate?: string; pageSize?: number }) => {
     try {
-      const response = await store.fetchExpensesOnDateRange(params);
-      setExpenses(response.data);
-      
+      const res = await store.fetchExpensesOnDateRange(params);
+      if (res?.success) {
+        setExpenses(res.data || []);
+      } else {
+        toast.error(res?.message || "Failed to fetch expenses");
+      }
     } catch (error) {
-      toast.error('Failed to fetch expenses');
-      
+      toast.error("Failed to fetch expenses");
     }
   };
 
@@ -71,46 +77,55 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
   const wrappedFetchTodayExpenses = async () => {
     try {
       const today = new Date();
-      const date = today.toISOString().split('T')[0];
-    
-      const response = await store.fetchExpensesOnDate( date );
-      setExpenses(response.data);
-      
+      const date = today.toISOString().split("T")[0];
+      const res = await store.fetchExpensesOnDate(date);
+      if (res?.success) {
+        setExpenses(res.data || []);
+      } else {
+        toast.error(res?.message || "Failed to fetch today's expenses");
+      }
     } catch (error) {
-      toast.error('Failed to fetch today\'s expenses');
-      
+      toast.error("Failed to fetch today's expenses");
     }
   };
 
-    // 🔹 Fetch Today's Expenses
-  const wrappedFetchExpensesOnDate = async (date:string) => {
+  // 🔹 Fetch Expenses on Specific Date
+  const wrappedFetchExpensesOnDate = async (date: string) => {
     try {
-      const response = await store.fetchExpensesOnDate( date );
-      setExpenses(response.data);
-      
+      const res = await store.fetchExpensesOnDate(date);
+      if (res?.success) {
+        setExpenses(res.data || []);
+      } else {
+        toast.error(res?.message || "Failed to fetch expenses");
+      }
     } catch (error) {
-      toast.error('Failed to fetch today\'s expenses');
-      
+      toast.error("Failed to fetch expenses");
     }
   };
 
   // 🔹 Fetch Single Expense
   const wrappedFetchExpense = async (id: string) => {
     try {
-      const response = await store.fetchExpense(id);
-      setExpense(response.data);
-     
+      const res = await store.fetchExpense(id);
+      if (res?.success) {
+        setExpense(res.data || null);
+      } else {
+        toast.error(res?.message || `Failed to fetch expense ${id}`);
+      }
     } catch (error) {
       toast.error(`Failed to fetch expense ${id}`);
-      
     }
   };
 
   // 🔹 Fetch Expenses by Category
   const wrappedFetchExpensesByCategory = async (category: string, params?: { pageSize?: number }) => {
     try {
-      const response = await store.fetchExpensesByCategory(category, params);
-      setExpenses(response.data);
+      const res = await store.fetchExpensesByCategory(category, params);
+      if (res?.success) {
+        setExpenses(res.data || []);
+      } else {
+        toast.error(res?.message || `Failed to fetch expenses for category ${category}`);
+      }
     } catch (error) {
       toast.error(`Failed to fetch expenses for category ${category}`);
     }
@@ -119,11 +134,13 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
   // 🔹 Fetch Summary
   const wrappedFetchExpenseSummary = async (params: { startDate: string; endDate: string }) => {
     try {
-      const response =  await store.fetchExpenseSummary(params);
-
+      const res = await store.fetchExpenseSummary(params);
+      if (!res?.success) {
+        toast.error(res?.message || "Failed to fetch expense summary");
+      }
+      // ⚠️ Not setting state because summary may need its own state field
     } catch (error) {
-      toast.error('Failed to fetch expense summary');
-      
+      toast.error("Failed to fetch expense summary");
     }
   };
 
@@ -151,6 +168,6 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
 
 export const useExpenses = () => {
   const context = useContext(ExpenseContext);
-  if (!context) throw new Error('useExpenses must be used within an ExpenseProvider');
+  if (!context) throw new Error("useExpenses must be used within an ExpenseProvider");
   return context;
 };

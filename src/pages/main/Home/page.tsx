@@ -28,30 +28,34 @@ const Home = () => {
 
   const todaysDate = getTodayDate();
   
-  useEffect(() => {
-    refresh();
-  }, [todaysDate]);
+useEffect(() => {
+  loadData(); // initial load whenever todaysDate changes
+}, [todaysDate]);
 
-    const refresh = async (e: CustomEvent) => {
-      try {
-        await Promise.all([
-              fetchBalanceOnDate(todaysDate),
-              fetchNewCustomersOnDateCount(todaysDate),
-              fetchRecordCountOnDate(todaysDate),
-              fetchExpensesCountOnDate(todaysDate),
-              fetchRecords(todaysDate),
-              fetchExpensesOnDate(todaysDate)
-        ]);
-      } catch (err) {
-        console.error("Refresh error:", err);
-      } finally {
-        e.detail.complete();
-      }
-    };
+const loadData = async () => {
+  try {
+    await Promise.all([
+      fetchBalanceOnDate(todaysDate),
+      fetchNewCustomersOnDateCount(todaysDate),
+      fetchRecordCountOnDate(todaysDate),
+      fetchExpensesCountOnDate(todaysDate),
+      fetchRecords(todaysDate),
+      fetchExpensesOnDate(todaysDate),
+    ]);
+  } catch (err) {
+    console.error("Load data error:", err);
+  }
+};
+
+const handleRefresh = async (e: CustomEvent) => {
+  await loadData();
+  e.detail.complete();
+};
+
 
   return (
     <div className="flex flex-col gap-8  pt-8 bg-gray-100 overflow-y-auto h-full w-full text-black">
-        <IonRefresher slot="fixed" onIonRefresh={refresh} className="text-gray-800">
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh} className="text-gray-800">
           <IonRefresherContent />
         </IonRefresher>
               

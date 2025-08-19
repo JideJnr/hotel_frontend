@@ -38,7 +38,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       if (response.success) {
         setBookings(response.data);
       }
-      return response;
+      
     } catch (error) {
       toast.error('Failed to fetch bookings by date');
       console.error('Fetch error:', error);
@@ -53,7 +53,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       if (response.success) {
         setBookings(response.data);
       }
-      return response;
+      
     } catch (error) {
       toast.error('Failed to fetch bookings by date range');
       console.error('Fetch error:', error);
@@ -68,7 +68,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
       if (response.success) {
         setBooking(response.data);
       }
-      return response;
+      
     } catch (error) {
       toast.error(`Failed to fetch booking ${id}`);
       console.error('Fetch error:', error);

@@ -126,7 +126,7 @@ export default function BookingStepOne() {
 
               setFormData(fd => ({
                 ...fd,
-                customerId: opt ? (opt.value) : null,
+                customerId: opt ? String(opt.value) : null,
                 customerName: opt ? opt.label : null
               }))
             }
@@ -145,13 +145,13 @@ export default function BookingStepOne() {
             name="room"
             value={
               formData.roomId != null
-                ? { value: formData.roomId, label: formData.roomLabel! }
+                ? { value: formData.roomId, label: formData.roomName! }
                 : null
             }
             onChange={opt =>
               setFormData(fd => ({
                 ...fd,
-                roomId: opt ? opt.value : null,
+                roomId: opt ? String(opt.value) : null,
                 roomName: opt ? opt.label : null
               }))
             }

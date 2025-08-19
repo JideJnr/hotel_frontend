@@ -37,7 +37,7 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     const response = await fetchOverview({
       startDate,
       endDate,
-      category: selected 
+      category: selected.map(opt => opt.value as string)
      
     });
     if (response.success) {

@@ -5,7 +5,7 @@ import { useAnalyticsStore } from '../../services/stores/analyticStore';
 // Define proper types for Analytics data
 interface AnalyticsOverview {
   customers: any[];
-  rooms: any[];
+  records: any[];
   expenses: any[];
   bookings: any[];
 }
@@ -32,17 +32,22 @@ export const AnalyticsProvider: React.FC<{ children: ReactNode }> = ({ children 
     endDate?: string;
     category?: string[];
   
-  }) => {
+  }): Promise<Response> => {
     try {
       const response = await getOverviewData(params);
       console.log("Analytics Overview Response:", response);
       if (response?.success) {
         setOverview(response.data); // Save overview response into local state
       }
+      // If response is undefined, throw an error to be caught below
+      if (!response) {
+        throw new Error('No response from getOverviewData');
+      }
       return response;
     } catch (err) {
       toast.error('Failed to fetch analytics overview');
       console.error('Fetch error:', err);
+      throw err;
     }
   };
 

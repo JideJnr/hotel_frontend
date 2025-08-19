@@ -19,7 +19,7 @@ const Users = () => {
       refresh();
     }, []);
 
-       const refresh = async (e: CustomEvent) => {
+       const refresh = async (e?: CustomEvent) => {
       try {
         await Promise.all([
           fetchStaffs()
@@ -27,7 +27,9 @@ const Users = () => {
       } catch (err) {
         console.error("Refresh error:", err);
       } finally {
-        e.detail.complete();
+        if (e && e.detail && typeof e.detail.complete === "function") {
+          e.detail.complete();
+        }
       }
     };
   return (

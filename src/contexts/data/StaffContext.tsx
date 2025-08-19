@@ -14,12 +14,12 @@ interface StaffContextType {
   staff: Staff | null;
   loading: boolean;
   error: string | null;
-  createStaff: (payload: any) => Promise<Response>;
-  updateStaff: (id: string, payload: any) => Promise<Response>;
-  fetchStaffs: () => Promise<Response>;
-  fetchStaff: (id: string) => Promise<Response>;
-  fetchTotalStaffCount: () => Promise<Response>;
-  searchStaffs: (query: string) => Promise<Response>; // <-- NEW
+  createStaff: (payload: any) => Promise<void>;
+  updateStaff: (id: string, payload: any) => Promise<void>;
+  fetchStaffs: () => Promise<void>;
+  fetchStaff: (id: string) => Promise<void>;
+  fetchTotalStaffCount: () => Promise<void>;
+  searchStaffs: (query: string) => Promise<void>; // <-- NEW
 }
 
 const StaffContext = createContext<StaffContextType | undefined>(undefined);
@@ -53,10 +53,10 @@ export const StaffProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         toast.success('Staff created successfully');
         sessionStorage.removeItem("staffData");
         router.push(`/staff/${response?.data.id}`, 'root');
-        return response;
+        
       } else {
         toast.error(`Creation failed: ${response.message}`);
-        return response;
+        
       }
     } catch (error) {
       toast.error('Staff creation error');
@@ -73,10 +73,10 @@ export const StaffProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setStaff(updatedStaff);
         toast.success('Staff updated successfully');
         router.push(`/staff/${updatedStaff.id}`, 'forward');
-        return response;
+       
       } else {
         toast.error(`Update failed: ${response.message}`);
-        return response;
+        
       }
     } catch (error) {
       toast.error('Staff update error');
@@ -92,7 +92,7 @@ export const StaffProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }
     } catch (error) {
       toast.error('Failed to fetch staffs');
-      throw error;
+      
     }
   };
 
@@ -104,7 +104,7 @@ export const StaffProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       }
     } catch (error) {
       toast.error(`Failed to fetch staff ${id}`);
-      throw error;
+      
     }
   };
 
@@ -128,10 +128,10 @@ export const StaffProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       if (results && Array.isArray(results)) {
         setStaffs(results);
       }
-      return results;
+      
     } catch (error) {
       toast.error('Staff search error');
-      throw error;
+      
     }
   };
 

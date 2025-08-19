@@ -46,7 +46,7 @@ const Issues = () => {
     
       </div>
 
-                <div className="pt-8 px-4 flex flex-col gap-4  bg-white rounded-lg shadow-md p-4 h-full">
+      <div className="pt-8 px-4 flex flex-col gap-4  bg-white rounded-lg shadow-md p-4 h-full">
 
             <div className="flex ">
             
@@ -67,7 +67,7 @@ const Issues = () => {
           
             <Footer/>
   
-          </div>
+      vb</div>
         
     </IonPage>
   );
