@@ -3,33 +3,6 @@ import { toast } from 'react-toastify';
 import { useIonRouter } from '@ionic/react';
 import { useExpenseStore } from '../../services/stores/expensesStore';
 
-interface Expense {
-  id: string;
-  category: string;
-  amount: number;
-  description?: string;
-  paymentMethod?: string;
-  reference?: string;
-  date?: string;
-  receiptURL?: string;
-}
-
-interface ExpenseContextType {
-  expenses: Expense[];
-  expense: Expense | null;
-  loading: boolean;
-  error: string | null;
-
-  createExpense: (payload: Partial<Expense>) => Promise<Expense>;
-  updateExpense: (id: string, payload: Partial<Expense>) => Promise<Expense>;
-  deleteExpense: (id: string) => Promise<any>;
-  fetchExpense: (id: string) => Promise<any>;
-  fetchExpenses: (params?: { startDate?: string; endDate?: string; pageSize?: number }) => Promise<Expense[]>;
-  fetchTodayExpenses: () => Promise<Expense[]>;
-  fetchExpensesOnDate: (id: string) => Promise<Expense>;
-  fetchExpensesByCategory: (category: string, params?: { pageSize?: number }) => Promise<Expense[]>;
-  fetchExpenseSummary: (params: { startDate: string; endDate: string }) => Promise<any>;
-}
 
 const ExpenseContext = createContext<ExpenseContextType | undefined>(undefined);
 

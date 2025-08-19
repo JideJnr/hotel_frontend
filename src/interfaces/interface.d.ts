@@ -110,6 +110,8 @@ interface CustomerState {
   updateCustomer: (id: string, data: Partial<Customer>) => Promise<Response>;
   deleteCustomer: (id: string) => Promise<Response>;
   getTotalCustomerCount: () => Promise<Response>;
+  getCustomerRegisteredOnDate: (date:string) => Promise<Response>;
+  getCustomerRegisteredOnDateRange: (params:any) => Promise<Response>;
   searchCustomer:(query: string) => Promise<Response>;
 }
 
@@ -308,3 +310,30 @@ interface UpdateBookingInput {
   bookingInstruction?: string;
 }
 
+interface Expense {
+  id: string;
+  category: string;
+  amount: number;
+  description?: string;
+  paymentMethod?: string;
+  reference?: string;
+  date?: string;
+  receiptURL?: string;
+}
+
+interface ExpenseContextType {
+  expenses: Expense[];
+  expense: Expense | null;
+  loading: boolean;
+  error: string | null;
+
+  createExpense: (payload: Partial<Expense>) => Promise<Expense>;
+  updateExpense: (id: string, payload: Partial<Expense>) => Promise<Expense>;
+  deleteExpense: (id: string) => Promise<any>;
+  fetchExpense: (id: string) => Promise<any>;
+  fetchExpenses: (params?: { startDate?: string; endDate?: string; pageSize?: number }) => Promise<Expense[]>;
+  fetchTodayExpenses: () => Promise<Expense[]>;
+  fetchExpensesOnDate: (id: string) => Promise<Expense>;
+  fetchExpensesByCategory: (category: string, params?: { pageSize?: number }) => Promise<Expense[]>;
+  fetchExpenseSummary: (params: { startDate: string; endDate: string }) => Promise<any>;
+}

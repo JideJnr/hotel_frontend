@@ -29,7 +29,7 @@ export const useStaffStore = create<StaffState>((set) => ({
     }
   },
 
-  createStaff: async (data: Partial<StaffData>) => {
+  createStaff: async (data: any) => {
     set({ loading: true, error: null });
     try {
       const response = await createStaff(data);  
@@ -42,7 +42,7 @@ export const useStaffStore = create<StaffState>((set) => ({
     }
   },
 
-  updateStaff: async (id: string, data: Partial<StaffData>) => {
+  updateStaff: async (id: string, data: any) => {
     set({ loading: true, error: null });
     try {
       const response = await updateStaff(id, data);

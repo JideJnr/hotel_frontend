@@ -6,21 +6,11 @@ import { useBooking } from "../../../../../contexts/data/BookingContext";
 import Button from "../../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../../components/forms";
 
-interface FormData {
-  category: {
-    label: string;
-    value: string;
-  };
-  amount: string;
-  receiptBase64?: string;
-  paymentMethod?: string;
-  reference?: string;
-}
 
 const BookingPaymentStepTwo = () => {
   const router = useIonRouter();
   const { updateBooking } = useBooking();
-  const [formData, setFormData] = useState<FormData | null>(null);
+  const [formData, setFormData] = useState<any | null>(null);
 
   useEffect(() => {
     const loadStoredData = () => {

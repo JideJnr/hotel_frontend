@@ -17,7 +17,7 @@ const options: Option[] = [
   { value: "sales", label: "Sales" },
   { value: "customers", label: "Customers" },
   { value: "expenses", label: "Expenses" },
-  { value: "bookings", label: "Bookings" },
+
 ];
 
 const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({

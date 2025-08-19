@@ -187,8 +187,8 @@ const Home = () => {
                     Expenses
                 </p>
                 {expenses.map((expenses, index) => (
-                  <div onClick={() => router.push(`/expenses/a`)}>
-                    <ScheduleCard key={index} name={expenses.expenseType} details={`N ${expenses.price}`} />
+                  <div onClick={() => router.push(`/expenses/${expenses.id}`)}>
+                    <ScheduleCard key={index} name={expenses.category} details={`N ${expenses.amount}`} />
                   </div>
                 ))}
               </div>

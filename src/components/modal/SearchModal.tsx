@@ -41,7 +41,7 @@ const SearchModal: React.FC<{
 
   const handleClearInput = () => setInputValue("");
 
-  const handleUserSelect = (customer: Customer) => {
+  const handleUserSelect = (customer: any) => {
     onClose();
     router.push(`/customer/${customer.id}`, "forward");
   };

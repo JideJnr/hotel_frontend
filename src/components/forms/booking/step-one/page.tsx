@@ -66,13 +66,9 @@ export default function BookingStepOne() {
     if (!formData.customerId) errs.customer = "Customer is required";
     if (!formData.roomId) errs.roomId = "Room is required";
     if (!formData.checkInDate) errs.checkInDate = "Check-in date is required";
-    if (!formData.checkOutDate) {
+    else if (!formData.checkOutDate) {
       errs.checkOutDate = "Check-out date is required";
-    } else if (
-      new Date(formData.checkOutDate) <= new Date(formData.checkInDate)
-    ) {
-      errs.checkOutDate = "Check-out must be after check-in";
-    }
+    } 
 
     setErrors(errs);
 

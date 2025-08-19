@@ -9,7 +9,7 @@ import { useAnalytics } from "../../../contexts/data/AnalyticsContext";
 
 const Analytics = () => {
   const router = useIonRouter();
-  const [showSearch, setShowSearch] = useState(true); 
+  const [showSearch, setShowSearch] = useState(false); 
   const { overview, loading } = useAnalytics();
 
   return (
@@ -46,14 +46,16 @@ const Analytics = () => {
           <DashboardTile title="Customer Registered" value={2} delta={1} />
         </div>
 
-        {overview?.customers && (
+
+
+        {overview?.records && (
           <div className="space-y-4">
-            <p className="text-black text-xl">Room Sales</p>
-            {overview?.customers.map((event, index) => (
-              <div key={index} onClick={() => router.push(`/record/a`)}>
+            <p className="text-black text-xl">Record</p>
+            {overview?.records.map((record, index) => (
+              <div key={index} onClick={() => router.push(`/expenses/${record.id}`)}>
                 <ScheduleCard
-                  name={event.customerName}
-                  details={`Room ${event.RoomNumber}`}
+                  name={record.expenseType}
+                  details={`N ${record.price}`}
                 />
               </div>
             ))}
@@ -63,16 +65,33 @@ const Analytics = () => {
         {overview?.expenses && (
           <div className="space-y-4">
             <p className="text-black text-xl">Expenses</p>
-            {overview?.expenses.map((expenses, index) => (
-              <div key={index} onClick={() => router.push(`/expenses/a`)}>
+            {overview?.expenses.map((expense, index) => (
+              <div key={index} onClick={() => router.push(`/expenses/${expense.id}`)}>
                 <ScheduleCard
-                  name={expenses.expenseType}
-                  details={`N ${expenses.price}`}
+                  name={expense.expenseType}
+                  details={`N ${expense.price}`}
                 />
               </div>
             ))}
           </div>
         )}
+
+        {overview?.customers && (
+          <div className="space-y-4">
+            <p className="text-black text-xl">Room Sales</p>
+            {overview?.customers.map((event, index) => (
+              <div key={index} onClick={() => router.push(`/customer/${id}`)}>
+                <ScheduleCard
+                  name={event.customerName}
+                  details={`Room ${event.RoomNumber}`}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+
+
 
     
       </div>
