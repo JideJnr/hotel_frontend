@@ -46,14 +46,7 @@ const UserDetails = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 w-full" onClick={() => router.push('/register/staff/stepone', 'forward')}>
-              {/* Edit Button (secondary / gray outline) */}
-              <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2">
-                <Edit3 size={16} />
-                Edit
-              </a>
-
-              {/* Contact Button (primary / filled blue) */}
+            <div className="flex items-center gap-4 w-full" >
               <a
                 href={`tel:+234${staff?.phone}`}
                 className="flex items-center justify-center gap-2 px-4 py-2 text-black border border-gray-800 rounded-lg text-sm font-medium hover:bg-gray-100  transition w-1/2"
@@ -61,11 +54,14 @@ const UserDetails = () => {
                 <Phone size={16} />
                 Contact
               </a>
+              
+              <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2">
+                <Edit3 size={16} />
+                Analytics
+              </a>
             </div>
 
-            {/* Personal Information */}
-            <div className="flex flex-col gap-2">
-          
+            <div className="flex flex-col gap-2">         
               <div className="text-sm text-gray-600  px-2 flex flex-col gap-2">
                 <h3 className="text-lg font-semibold">Personal Information</h3>
                   <DetailRow label="Username" value={staff?.userName || 0} />
@@ -77,7 +73,6 @@ const UserDetails = () => {
               </div>
             </div>
 
-            {/* Current Guest Info */}
             {staff?.active && (
               <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
                 <h3 className="text-lg font-semibold">Current Stay</h3>
@@ -94,8 +89,40 @@ const UserDetails = () => {
 
             {/* Lodge History */}
             <div className="flex flex-col gap-2 px-2">
-              <h3 className="text-lg font-semibold text-gray-600">Lodge History</h3>
+              <div className="flex justify-between">
+                
+              <h3 className="text-lg font-semibold text-gray-600">Payment History</h3>
+              <div className="flex items-center justify-center  px-2 py-1 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-fit">
+                    ADD NEW
+              </div>
+              </div>
 
+              {salary?.length > 0 ? (
+                salary.map((salary:any) => (
+                  <div
+                    key={salary.id}
+                    className="flex justify-between items-center px-4 py-2 border rounded-md text-sm"
+                  >
+                    <div>
+                      <p className="font-semibold">Room {salary.name}</p>
+                      <p className="text-gray-500">Host: {salary.tellerName}</p>
+                    </div>
+                    <div className="text-xs text-gray-500">{salary.date}</div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-400 italic">No salary history yet</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2 px-2">
+               <div className="flex justify-between">
+                
+              <h3 className="text-lg font-semibold text-gray-600">Tasks</h3>
+              <div className="flex items-center justify-center  px-2 py-1 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-fit">
+                    ADD NEW
+              </div>
+              </div>
               {salary?.length > 0 ? (
                 salary.map((salary:any) => (
                   <div

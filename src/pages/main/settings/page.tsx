@@ -52,25 +52,17 @@ const Setting = () => {
               <p>Bookings</p>
             </div>
 
-            <div className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-              <p>Check For Update</p>
-            </div>
-          
-
-            
-          
-            <div className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-              <p>DarkMode</p>
-            </div>
-
-
-
             <a
               className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
               href="tel:+2348105200066"
             >
               <p>Contact Support</p>
             </a>
+
+            <div className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+              onClick={() => router.push('/issue', 'forward')}>
+              <p>Issues</p>
+            </div>
 
             <div className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
               onClick={() => router.push('/staff', 'forward')}>

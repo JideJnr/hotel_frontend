@@ -5,7 +5,7 @@ import { IonRouterOutlet } from "@ionic/react";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 
-
+const Issue = React.lazy(() => import("../pages/main/issues/page"));
 const Support = React.lazy(() => import("../pages/main/support/Support"));
 
 const SalesStepOne = React.lazy(() => import("../components/forms/sales/step-one/page"));
@@ -36,6 +36,7 @@ const RecordDetails = React.lazy(() => import("../pages/main/home/details/record
 const ExpensesDetails = React.lazy(() => import("../pages/main/home/details/expenses"));
 const RoomDetails = React.lazy(() => import("../pages/main/room/details/RoomDetails"));
 const BookingsDetails = React.lazy(() => import("../pages/main/bookings/details/BookingDetails"));
+const StaffDetails = React.lazy(() => import("../pages/main/user/details/StaffDetails"));
 
 const Staff = React.lazy(() => import("../pages/main/user/staff"));
 const Bookings = React.lazy(() => import("../pages/main/bookings/page"));
@@ -58,7 +59,8 @@ const Routes: React.FC = () => {
         <Route path="/support" exact component={Support} />
 
         {/* PRIVATE ROUTES */}
-        <PrivateRoute path="/staff/:id" exact component={Staff} />
+        <PrivateRoute path="/issue" exact component={Issue} />
+        <PrivateRoute path="/staff/:id" exact component={StaffDetails} />
         <PrivateRoute path="/staff" exact component={Staff} />
         <PrivateRoute path="/bookings/:id" exact component={BookingsDetails} />
         <PrivateRoute path="/expenses/:id" exact component={ExpensesDetails} />
