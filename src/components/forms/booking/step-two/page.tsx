@@ -10,17 +10,7 @@ import Button from "../../../../components/button/button";
 import { useBooking } from "../../../../contexts/data/BookingContext";
 import { useRoom } from "../../../../contexts/data/RoomContext";
 
-interface BookingData {
-  customerId: string | null;
-  customerName: string | null;
-  roomId: string | null;
-  roomLabel: string | null;
-  bookingInstruction: string;
-  checkInDate: string;
-  checkOutDate: string;
-  paymentMethodId: string | null;
-  paymentMethodLabel: string | null;
-}
+
 
 const BookingStepTwo = () => {
   const router = useIonRouter();
@@ -31,7 +21,7 @@ const BookingStepTwo = () => {
     customerId: null,
     customerName: null,
     roomId: null,
-    roomLabel: null,
+    roomName: null,
     bookingInstruction: "",
     checkInDate: "",
     checkOutDate: "",
@@ -145,7 +135,7 @@ const BookingStepTwo = () => {
               <div className="col-span-1">
                 <DetailRow
                   label="Room"
-                  value={formData.roomLabel || "Not specified"}
+                  value={formData.roomName || "Not specified"}
                 />
               </div>
               <div className="col-span-1">

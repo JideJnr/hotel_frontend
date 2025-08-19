@@ -1,14 +1,17 @@
 import { useParams } from "react-router-dom";
-import { IonPage } from "@ionic/react";
+import { IonPage, useIonRouter } from "@ionic/react";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import { useEffect } from "react";
 import { getNameInitials } from "../../../../utils/getInitials";
 import { useBooking } from "../../../../contexts/data/BookingContext";
 import { Edit3, Phone } from "lucide-react";
+import Button from "../../../../components/button/button";
 
 const BookingDetails = () => {
+    const router = useIonRouter();
+  
   const { id } = useParams<{ id: string }>();
-  const { fetchBookingById , booking } = useBooking();
+  const { fetchBookingById , booking , cancelBooking } = useBooking();
 
   useEffect(() => {
     fetchBookingById(id);
@@ -26,7 +29,7 @@ const BookingDetails = () => {
               {getNameInitials('Room')}
             </div>
             <div className="flex flex-col text-sm gap-1">
-              <h2 className="text-2xl font-semibold">Room  { ""}</h2>
+              <h2 className="text-2xl font-semibold">Room   {booking?.roomName || ''}</h2>
             </div>
           </div>
 
@@ -39,7 +42,7 @@ const BookingDetails = () => {
 
             {/* Contact Button (primary / filled blue) */}
             <a
-              href="tel:+2348105200066"
+   
               className="flex items-center justify-center gap-2 px-4 py-2 text-black border border-gray-800 rounded-lg text-sm font-medium hover:bg-blue-700 transition w-1/2"
             >
               <Phone size={16} />
@@ -55,6 +58,11 @@ const BookingDetails = () => {
               <DetailRow label='Teller' value={booking?.userId||'-'}/>
             </div>
           </div>
+
+        <div className="flex justify-center p-4">
+          <Button className="w-full "  text="Make Payment"  
+          onClick={() => router.push('/register/booking/payment/stepone', 'forward')} />
+        </div>
           
         </div>
       </BackFormContainer>

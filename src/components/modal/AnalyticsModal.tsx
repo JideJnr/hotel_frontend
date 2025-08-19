@@ -90,6 +90,8 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
               />
             </div>
 
+            
+
             <div className="flex justify-end gap-3 pt-2 border-t mt-2">
               <IonButton size="small" color="medium" onClick={handleClose}>
                 Close

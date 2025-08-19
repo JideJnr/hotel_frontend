@@ -19,7 +19,10 @@ const ClientStepTwo = () => {
   const { createCustomer ,loading} = useCustomer();
   const [formData, setFormData] = useState<CustomerData | null>(null);
  
-  const [error, setError] = useState<string | null>(null);
+  const handleDataError = (message: string) => {
+    toast.error(`${message}. Please start over.`);
+    router.push("/register/customer/stepone", "back", "push");
+  };
 
   useEffect(() => {
     const storedData = sessionStorage.getItem("customerData");
@@ -34,10 +37,7 @@ const ClientStepTwo = () => {
     }
   }, []);
 
-  const handleDataError = (message: string) => {
-    toast.error(`${message}. Please start over.`);
-    router.push("/register/customer/stepone", "back", "push");
-  };
+
 
   const handleConfirm = async () => {
     if (!formData) return;
@@ -84,13 +84,7 @@ const ClientStepTwo = () => {
           <DetailRow label="Address" value={formData.address} />
         </div>
         
-        {error && (
-          <div className="bg-red-50 text-red-700 p-3 rounded-md">
-            <p className="font-medium">Error:</p>
-            <p>{error}</p>
-          </div>
-        )}
-        
+       
         <div className="flex flex-col gap-3 pt-4">
           <Button 
             text="Submit"

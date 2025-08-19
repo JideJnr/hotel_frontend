@@ -12,22 +12,13 @@ import FormSelect from "../../FormSelect";
 import { useRoom } from "../../../../contexts/data/RoomContext";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";
 import { paymentOptions } from "../../../../utils/enum";
+import { useBooking } from "../../../../contexts/data/BookingContext";
+import { useParams } from "react-router";
 
 // -------------------
 // Types
 // -------------------
-type BookingData = {
-  customerId: number | null;
-  customerName: string | null;
-  roomId: number | null;
-  roomLabel: string | null;
-  bookingInstruction: string;
-  checkInDate: string;
-  checkOutDate: string;
-  paymentMethodId: number | null;
-  paymentMethodLabel: string | null;
-  price: string;
-};
+
 
 type Errors = {
   customer?: string;
@@ -38,6 +29,8 @@ type Errors = {
 
 export default function BookingStepOne() {
   const router = useIonRouter();
+
+  
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -49,7 +42,7 @@ export default function BookingStepOne() {
     customerId: null,
     customerName: null,
     roomId: null,
-    roomLabel: null,
+    roomName: null,
     bookingInstruction: "",
     checkInDate: today.toISOString().split("T")[0], 
     checkOutDate: tomorrow.toISOString().split("T")[0], 
@@ -163,7 +156,7 @@ export default function BookingStepOne() {
               setFormData(fd => ({
                 ...fd,
                 roomId: opt ? opt.value : null,
-                roomLabel: opt ? opt.label : null
+                roomName: opt ? opt.label : null
               }))
             }
             options={rooms.map(r => ({
@@ -179,7 +172,7 @@ export default function BookingStepOne() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormDatePicker
               label="Check-in Date *"
-              value={formData.checkInDate}
+              value={formData.checkInDate||''}
               onChange={value =>
                 setFormData(fd => ({
                   ...fd,
@@ -192,7 +185,7 @@ export default function BookingStepOne() {
 
             <FormDatePicker
               label="Check-out Date *"
-              value={formData.checkOutDate}
+              value={formData.checkOutDate||''}
               onChange={value =>
                 setFormData(fd => ({
                   ...fd,
@@ -227,7 +220,7 @@ export default function BookingStepOne() {
           <FormTextarea
             label="Special Instructions"
             name="bookingInstruction"
-            value={formData.bookingInstruction}
+            value={formData.bookingInstruction||''}
             onChange={e =>
               setFormData(fd => ({
                 ...fd,

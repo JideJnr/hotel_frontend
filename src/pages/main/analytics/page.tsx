@@ -1,6 +1,6 @@
 // Analytics.tsx
-import { IonIcon, IonPage, IonButton, useIonRouter } from "@ionic/react";
-import React, { useState } from "react";
+import {  IonPage, IonButton, useIonRouter } from "@ionic/react";
+import  { useState } from "react";
 import DashboardTile from "../../../components/templates/dashboardtiles/DashboardTiles";
 import ScheduleCard from "../../../components/templates/card/ScheduleCard";
 import { FormHeader } from "../../../components/forms";
@@ -11,8 +11,6 @@ const Analytics = () => {
   const router = useIonRouter();
   const [showSearch, setShowSearch] = useState(true); 
   const { overview, loading } = useAnalytics();
-
-  console.log("Overview Data:", overview);
 
   return (
     <IonPage>

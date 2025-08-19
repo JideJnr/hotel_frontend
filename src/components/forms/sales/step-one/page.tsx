@@ -62,8 +62,8 @@ export default function SalesStepOne() {
     <IonPage>
       <FormHeader/>
       <BackFormContainer
-        title="New Booking"
-        subtitle="Step 1: Enter booking details"
+        title="New Sales"
+        subtitle="Step 1: Enter Sales details"
         className="max-w-2xl"
       >
         <form onSubmit={e => { e.preventDefault(); handleNext(); }} className="space-y-6">

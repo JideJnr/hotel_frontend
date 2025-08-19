@@ -59,6 +59,20 @@ interface RecordData {
   receiptUrl?: string;
 }
 
+interface BookingData {
+  customerId?: string | null;
+  customerName?: string | null;
+  roomId?: string | null;
+  roomName?: string | null;
+  bookingInstruction?: string| null;
+  checkInDate?: string;
+  checkOutDate?: string;
+  paymentMethodId?: string | null;
+  paymentMethodLabel?: string | null;
+  price?: string| null;
+};
+
+
 interface RecordState {
   record: null;
   records: Record[];
@@ -71,7 +85,6 @@ interface RecordState {
   updateRecord: (id: string, data: Partial<Record>) => Promise<void>;
   deleteRecord: (id: string) => Promise<void>;
 }
-
 
 interface RoomState {
   loading: boolean;
@@ -86,15 +99,6 @@ interface RoomState {
   deleteRoom: (id: string) => Promise<Response>;
 }
 
-interface CustomerData {
-  id: string;
-  fullName: string;
-  email: string;
-  phone?: string;
-  createdAt?: any;
-  updatedAt?: any;
-}
-
 interface CustomerState {
 
   loading: boolean;
@@ -106,10 +110,21 @@ interface CustomerState {
   updateCustomer: (id: string, data: Partial<Customer>) => Promise<Response>;
   deleteCustomer: (id: string) => Promise<Response>;
   getTotalCustomerCount: () => Promise<Response>;
-  getCustomerRegisteredOnDate:(date: string) => Promise<Response>;
-  getCustomerRegisteredOnDateRange:(params: any) => Promise<Response>;
   searchCustomer:(query: string) => Promise<Response>;
+}
 
+interface StaffState {
+
+  loading: boolean;
+  error: string | null;
+
+  fetchStaff: () => Promise<Response>;
+  getStaffById: (id: string) => Promise<Response>;
+  createStaff: (data: Partial<Customer>) => Promise<Response>;
+  updateStaff: (id: string, data: Partial<Customer>) => Promise<Response>;
+  deleteStaff: (id: string) => Promise<Response>;
+  getTotalStaffCount: () => Promise<Response>;
+  searchStaff:(query: string) => Promise<Response>;
 }
 
 interface ExpenseState {
@@ -238,19 +253,6 @@ interface FormDatePickerProps {
   required?: boolean;
 }
 
-interface BookingData {
-  customerId: number | null;
-  customerName: string | null;
-  roomId: number | null;
-  roomLabel: string | null;
-  bookingInstruction: string;
-  checkInDate: string;
-  checkOutDate: string;
-  paymentMethodId: string | null;
-  paymentMethodLabel: string | null;
-  price: string;
-};
-
 interface RecordContextType {
   records: Record[];
   record: Record | null;
@@ -276,7 +278,6 @@ interface RoomContextType {
   fetchRoom: (id: string) => Promise<Response>;
 }
 
-// Add this interface for booking data
 interface Booking {
   id: string;
   customerId: string;

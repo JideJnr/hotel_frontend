@@ -11,10 +11,6 @@ import {
 import Button from "../../../../components/button/button";
 import { RoomFormData } from "../step-two/page";
 
-
-
-
-
 export default function CreateRoomForm() {
   const router = useIonRouter();
   const [formData, setFormData] = useState<RoomFormData>({

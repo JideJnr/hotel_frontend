@@ -9,6 +9,7 @@ import { ComputationProvider } from './data/ComputationContext';
 import { ActivityProvider } from './data/ActivityContext';
 import { BookingProvider } from './data/BookingContext';
 import { AnalyticsProvider } from './data/AnalyticsContext';
+import { StaffProvider } from './data/StaffContext';
 
 export const ContextProvider:  React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
@@ -24,7 +25,9 @@ export const ContextProvider:  React.FC<{ children: React.ReactNode }> = ({ chil
                   <ComputationProvider>   
                     <BookingProvider>
                       <AnalyticsProvider>
-                        {children}
+                        <StaffProvider>
+                          {children}
+                        </StaffProvider>
                       </AnalyticsProvider>
                     </BookingProvider>
                   </ComputationProvider>

@@ -11,3 +11,15 @@ export const fetchMyActivity = async (
   });
   return res.data;
 };
+
+export const fetchStaffActivity = async (
+  pageSize?: number,
+  lastCreatedAt?: string,
+  lastId?: string
+) => {
+  const res = await api.get('/activities', {
+    params: { pageSize, lastCreatedAt, lastId }
+  });
+  return res.data;
+};
+

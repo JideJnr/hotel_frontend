@@ -13,9 +13,9 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ title, value, delta , sub
   const isPositive = delta >= 0;
 
   return (
-    <div className="bg-white rounded-xl shadow p-4 w-full">
-      <h4 className="text-gray-500 text-sm mb-1">{title}</h4>
-      <div className="text-2xl font-semibold text-gray-700">{value}</div>
+    <div className="bg-white rounded-xl border-gray-300 border shadow p-4 w-full">
+      <h4 className="text-gray-700 font-semibold text-sm mb-1">{title}</h4>
+      <div className="text-xl font-semibold text-gray-700">{value}</div>
       {subtitle &&
         <div className={`text-sm mt-1 flex items-center ${isPositive ? 'text-green-600' : 'text-red-500'}`}>
           <span className="mr-1">{isPositive ? '↑' : '↓'} {Math.abs(delta)}</span>
