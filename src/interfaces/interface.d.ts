@@ -116,6 +116,7 @@ interface CustomerState {
   getCustomerRegisteredOnDateRange: (params:any) => Promise<Response>;
   searchCustomer:(query: string) => Promise<Response>;
   fetchRecentCustomer: () => Promise<Response>;
+  fetchActiveCustomer: () => Promise<Response>;
 }
 
 interface StaffState {
@@ -322,6 +323,9 @@ interface Expense {
   reference?: string;
   date?: string;
   receiptURL?: string;
+  tellerName?: string;
+  tellerId?: string;
+  
 }
 
 interface ExpenseContextType {

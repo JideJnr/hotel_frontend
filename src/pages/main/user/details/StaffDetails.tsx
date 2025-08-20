@@ -64,7 +64,7 @@ const UserDetails = () => {
             <div className="flex flex-col gap-2">         
               <div className="text-sm text-gray-600  px-2 flex flex-col gap-2">
                 <h3 className="text-lg font-semibold">Personal Information</h3>
-                  <DetailRow label="Username" value={staff?.userName || 0} />
+                  <DetailRow label="FullName" value={staff?.fullName || 0} />
                   <DetailRow label="Email" value={staff?.email||0} />
                   <DetailRow label="Address " value={staff?.address || 0} />
                   <DetailRow label="Created At" value={staff?.email|| 0} />
@@ -73,19 +73,7 @@ const UserDetails = () => {
               </div>
             </div>
 
-            {staff?.active && (
-              <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
-                <h3 className="text-lg font-semibold">Current Stay</h3>
-                <div className="text-sm">
-                  <p className="font-semibold">{staff?.currentRoom?.name}</p>
-                </div>
-          
-                <div className="grid grid-cols-1 gap-2 mt-2">
-                    <Button text="Check Out" className="w-full" />
-                </div>
-                
-              </div>
-            )}
+
 
             {/* Lodge History */}
             <div className="flex flex-col gap-2 px-2">
@@ -115,31 +103,7 @@ const UserDetails = () => {
               )}
             </div>
 
-            <div className="flex flex-col gap-2 px-2">
-               <div className="flex justify-between">
-                
-              <h3 className="text-lg font-semibold text-gray-600">Tasks</h3>
-              <div className="flex items-center justify-center  px-2 py-1 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-fit">
-                    ADD NEW
-              </div>
-              </div>
-              {salary?.length > 0 ? (
-                salary.map((salary:any) => (
-                  <div
-                    key={salary.id}
-                    className="flex justify-between items-center px-4 py-2 border rounded-md text-sm"
-                  >
-                    <div>
-                      <p className="font-semibold">Room {salary.name}</p>
-                      <p className="text-gray-500">Host: {salary.tellerName}</p>
-                    </div>
-                    <div className="text-xs text-gray-500">{salary.date}</div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-gray-400 italic">No salary history yet</p>
-              )}
-            </div>
+         
 
           <Footer/>
         </div>

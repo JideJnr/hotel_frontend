@@ -3,6 +3,8 @@ import { toast } from "react-toastify";
 import { useComputationStore } from "../../services/stores/computationStore";
 
 interface ComputationContextType {
+  totalSales: number | null;
+  totalExpenses: number | null;
   balance: number | null;
   recordCount: number | null;
   totalRoomCount: number | null;
@@ -22,7 +24,7 @@ interface ComputationContextType {
   fetchTotalCustomersCount: () => Promise<void>;
   fetchNewCustomersOnDateCount: (date: string) => Promise<void>;
   fetchNewCustomersOnDateRangeCount: (startDate:string, endDate:string) => Promise<void>;
-  fetchExpensesCountOnDate: (date: string) => Promise<void>;
+  fetchExpensesOnDate: (date: string) => Promise<void>;
   fetchExpensesCountOnDateRange: (startDate:string, endDate:string) => Promise<void>;
   fetchBalanceOnDate: (date: string) => Promise<void>;
   fetchBalanceOnDateRange: (startDate:string, endDate:string) => Promise<void>;

@@ -10,7 +10,8 @@ interface Customer {
 
 interface CustomerContextType {
   totalCustomerCount: number;
-  recentCustomers: Customer[]; // <-- NEW
+  recentCustomers: Customer[];
+  activeCustomers: Customer[]; // <-- NEW
   customers: Customer[];
   customer: Customer | null;
   loading: boolean;
@@ -219,6 +220,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
   const contextValue = useMemo(() => ({
     totalCustomerCount,
     recentCustomers,
+    activeCustomers,
     customers,
     customer,
     loading,
