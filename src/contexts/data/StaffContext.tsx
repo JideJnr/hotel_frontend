@@ -121,7 +121,6 @@ export const StaffProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  // 🔍 NEW: wrapper for searching staffs
   const wrappedSearchStaffs = async (query: string) => {
     try {
       const results = await storeSearchStaff(query);
@@ -134,6 +133,33 @@ export const StaffProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       
     }
   };
+
+  const wrappedAddSalary = async (query: string) => {
+    try {
+      const results = await storeSearchStaff(query);
+      if (results && Array.isArray(results)) {
+        setStaffs(results);
+      }
+      
+    } catch (error) {
+      toast.error('Staff search error');
+      
+    }
+  };
+
+    const wrappedGetSalaryHistory = async (query: string) => {
+    try {
+      const results = await storeSearchStaff(query);
+      if (results && Array.isArray(results)) {
+        setStaffs(results);
+      }
+      
+    } catch (error) {
+      toast.error('Staff search error');
+      
+    }
+  };
+
 
   const contextValue = useMemo(() => ({
     totalStaffCount,

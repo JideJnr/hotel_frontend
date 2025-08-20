@@ -10,6 +10,7 @@ interface Customer {
 
 interface CustomerContextType {
   totalCustomerCount: number;
+  recentCustomers: Customer[]; // <-- NEW
   customers: Customer[];
   customer: Customer | null;
   loading: boolean;
@@ -23,6 +24,8 @@ interface CustomerContextType {
   fetchCustomerRegisterOnDate: (date:string) => Promise<void>;
   fetchCustomerRegisterOnDateRange: (startDate:string, endDate:string) => Promise<void>;
   searchCustomers: (query: string) => Promise<Response>; // <-- NEW
+  fetchRecentCustomers: () => Promise<Response>; // <-- NEW
+  fetchActiveCustomers: () => Promise<Response>; // <-- NEW
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined);
@@ -30,6 +33,8 @@ const CustomerContext = createContext<CustomerContextType | undefined>(undefined
 export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const router = useIonRouter();
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [recentCustomers, setRecentCustomers] = useState<Customer[]>([]);
+  const [activeCustomers, setActiveCustomers] = useState<Customer[]>([]);
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [totalCustomerCount, setTotalCustomerCount] = useState<number>(0);
   const [customerCount, setCustomerCount] = useState<number>(0);
@@ -44,7 +49,9 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     getTotalCustomerCount: storeGetTotalCustomerCount,
     getCustomerRegisteredOnDate: storeGetCustomerRegisteredOnDate,
     getCustomerRegisteredOnDateRange: storeGetCustomerRegisteredOnDateRange,
-    searchCustomer: storeSearchCustomer, // <-- bring in from zustand
+    searchCustomer: storeSearchCustomer,
+    fetchRecentCustomer: storeFetchRecentCustomer,
+    fetchActiveCustomer: storeFetchActiveCustomer, // <-- bring in from zustand
   } = useCustomerStore();
 
   // =========================
@@ -74,8 +81,6 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       const response = await storeUpdateCustomer(id, payload);
       if (response.success && response.data) {
         const updatedCustomer = response.data as Customer;
-        setCustomers(prev => prev.map(c => c.id === id ? updatedCustomer : c));
-        setCustomer(updatedCustomer);
         toast.success('Customer updated successfully');
         router.push(`/customer/${updatedCustomer.id}`, 'forward');
        
@@ -180,8 +185,40 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     }
   };
 
+  const wrappedFetchRecentCustomers = async () => {
+    try {
+      const response = await storeFetchRecentCustomer();
+       if (response.success && response.data) {
+        setRecentCustomers(response.data);
+      } else {
+        toast.error(`Failed: ${response.message}`);
+      }
+      return response;
+    } catch (error) {
+      toast.error('Customer search error');
+      throw error;
+    }
+  };
+
+  const wrappedFetchActiveCustomers = async () => {
+    try {
+      const response = await storeFetchActiveCustomer();
+      if (response.success && response.data) {
+        setActiveCustomers(response.data);
+      } else {
+        toast.error(`Failed: ${response.message}`);
+      }
+      return response;
+    } catch (error) {
+      toast.error('Customer search error');
+      throw error;
+    }
+  };
+
+
   const contextValue = useMemo(() => ({
     totalCustomerCount,
+    recentCustomers,
     customers,
     customer,
     loading,
@@ -194,7 +231,9 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     fetchCustomerRegisteredToday: wrappedFetchTotalCustomerRegisteredToday,
     fetchCustomerRegisterOnDate: wrappedFetchTotalCustomerRegisteredOnDate,
     fetchCustomerRegisterOnDateRange: wrappedFetchTotalCustomerRegisteredOnDateRange,
-    searchCustomers: wrappedSearchCustomers, // <-- exposed in context
+    searchCustomers: wrappedSearchCustomers,
+    fetchRecentCustomers: wrappedFetchRecentCustomers,
+    fetchActiveCustomers: wrappedFetchActiveCustomers,
   }), [
     customers,
     totalCustomerCount,

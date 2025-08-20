@@ -57,7 +57,7 @@ const Analytics = () => {
 
           <div className="flex flex-col gap-8  px-4 ">
 
-            {data?.records.length > 0 && (
+            {data?.records && data?.records.length > 0 && (
               <div className="space-y-4">
                 <p className="text-black text-xl font-medium">Room Sold ({count.sales})</p>
                 {data?.records.map((record:any, index:any) => (
@@ -71,7 +71,7 @@ const Analytics = () => {
               </div>
             )}
 
-            {data?.expenses.length > 0 && (
+            {data?.expenses && data?.expenses.length > 0 && (
               <div className="space-y-4">
                 <p className="text-black text-xl font-medium">Expenses Recorded ({count.expenses})</p>
                 {data?.expenses.map((expense:any, index:any) => (
@@ -85,7 +85,7 @@ const Analytics = () => {
               </div>
             )}
 
-            {data?.customers.length > 0 && (
+            {data?.customers && data?.customers.length > 0 && (
               <div className="space-y-4">
                 <p className="text-black text-xl font-medium">Customer Registered ({count.customers})</p>
                 {data?.customers.map((event:any, index:any) => (

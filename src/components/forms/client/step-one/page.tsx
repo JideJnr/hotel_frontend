@@ -1,27 +1,39 @@
 import {  IonPage, useIonRouter } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { BackFormContainer, FormHeader, FormInput } from "../..";
 import Button from "../../../../components/button/button";
+import { useParams } from "react-router";
+import { useCustomer } from "../../../../contexts/data/CustomerContext";
 
 const ClientStepOne = () => {
   const router = useIonRouter();
+  const { id } = useParams<{ id: string }>();
 
-  const [formData, setFormData] = useState({
-    fullName: '',
-    userName: '',
-    phone: '',
-    address: '',
-    email: ''
+  const { fetchCustomer , customer } = useCustomer();
+
+  useEffect(() => {
+    fetchCustomer(id)
+  }, [id]);
+
+    const [formData, setFormData] = useState({
+    id: customer?.id||"",
+    fullName: customer?.fullName||"",
+    userName: customer?.userName||"",
+    phone: customer?.phone||"",
+    address: customer?.address||"",
+    email: customer?.email||"",
   });
 
   const [errors, setErrors] = useState({
-    fullName: '',
-    userName: '',
-    phone: '',
-    address: '',
-    email: ''
+    id: "",
+    fullName: "",
+    userName: "",
+    phone: "",
+    address: "",
+    email: "",
   });
+
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();

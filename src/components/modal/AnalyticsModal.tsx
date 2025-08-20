@@ -1,5 +1,5 @@
 // SearchModal.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonModal,
   IonButton,
@@ -7,18 +7,14 @@ import {
 } from "@ionic/react";
 import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms"; 
 import { useAnalytics } from "../../contexts/data/AnalyticsContext";
+import { useStaff } from "../../contexts/data/StaffContext";
 
 interface Option {
   value: string | number;
   label: string;
 }
 
-const options: Option[] = [
-  { value: "sales", label: "Sales" },
-  { value: "customers", label: "Customers" },
-  { value: "expenses", label: "Expenses" },
 
-];
 
 const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
@@ -30,6 +26,12 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const [selected, setSelected] = useState<Option[]>([]);
 
   const { fetchOverview, loading } = useAnalytics();
+
+   const { fetchStaffs, staffs } = useStaff();
+    
+    useEffect(() => {
+      fetchStaffs()
+    }, []);
 
   const handleSearch = async () => {
     // Extract only the values from selected options
@@ -54,6 +56,14 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const handleCloseModal = () => {
     onClose();
   };
+
+  const options = [
+  { value: "all", label: "All" },
+    ...staffs.map((staff) => ({
+      value: staff.id,
+      label: staff.name,
+    })),
+  ];
 
   return (
     <IonModal isOpen={isOpen} onDidDismiss={handleCloseModal}>
@@ -89,6 +99,26 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
                 placeholder="Choose tags…"
               />
             </div>
+            <div>
+              <FormMultiSelect
+                label=""
+                name="tags"
+                value={selected}
+                onChange={(s) => {
+                  if (s.some((opt) => opt.value === "all")) {
+                    // If "All" is selected, keep only All
+                    setSelected([{ value: "all", label: "All" }]);
+                  } else {
+                    // If user picks something else while All was selected, remove All
+                    const filtered = s.filter((opt) => opt.value !== "all");
+                    setSelected(filtered);
+                  }
+                }}
+                options={options}
+                placeholder="Choose Filters…"
+              />
+            </div>
+            
 
             
 

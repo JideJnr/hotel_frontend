@@ -12,7 +12,7 @@ import StaffAnalyticsModal from "../../../components/modal/StaffModal";
 const Users = () => {
   const router = useIonRouter();
   const { fetchStaffs, staffs } = useStaff();
-      const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
  
     useEffect(() => {
@@ -71,12 +71,12 @@ const Users = () => {
               {staffs.map((staff:any) => (
                 <div
                   key={staff.id}
-                  onClick={() => router.push(`/user/${staff.id}`)}
+                  onClick={() => router.push(`/staff/${staff.id}`)}
                 >
                   <ScheduleCard
                 
                     name={staff.fullName}
-                    details={staff.userName}
+                    details={staff.email}
                     avatar={
                       <div className="w-12 h-12 p-2 font-semibold rounded-full bg-gray-200 flex items-center !w-full">
                         {getNameInitials(staff.fullName)}

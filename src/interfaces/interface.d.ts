@@ -115,6 +115,7 @@ interface CustomerState {
   getCustomerRegisteredOnDate: (date:string) => Promise<Response>;
   getCustomerRegisteredOnDateRange: (params:any) => Promise<Response>;
   searchCustomer:(query: string) => Promise<Response>;
+  fetchRecentCustomer: () => Promise<Response>;
 }
 
 interface StaffState {

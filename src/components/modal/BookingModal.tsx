@@ -6,7 +6,6 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms"; 
-import { useAnalytics } from "../../contexts/data/AnalyticsContext"; // adjust path
 import { useRoom } from "../../contexts/data/RoomContext";
 import { useBooking } from "../../contexts/data/BookingContext";
 
@@ -24,7 +23,7 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const router = useIonRouter();
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
-  const [selected, setSelected] = useState<Option[]>([]);
+  const [selected, setSelected] = useState<any>({value:'all',label:'All'});
 
   const { fetchBookingsByFilter , loading } = useBooking();
   const { fetchRooms, rooms } = useRoom();
@@ -37,21 +36,21 @@ const BookingModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 const handleSearch = async () => {
   let roomValues: string[] = [];
 
-  if (selected.length > 0 && !selected.some(opt => opt.value === "all")) {
-    roomValues = selected.map(opt => String(opt.value));
+  if (selected.length > 0 && !selected.some((opt: Option) => opt.value === "all")) {
+    roomValues = selected.map((opt: Option) => String(opt.value));
   }
 
+  console.log("Selected rooms:", endDate,);
   const response = await fetchBookingsByFilter(
     startDate,
     endDate,
-    roomValues.length > 0 ? roomValues.join(",") : undefined // omit if "All"
+    roomValues.length > 0 ? roomValues.join(",") : undefined 
   );
 
-  if (response.success) {
+  if (response?.success) {
     onClose();
   }
 };
-
 
   const handleClose = () => {
     router.goBack();
@@ -115,7 +114,7 @@ const handleSearch = async () => {
     }
   }}
   options={options}
-  placeholder="Choose tags…"
+  placeholder="Filter By Room"
 />
 
 

@@ -8,7 +8,7 @@ interface BookingState {
   error: string | null;
 
   fetchBookingsByDate: (date: string) => Promise<Response>;
-  fetchBookingsByDateRange: (startDate: string, endDate: string , rooms:any) => Promise<Response>;
+  fetchBookingsByFilter: (startDate: string, endDate: string , rooms:any) => Promise<Response>;
   fetchBookingById: (id: string) => Promise<Response>;
   createBooking: (data: bookingApi.BookingInput) => Promise<Response>;
   updateBooking: (id: string, data: bookingApi.BookingUpdate) => Promise<Response>;
@@ -32,10 +32,10 @@ export const useBookingStore = create<BookingState>((set) => ({
     }
   },
 
-  fetchBookingsByDateRange: async (startDate, endDate) => {
+  fetchBookingsByFilter: async (startDate, endDate , rooms) => {
     set({ loading: true, error: null });
     try {
-      const response = await bookingApi.getBookingsByDateRange(startDate, endDate);
+      const response = await bookingApi.getBookingsByFilter(startDate, endDate , rooms);
       set({ loading: false });
       return response;
     } catch (err: any) {

@@ -59,9 +59,9 @@ const RecordDetails = () => {
 
 
           {/* Personal Information */}
-          <div className="flex flex-col gap-2">
+        
          
-            <div className="text-sm text-gray-600 grid grid-cols-1 gap-4 px-2">
+            <div className="text-sm text-gray-600 grid grid-cols-1 gap-2 px-2">
 
               <DetailRow label='Teller' value={record?.tellerName || "N/A"} />
               <DetailRow label='Lodge Type' value={record?.requestId}/>
@@ -72,7 +72,7 @@ const RecordDetails = () => {
 
 
             </div>
-          </div>
+          
 
           
             {record && record.active && 

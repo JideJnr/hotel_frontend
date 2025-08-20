@@ -46,3 +46,15 @@ export const searchCustomers = async (query: string) => {
   });
   return res.data;
 };
+
+export const recentCustomers = async () => {
+  const res = await api.get(`/records/customer/recent`
+  );
+  return res.data;
+};
+
+export const activeCustomers = async () => {
+  const res = await api.get(`/customers/customers/active`
+  );
+  return res.data;
+};

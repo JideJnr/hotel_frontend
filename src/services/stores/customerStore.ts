@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { createCustomer, customerRegisteredOnDate, customerRegisteredOnDateRange, deleteCustomer, getAllCustomers, getCustomerById, searchCustomers, totalCustomer, updateCustomer } from '../api/customerApi';
+import { activeCustomers, createCustomer, customerRegisteredOnDate, customerRegisteredOnDateRange, deleteCustomer, getAllCustomers, getCustomerById, recentCustomers, searchCustomers, totalCustomer, updateCustomer } from '../api/customerApi';
 
 
 export const useCustomerStore = create<CustomerState>((set) => ({
@@ -102,6 +102,28 @@ export const useCustomerStore = create<CustomerState>((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await searchCustomers(query);
+      set({ loading: false });
+      return response;
+    } catch (err: any) {
+      set({ error: err.message || "Something went wrong", loading: false });
+    }
+  },
+
+  fetchRecentCustomer: async () => {
+    set({ loading: true, error: null });
+    try {
+      const response = await recentCustomers();
+      set({ loading: false });
+      return response;
+    } catch (err: any) {
+      set({ error: err.message || "Something went wrong", loading: false });
+    }
+  },
+
+  fetchActiveCustomer: async () => {
+    set({ loading: true, error: null });
+    try {
+      const response = await activeCustomers();
       set({ loading: false });
       return response;
     } catch (err: any) {

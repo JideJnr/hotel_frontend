@@ -11,12 +11,12 @@ interface Booking {
 }
 
 interface BookingContextType {
-  bookings: Booking[];
-  booking: Booking | null;
+  bookings: any;
+  booking: any;
   loading: boolean;
   error: string | null;
   fetchBookingsByDate: (date: string) => Promise<void>;
-  fetchBookingsByFilter: (startDate: string, endDate: string , rooms:any) => Promise<Response>;
+  fetchBookingsByFilter: (startDate: string, endDate: string , rooms:any) => Promise<Response|undefined>;
   fetchBookingById: (id: string) => Promise<void>;
   createBooking: (data: any) => Promise<void>;
   updateBooking: (id: string, data: any) => Promise<void>;
@@ -49,7 +49,7 @@ export const BookingProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const wrappedFetchBookingsByFilter = async (startDate: string, endDate: string , rooms: any) => {
     try {
-      const response = await store.fetchBookingsByDateRange(startDate, endDate , rooms);
+      const response = await store.fetchBookingsByFilter(startDate, endDate , rooms);
       if (response.success) {
         setBookings(response.data);
       }

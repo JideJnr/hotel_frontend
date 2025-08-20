@@ -39,6 +39,8 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [totalCustomerCount, setTotalCustomerCount] = useState<number | null>(null);
   const [newCustomerCount, setNewCustomerCount] = useState<number | null>(null);
   const [expensesCount, setExpensesCount] = useState<number | null>(null);
+  const [totalExpenses, setTotalExpenses] = useState<number | null>(null);
+  const [totalSales, setTotalSales] = useState<number | null>(null);
 
   const store = useComputationStore();
 
@@ -160,6 +162,7 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
       const response = await store.fetchExpensesCountOnDate(date);
       if (response.success) {
         setExpensesCount(response.data?.count || 0);
+        setTotalExpenses(response.data?.totalExpenses || 0);
       } else {
         toast.error(`Failed: ${response.message || "Expenses on date"}`);
       }
@@ -187,7 +190,11 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
     try {
       const response = await store.fetchBalanceOnDate(date);
       if (response.success) {
-        setBalance(response.data?.totalBalance || 0);
+        setBalance(response.data?.netBalance || 0);
+        setTotalExpenses(response.data?.totalExpenses || 0);
+        setExpensesCount(response.data?.totalExpensesCount|| 0);
+        setTotalSales(response.data?.totalSales || 0);
+        setRecordCount(response.data?.totalSalesCount || 0)
       } else {
         toast.error(`Failed: ${response.message || "Balance on date"}`);
       }
@@ -222,6 +229,8 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
       activeCustomerCount,
       newCustomerCount,
       expensesCount,
+      totalExpenses,
+      totalSales,
       loading: store.loading,
       error: store.error,
       fetchRecordCountOnDate: wrappedFetchRecordCountForDate,
@@ -232,7 +241,7 @@ export const ComputationProvider: React.FC<{ children: ReactNode }> = ({ childre
       fetchTotalCustomersCount: wrappedFetchTotalCustomers,
       fetchNewCustomersOnDateCount: wrappedFetchNewCustomersOnDateCount,
       fetchNewCustomersOnDateRangeCount: wrappedFetchNewCustomersOnDateRangeCount,
-      fetchExpensesCountOnDate: wrappedFetchExpensesOnDate,
+      fetchExpensesOnDate: wrappedFetchExpensesOnDate,
       fetchExpensesCountOnDateRange: wrappedFetchExpensesOnDateRange,
       fetchBalanceOnDate: wrappedFetchBalanceOnDate,
       fetchBalanceOnDateRange: wrappedFetchBalanceOnDateRange,

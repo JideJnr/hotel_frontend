@@ -9,9 +9,11 @@ import Footer from "../../../../components/footer/footer";
 import { useRecord } from "../../../../contexts/data/RecordContext";
 import { toast } from "react-toastify";
 import { Edit3, Phone } from "lucide-react";
+import { formatNaira } from "../../../../utils/formatNaira";
 
 const RoomDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
   const { fetchRoom , currentRoom } = useRoom();
   const { checkOutRecord } = useRecord();
   const router = useIonRouter();
@@ -40,11 +42,11 @@ const RoomDetails = () => {
     <IonPage>
       <FormHeader /> 
       <BackFormContainer title="Room Details" subtitle="" className="max-w-2xl h-full">
-        <div className="w-full h-full flex flex-col gap-8 text-gray-800">
+        <div className="w-full h-full flex flex-col gap-8 text-gray-800 capitalize">
 
           {/* Profile Image and Basic Info */}
           <div className="flex items-center gap-6">
-            <div className="w-24 h-24 flex items-center justify-center rounded-full bg-gray-100 border text-gray-600 font-bold text-xl uppercase">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gray-100 border text-gray-600 font-bold text-xl uppercase">
               {getNameInitials(currentRoom?.name || "Room")}
             </div>
 
@@ -53,7 +55,9 @@ const RoomDetails = () => {
             </div>
           </div>
 
-                    <div className="flex items-center gap-4 w-full" onClick={() => router.push('/register/room/stepone', 'forward')}>
+          {user && user.role == 'ADMIN' && 
+
+          <div className="flex items-center gap-4 w-full" onClick={() => router.push('/register/room/stepone', 'forward')}>
             {/* Edit Button (secondary / gray outline) */}
             <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2">
               <Edit3 size={16} />
@@ -68,15 +72,15 @@ const RoomDetails = () => {
               <Phone size={16} />
               Analysis
             </a>
-          </div>
+          </div>}
 
           {/* Personal Information */}
           <div className="flex flex-col gap-2">
             <div className="text-sm text-gray-600 grid grid-cols-1 gap-4 px-2">
               <DetailRow label='Description' value={currentRoom?.description||'-'}/>
-              <DetailRow label='Short Rest (One Hour)' value={currentRoom?.priceOneHour||'-'}/>
-              <DetailRow label='Short Rest (Two Hours)' value={currentRoom?.priceTwoHours||'-'} />
-              <DetailRow label='Overnight' value={currentRoom?.pricePerNight||'-'}/>
+              <DetailRow label='Short Rest (One Hour)' value={formatNaira(currentRoom?.priceOneHour||0)}/>
+              <DetailRow label='Short Rest (Two Hours)' value={formatNaira(currentRoom?.priceTwoHours||0)} />
+              <DetailRow label='Overnight' value={formatNaira(currentRoom?.pricePerNight||0)}/>
             </div>
           </div>
 
@@ -96,9 +100,9 @@ const RoomDetails = () => {
             </div>
           }
 
-          {currentRoom?.bookings &&
+          {currentRoom?.bookings && currentRoom?.bookings.length > 0 &&
             <div className="flex flex-col gap-2">
-              <h3 className="text-lg font-semibold">Booking History</h3>
+              <h3 className="text-lg font-semibold">Room History</h3>
               {currentRoom?.bookings?.map((booking:any, index:any) => (
                 <div
                   key={index}
@@ -108,10 +112,10 @@ const RoomDetails = () => {
                     {getNameInitials(booking?.customerName)}
                   </span>
                   <div>
-                    <p className="font-semibold">{booking.customerName|| ''}</p>
-                    <p className="text-gray-500">Host: {booking.tellerName}</p>
+                    <p className="font-semibold">{booking.customerName || ''}</p>
+                    <p className="text-gray-500"> {booking.tellerName}</p>
                   </div>
-                  <div className="text-xs text-gray-500 ml-auto mr-2">{booking.price}</div>
+                  <div className="text-xs text-gray-500 ml-auto mr-2">{formatNaira(booking.price)}</div>
                 </div>
                 
               ))}

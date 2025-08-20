@@ -35,14 +35,10 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   const color = React.useMemo(() => getColorForName(name), [name]);
 
   return (
-    <div className={`rounded-lg p-4 shadow-sm border-l-4 flex capitalize ${color} ${className}`}>
-      {avatar && (
-        <div className="flex mr-4 items-center justify-center">
-          {avatar}
-        </div>
-      )}
+    <div className={`rounded-lg px-4 py-2 shadow-sm border-l-4 flex capitalize ${color} ${className}`}>
+
       <div>
-        <div className="font-semibold text-gray-800 truncate " title={name}>
+        <div className="font-semibold text-sm text-gray-800 truncate " title={name}>
           {name}
         </div>
         <div className="text-sm text-gray-600">{details}</div>

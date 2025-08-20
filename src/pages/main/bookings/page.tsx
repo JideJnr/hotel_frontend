@@ -12,6 +12,11 @@ const Bookings = () => {
   const [showSearch, setShowSearch] = useState(true); // Modal opens by default
   const {bookings } = useBooking();
 
+  console.log('Bookings:', bookings);
+  const data = bookings.bookings? bookings.bookings : []; 
+
+  console.log('Data:', data);
+
   return (
     <IonPage>
       <FormHeader />
@@ -35,26 +40,16 @@ const Bookings = () => {
         <div className='bg-white h-full w-full px-4 pt-8 gap-8 flex flex-col'>
           
             <div className="space-y-4">
-                <p className='text-black text-xl'>
+                <p className='text-lg font-semibold text-black'>
                   Active Bookings
                 </p>
-                {bookings.map((event, index) => (
+                {data?.length > 0 && data.map((event:any, index:any) => (
                   <div onClick={() => router.push(`/record/a`)}>
-                  <ScheduleCard key={index} name={event.customerName} details={`Room ${event.RoomNumber}`} />
+                  <ScheduleCard key={index} name={event.customerId} details={`Room ${event.RoomId}`} />
                   </div>
                 ))}
             </div>
 
-            <div className="space-y-4">
-                <p className='text-black text-xl'>
-                  Cancelled Bookings
-                </p>
-                {bookings.map((event, index) => (
-                  <div onClick={() => router.push(`/record/a`)}>
-                  <ScheduleCard key={index} name={event.customerName} details={`Room ${event.RoomNumber}`} />
-                  </div>
-                ))}
-            </div>
 
             <Footer/>
 

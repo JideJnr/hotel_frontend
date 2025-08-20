@@ -12,13 +12,14 @@ import ScheduleCard from "../../../components/templates/card/ScheduleCard";
 import { useRoom } from "../../../contexts/data/RoomContext";
 import { useComputation } from "../../../contexts/data/ComputationContext";
 import Footer from "../../../components/footer/footer";
+import EmptyState from "../../../components/empty/empty";
 
 const Room = () => {
   const router = useIonRouter();
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [activeTab, setActiveTab] = useState<"available" | "active">("available");
-
   const { fetchRooms, rooms } = useRoom();
-  const {fetchTotalRoomsCount, fetchActiveRoomsCount, totalRoomCount, activeRoomCount } = useComputation();
+  const {fetchTotalRoomsCount, fetchActiveRoomsCount, totalRoomCount, activeRoomCount,   } = useComputation();
 useEffect(() => {
   loadData(); // clean initial load
 }, []);
@@ -61,7 +62,7 @@ const filteredRooms = (() => {
 
   return (
 
-    <div className="  pt-8 text-black bg-gray-100 w-full h-full flex flex-col gap-6 overflow-y-auto ">
+    <div className=" flex flex-col gap-8  pt-8 bg-gray-100 overflow-y-auto h-full w-full text-black ">
       <IonRefresher slot="fixed" onIonRefresh={handleRefresh} className="text-gray-800">
         <IonRefresherContent />
       </IonRefresher>
@@ -75,16 +76,17 @@ const filteredRooms = (() => {
       </div>
 
       
-      <div className="px-4 grid gap-4 lg:gap-8 grid-cols-2 md:grid-cols-3 w-full h-fit my-4">
-        <DashboardTile title="Total Rooms" value={totalRoomCount||0} delta={1} />
+      <div className="px-4 grid gap-4 lg:gap-8 grid-cols-2 w-full h-fit">
+        <DashboardTile title="Total  Rooms" value={totalRoomCount||0} delta={1} />
         <DashboardTile title="Active Rooms" value={activeRoomCount||0} delta={1} />
       </div>
-
-      <div className=" px-4 w-fit ml-auto mr-2">
-        <button className="text-black" onClick={handleAddNew}>
-          Add New
-        </button>
-      </div>
+      {user && user.role === "admin" && (       
+        <div className=" px-4 w-fit ml-auto mr-2">
+          <button className="text-black" onClick={handleAddNew}>
+            Add New
+          </button>
+        </div>
+      )}
 
       <div className="  flex flex-col gap-4 w-full h-full bg-white p-4 rounded-lg shadow-md ">
         <IonSegment
@@ -99,16 +101,23 @@ const filteredRooms = (() => {
             </IonSegmentButton>
           ))}
         </IonSegment>
-        <div className="space-y-2">
+        {filteredRooms && filteredRooms?.length > 0 ?(
+
+        <div className="space-y-2 py-4">
           {filteredRooms.map((room, index) => (
             <div key={room.id || index} onClick={() => handleRoomClick(room.id)}>
               <ScheduleCard
-                name={room.name||'test'}
+                name={`ROOM ${room.name}`||'test'}
                 details={room.description || room.title ||'test' }
               />
             </div>
           ))}
         </div>
+        ) : (
+          <div className="py-4">
+            <EmptyState/>
+          </div>
+        )}
         <Footer className=''/>
       </div>
 

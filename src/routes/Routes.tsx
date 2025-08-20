@@ -75,6 +75,10 @@ const Routes: React.FC = () => {
         <PrivateRoute path="/sales/steptwo" exact component={SalesStepTwo} />
         <PrivateRoute path="/register/customer/stepone" exact component={ClientStepOne} />
         <PrivateRoute path="/register/customer/steptwo" exact component={ClientStepTwo} />
+
+        <PrivateRoute path="/register/customer/stepone/:id" exact component={ClientStepOne} />
+        <PrivateRoute path="/register/customer/steptwo/:id" exact component={ClientStepTwo} />
+
         <PrivateRoute path="/register/expenses/stepone" exact component={ExpenseStepOne} />
         <PrivateRoute path="/register/expenses/steptwo" exact component={ExpenseStepTwo} />
         <PrivateRoute path="/register/booking/stepone" exact component={BookingStepOne} />

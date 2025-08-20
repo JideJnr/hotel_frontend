@@ -13,6 +13,8 @@ import FormSelect from "../../FormSelect";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";
 import { useRoom } from "../../../../contexts/data/RoomContext";
 import { paymentOptions , requestOption } from "../../../../utils/enum";
+import { useRecord } from "../../../../contexts/data/RecordContext";
+import { useParams } from "react-router";
 
 type Errors = {
   customer?: string;
@@ -21,20 +23,28 @@ type Errors = {
 
 export default function SalesStepOne() {
   const router = useIonRouter();
-
+  const { id } = useParams<{ id: string }>();
+  
+  const { fetchRecord , record } = useRecord();
   const { fetchCustomers , customers } = useCustomer();
   const { fetchAvailableRooms , availableRooms } = useRoom();
+  
+  useEffect(() => {
+    fetchRecord(id)
+  }, [id]);
+  
   const [formData, setFormData] = useState<SalesData>({
     customerId: null,
-    customerName: null,
+    customerName: record?.customerName || null,
     requestId: null,
     requestLabel: null,
-    roomName: null,
+    roomName: record?.roomName || null,
     roomId: null,
     paymentMethodId: null,
-    paymentMethodLabel: null,
-    bookingInstruction: "",
+    paymentMethodLabel: record?.paymentMethodLabel ||  null,
+    bookingInstruction: record?.bookingInstruction ||"",
   });
+
   const [errors, setErrors] = useState<Errors>({});
 
 
