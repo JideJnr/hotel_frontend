@@ -8,12 +8,12 @@ import {
 import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms"; 
 import { useAnalytics } from "../../contexts/data/AnalyticsContext";
 import { useStaff } from "../../contexts/data/StaffContext";
+import { options } from "../../enum/enum";
 
 interface Option {
   value: string | number;
   label: string;
 }
-
 
 
 const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
@@ -23,8 +23,8 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const router = useIonRouter();
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
-  const [selected, setSelected] = useState<Option[]>([]);
-
+  const [staffSelection, setStaffSelection] = useState<Option[]>([]);
+  const [dataSelection, setDataSelection] = useState<Option[]>([]);
   const { fetchOverview, loading } = useAnalytics();
 
    const { fetchStaffs, staffs } = useStaff();
@@ -35,7 +35,7 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
   const handleSearch = async () => {
     // Extract only the values from selected options
-    const categoryValues = selected.map(opt => String(opt.value));
+    const categoryValues = staffSelection.map(opt => String(opt.value));
     
     const payload = {
       startDate,
@@ -57,17 +57,25 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     onClose();
   };
 
-  const options = [
+const dataOptions = [
+  { value: "all", label: "All" },
+    ...options.map((option) => ({
+      value: option.value,
+      label: option.label,
+    })),
+  ];
+
+  const staffOptions = [
   { value: "all", label: "All" },
     ...staffs.map((staff) => ({
       value: staff.id,
-      label: staff.name,
+      label: staff.fullName,
     })),
   ];
 
   return (
     <IonModal isOpen={isOpen} onDidDismiss={handleCloseModal}>
-      <div className="bg-gray-50 min-h-screen flex flex-col ">
+      <div className="bg-gray-50 min-h-screen flex flex-col capitalize">
         <FormHeader className="mb-4 bg-white rounded-lg" />
 
         <div className="w-full max-w-2xl mx-auto">
@@ -93,9 +101,9 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
               <FormMultiSelect
                 label=""
                 name="tags"
-                value={selected}
-                onChange={(s) => setSelected(s)}
-                options={options}
+                value={staffSelection}
+                onChange={(s) => setStaffSelection(s)}
+                options={staffOptions}
                 placeholder="Choose tags…"
               />
             </div>
@@ -103,18 +111,18 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
               <FormMultiSelect
                 label=""
                 name="tags"
-                value={selected}
+                value={dataSelection}
                 onChange={(s) => {
                   if (s.some((opt) => opt.value === "all")) {
                     // If "All" is selected, keep only All
-                    setSelected([{ value: "all", label: "All" }]);
+                    setDataSelection([{ value: "all", label: "All" }]);
                   } else {
                     // If user picks something else while All was selected, remove All
                     const filtered = s.filter((opt) => opt.value !== "all");
-                    setSelected(filtered);
+                    setDataSelection(filtered);
                   }
                 }}
-                options={options}
+                options={dataOptions}
                 placeholder="Choose Filters…"
               />
             </div>

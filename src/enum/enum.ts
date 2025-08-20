@@ -15,3 +15,10 @@ export const typeLabels: Record<string, (act: any) => string> = {
   record_updated: (act) => "Modified sales record",
   record_deleted: (act) => "Deleted sales record",
 };
+
+export const options: Option[] = [
+  { value: "sales", label: "Sales" },
+  { value: "customers", label: "Customers" },
+  { value: "expenses", label: "Expenses" },
+  { value: "bookings", label: "Bookings" },
+];

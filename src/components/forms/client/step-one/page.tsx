@@ -1,10 +1,11 @@
 import {  IonPage, useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { BackFormContainer, FormHeader, FormInput } from "../..";
+import { BackFormContainer, FormFooter, FormHeader, FormInput  } from "../..";
 import Button from "../../../../components/button/button";
 import { useParams } from "react-router";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";
+import Footer from "../../../footer/footer";
 
 const ClientStepOne = () => {
   const router = useIonRouter();
@@ -139,6 +140,7 @@ const ClientStepOne = () => {
               />
             </div>
           </form>
+          <Footer  className=" mt-8"/>
         </BackFormContainer>
     
     </IonPage>

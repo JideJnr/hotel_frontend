@@ -194,7 +194,8 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       } else {
         toast.error(`Failed: ${response.message}`);
       }
-      return response;
+      console.log(response)
+      return response.data;
     } catch (error) {
       toast.error('Customer search error');
       throw error;
@@ -209,7 +210,9 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
       } else {
         toast.error(`Failed: ${response.message}`);
       }
-      return response;
+      console.log(response)
+      return response.data;
+      
     } catch (error) {
       toast.error('Customer search error');
       throw error;

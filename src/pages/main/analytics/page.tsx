@@ -11,7 +11,7 @@ import { formatNaira } from "../../../utils/formatNaira";
 
 const Analytics = () => {
   const router = useIonRouter();
-  const [showSearch, setShowSearch] = useState(true); 
+  const [showSearch, setShowSearch] = useState(false); 
   const { overview, loading } = useAnalytics();
 
   const count: { customers: number; sales: number; expenses: number } = overview?.count || { customers: 0, sales: 0, expenses: 0 };

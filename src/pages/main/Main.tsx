@@ -1,8 +1,6 @@
 import {
   IonPage,
   IonContent,
-  IonRefresherContent,
-  IonRefresher,
   IonHeader
 } from "@ionic/react";
 import { Tab, TabGroup } from "@headlessui/react";
@@ -11,12 +9,6 @@ import Room from "./room/Room";
 import Activity from "./activity/page";
 import Setting from "./settings/page";
 import User from "./user/page"
-import { useRecord } from "../../contexts/data/RecordContext";
-import { useExpenses } from "../../contexts/data/ExpensesContext";
-import { useRoom } from "../../contexts/data/RoomContext";
-import { useActivity } from "../../contexts/data/ActivityContext";
-import { useCustomer } from "../../contexts/data/CustomerContext";
-
 
 
 function classNames(...classes: string[]) {
@@ -26,31 +18,8 @@ function classNames(...classes: string[]) {
 function Main() {
 
     
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-  {/*
-    const { fetchRecords } = useRecord();
-    const {fetchExpenses} = useExpenses();
-    const { fetchRooms } = useRoom();
-    const { fetchActivities } = useActivity();
-    const {fetchCustomers} = useCustomer();
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-
-    const refresh = async (e: CustomEvent) => {
-      try {
-        await Promise.all([
-          fetchRecords(),
-          fetchExpenses(),
-          fetchRooms(),
-          fetchActivities(),
-          fetchCustomers()
-        ]);
-      } catch (err) {
-        console.error("Refresh error:", err);
-      } finally {
-        e.detail.complete();
-      }
-    };
-*/}
   const renderTabs = () => (
     <Tab.Panels className="h-full w-full flex ">
 
@@ -204,8 +173,6 @@ function Main() {
   return (
     <IonPage className="bg-white">
       <IonContent fullscreen>
-
-
         <TabGroup
           as="div"
           className=" grid grid-cols-1 grid-rows-12 h-full w-full "

@@ -7,18 +7,14 @@ import {
 } from "@ionic/react";
 import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms"; 
 import { useAnalytics } from "../../contexts/data/AnalyticsContext";
+import { options } from "../../enum/enum";
 
 interface Option {
   value: string | number;
   label: string;
 }
 
-const options: Option[] = [
-  { value: "sales", label: "Sales" },
-  { value: "customers", label: "Customers" },
-  { value: "expenses", label: "Expenses" },
-  { value: "bookings", label: "Bookings" },
-];
+
 
 const StaffAnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
