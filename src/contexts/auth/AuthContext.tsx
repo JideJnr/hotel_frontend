@@ -26,7 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const router = useIonRouter();
   const { login: storeLogin, logout: storeLogout, signup: storeSignup, loading, error } = useAuthStore();
-  console.log(error);
+  
   const [user, setUser] = useState<User | null>(() => {
     // initialize from localStorage if available
     const saved = localStorage.getItem('user');

@@ -15,7 +15,7 @@ const Signin = () => {
     });
   const [error, setError] = useState('');
 
-  console.log(error);
+ 
 
   useEffect(() => {
     if (authError) setError(authError);

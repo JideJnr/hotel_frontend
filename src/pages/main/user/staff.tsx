@@ -96,8 +96,7 @@ const Users = () => {
         
     </div>
    
-  </IonPage>
-    
+  </IonPage>   
   );
 };
 
