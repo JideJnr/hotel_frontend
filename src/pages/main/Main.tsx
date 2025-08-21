@@ -17,7 +17,6 @@ function classNames(...classes: string[]) {
 
 function Main() {
 
-    
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const renderTabs = () => (
@@ -43,8 +42,8 @@ function Main() {
   );
 
   const renderTabList = () => (
-    <Tab.List className=" bg-white shadow-lg h-full w-full flex ">
-      <div className="flex w-full h-full p-2">
+    <Tab.List className=" bg-white shadow-lg  h-full w-full flex ">
+      <div className="flex w-full h-full p-2 ">
         {[
           {
             label: "Home",
@@ -153,18 +152,19 @@ function Main() {
             key={label}
             className={({ selected }) =>
               classNames(
-                "grid grid-flow-col w-full h-full",
+                "grid grid-flow-col w-full h-full outline-none focus:outline-none", // 👈 added here
                 selected
                   ? "text-emerald-500 border-b-2 border-emerald-500"
                   : "text-gray-400 group-hover:text-indigo-500 border-transparent group-hover:border-indigo-500",
               )
             }
           >
-            <div className="flex flex-col  p-1 h-full  mt-auto">
+            <div className="flex flex-col p-1 h-full mt-auto">
               {icon}
               <span className="flex h-fit mx-auto text-xs">{label}</span>
             </div>
           </Tab>
+
         ))}
       </div>
     </Tab.List>

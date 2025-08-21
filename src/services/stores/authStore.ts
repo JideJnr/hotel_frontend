@@ -13,16 +13,23 @@ export const useAuthStore = create<AuthState>((set) => ({
   loading: false,
   error: null,
 
+  
+
   login: async (email, password) => {
     set({ loading: true, error: null });
     try {
       const response = await login({ email, password });
       set({ loading: false });
+      if (!response.success) {
+        set({ error: response.message || 'Login failed' });
+      }
       return response;
     } catch (err: any) {
       const msg = err.message || 'Login failed';
       set({ error: msg, loading: false });
+      
       throw new Error(msg);
+
     }
   },
 
@@ -43,6 +50,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       const response = await signup(payload);
       set({ loading: false });
+      if (!response.success) {
+        set({ error: response.message || 'Login failed' });
+      }
       return response;
     } catch (err: any) {
       const msg = err.message || 'Signup failed';
