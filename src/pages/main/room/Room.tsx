@@ -13,16 +13,22 @@ import { useRoom } from "../../../contexts/data/RoomContext";
 import { useComputation } from "../../../contexts/data/ComputationContext";
 import Footer from "../../../components/footer/footer";
 import EmptyState from "../../../components/empty/empty";
+import LoadingPage from "../../../components/loading/Loading";
 
 const Room = () => {
   const router = useIonRouter();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [activeTab, setActiveTab] = useState<"available" | "active">("available");
-  const { fetchRooms, rooms } = useRoom();
-  const {fetchTotalRoomsCount, fetchActiveRoomsCount, totalRoomCount, activeRoomCount,   } = useComputation();
-useEffect(() => {
-  loadData(); // clean initial load
-}, []);
+  const { fetchRooms, rooms, loading:roomLoading } = useRoom();
+  const {fetchTotalRoomsCount, fetchActiveRoomsCount, totalRoomCount, activeRoomCount,loading:computationLoading   } = useComputation();
+  useEffect(() => {
+    loadData(); // clean initial load
+  }, []);
+
+  const loading = roomLoading || computationLoading;
+
+  console.log("Rooms:", user);
+  
 
 const loadData = async () => {
   try {
@@ -63,6 +69,10 @@ const filteredRooms = (() => {
   return (
 
     <div className=" flex flex-col gap-8  pt-8 bg-gray-100 overflow-y-auto h-full w-full text-black ">
+             {loading && (
+            <LoadingPage/>
+      )}
+     
       <IonRefresher slot="fixed" onIonRefresh={handleRefresh} className="text-gray-800">
         <IonRefresherContent />
       </IonRefresher>
@@ -80,7 +90,7 @@ const filteredRooms = (() => {
         <DashboardTile title="Total  Rooms" value={totalRoomCount||0} delta={1} />
         <DashboardTile title="Active Rooms" value={activeRoomCount||0} delta={1} />
       </div>
-      {user && user.role === "admin" && (       
+      {user && user.role === "ADMIN" && (       
         <div className=" px-4 w-fit ml-auto mr-2">
           <button className="text-black" onClick={handleAddNew}>
             Add New

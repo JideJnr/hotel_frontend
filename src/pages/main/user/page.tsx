@@ -8,13 +8,14 @@ import SearchModal from "../../../components/modal/SearchModal";
 import Footer from "../../../components/footer/footer";
 import ScheduleCard from "../../../components/templates/card/ScheduleCard";
 import EmptyState from "../../../components/empty/empty";
+import LoadingPage from "../../../components/loading/Loading";
 
 
 const Users = () => {
   const router = useIonRouter();
-  const { fetchActiveCustomers, activeCustomers , recentCustomers , fetchRecentCustomers} = useCustomer();
+  const { fetchActiveCustomers, activeCustomers , recentCustomers , fetchRecentCustomers , loading:customerLoading} = useCustomer();
   const [showSearch, setShowSearch ] = useState(false);
-  const { totalCustomerCount, activeCustomerCount , fetchActiveCustomersCount, fetchTotalCustomersCount} = useComputation();
+  const { totalCustomerCount, activeCustomerCount , fetchActiveCustomersCount, fetchTotalCustomersCount , loading:computationLoading} = useComputation();
 
     useEffect(() => {
       loadData(); // clean initial load
@@ -35,12 +36,20 @@ const Users = () => {
     };
 
 
+  const loading = customerLoading || computationLoading;
+  
+
 
   return (
   
        
     <div className="flex flex-col gap-8  pt-8 bg-gray-100 overflow-y-auto h-full w-full text-black">
-        
+
+                 {/* Dark hint overlay */}
+        {loading && (
+            <LoadingPage/>
+      )}
+         
         <SearchModal 
           isOpen={showSearch} 
           onClose={() => setShowSearch(false)} 
@@ -57,12 +66,12 @@ const Users = () => {
           </div>
 
 <div className="pt-8 px-4 flex flex-col gap-4 bg-white rounded-lg shadow-md p-4 h-full">
-
+   <h2 className="text-lg font-semibold text-black">Active Customer</h2>
   {/* Active Customers */}
   {Array.isArray(activeCustomers) && activeCustomers.length > 0 && (
     <div className="w-full h-full flex flex-col gap-4 mb-4">
       <div className="flex">
-        <h2 className="text-lg font-semibold text-black">Active Customer</h2>
+     
       </div>
       {activeCustomers.map((client: any) => (
         <div
@@ -128,7 +137,7 @@ const Users = () => {
 
   {/* Empty state (only if both are empty) */}
   {(!activeCustomers?.length && !recentCustomers?.length) && (
-    <div className="py-4">
+    <div className="p-4">
       <EmptyState />
     </div>
   )}

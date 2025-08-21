@@ -9,13 +9,14 @@ import { useCustomer } from "../../../../contexts/data/CustomerContext";
 import { Edit3, Phone } from "lucide-react";
 import { formatFirestoreDate } from "../../../../utils/utilities";
 import { useRecord } from "../../../../contexts/data/RecordContext";
+import LoadingPage from "../../../../components/loading/Loading";
 
 const UserDetails = () => {
   const router = useIonRouter();
   const { id } = useParams<{ id: string }>();
 
-  const { fetchCustomer , customer } = useCustomer();
-  const {  checkOutRecord  } = useRecord();
+  const { fetchCustomer , customer ,loading} = useCustomer();
+  const {  checkOutRecord ,loading:checkOutLoading } = useRecord();
   
   
   useEffect(() => {
@@ -43,6 +44,9 @@ const UserDetails = () => {
 
   return (
     <IonPage>
+            {loading && (
+        <LoadingPage/>
+      )}
       <FormHeader />
       <BackFormContainer title="" subtitle="" className="max-w-2xl">
         <div className="w-full flex flex-col  gap-8 text-gray-800 capitalize">
@@ -109,7 +113,7 @@ const UserDetails = () => {
                 </div>
           
                 <div className="grid grid-cols-1 gap-2 mt-2">
-                    <Button text="Check Out" className="w-full" onClick={handleCheckout}/>
+                    <Button text="Check Out" className="w-full" onClick={handleCheckout} loading={checkOutLoading} loadingText="Checking Out..."/>
                 </div>
                 
               </div>

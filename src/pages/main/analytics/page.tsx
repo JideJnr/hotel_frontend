@@ -8,6 +8,7 @@ import SearchModal from "../../../components/modal/AnalyticsModal";
 import { useAnalytics } from "../../../contexts/data/AnalyticsContext";
 import Footer from "../../../components/footer/footer";
 import { formatNaira } from "../../../utils/formatNaira";
+import LoadingPage from "../../../components/loading/Loading";
 
 const Analytics = () => {
   const router = useIonRouter();
@@ -21,6 +22,9 @@ const Analytics = () => {
 
   return (
     <IonPage>
+      {loading && (
+        <LoadingPage/>
+      )}
       <FormHeader />
       <SearchModal 
         isOpen={showSearch} 

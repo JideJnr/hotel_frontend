@@ -24,8 +24,7 @@ const Setting = () => {
         <div className="flex-col flex gap-4  ">
           <div className="w-full flex ">
             <div className=" mx-auto my-auto  border border-white w-24 h-24 uppercase border-gray-200 rounded-full bg-white shadow-md">
-              <p className="text-3xl font-semibold text-gray-600 flex justify-center items-center h-full"
-                  onClick={() => router.push('/profile', 'forward')}>
+              <p className="text-3xl font-semibold text-gray-600 flex justify-center items-center h-full">
                 {getNameInitials(user?.fullName || `NOT FOUND`) }                          
               </p>
             </div>
@@ -33,13 +32,20 @@ const Setting = () => {
 
           <div className="mx-auto w-fit">
             <p className="font-semibold text-lg text-black capitalize "
-              onClick={() => router.push('/profile', 'forward')}>{user?.fullName}</p>
+              >{user?.fullName}</p>
           </div>
         </div>
 
         <div className="w-full flex flex-col  px-4 2xl:px-8">
 
-            {user && user.role === 'admin' &&           
+           <div
+              className="flex w-full items-center justify-between border-y rounded-lg p-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                         onClick={() => router.push('/profile', 'forward')}
+            >
+              <p>Profile</p>
+            </div>
+
+            {user && user.role === 'ADMIN' &&           
               <div
                 className="flex w-full items-center justify-between border-y rounded-lg p-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                           onClick={() => router.push('/analytic', 'forward')}
@@ -67,7 +73,7 @@ const Setting = () => {
               <p>Issues</p>
             </div>
 
-            {user && user.role === 'admin' && 
+            {user && user.role === 'ADMIN' && 
               <div className="flex w-full items-center justify-between border-y rounded-lg py-2 px-3 text-md font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 onClick={() => router.push('/staff', 'forward')}>
                 <p>Staff</p>

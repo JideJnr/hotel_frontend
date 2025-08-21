@@ -17,7 +17,7 @@ const ClientStepOne = () => {
     fetchCustomer(id)
   }, [id]);
 
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     id: customer?.id||"",
     fullName: customer?.fullName||"",
     userName: customer?.userName||"",

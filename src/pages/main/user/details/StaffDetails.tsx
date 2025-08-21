@@ -7,6 +7,7 @@ import Footer from "../../../../components/footer/footer";
 import { Edit3, Phone } from "lucide-react";
 import { useStaff } from "../../../../contexts/data/StaffContext";
 import { formatDate } from "../../../../utils/utilities";
+import LoadingPage from "../../../../components/loading/Loading";
 
 const UserDetails = () => {
   const router = useIonRouter();
@@ -14,7 +15,7 @@ const UserDetails = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const uid = id || user.uid;
 
-  const { fetchStaff , staff } = useStaff();
+  const { fetchStaff , staff , loading } = useStaff();
     useEffect(() => {
       fetchStaff(uid)
     }, [uid]);
@@ -24,6 +25,9 @@ const UserDetails = () => {
   return (
     <IonPage>
       <FormHeader />
+      {loading && (
+        <LoadingPage/>
+      )}
       <BackFormContainer title="" subtitle="" className="max-w-2xl">
         <div className="w-full flex flex-col  gap-8 text-gray-800 capitalize">
 

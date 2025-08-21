@@ -12,15 +12,14 @@ import FloatingMenu from '../../../components/table/FloatingMenu';
 import dayjs from 'dayjs';
 import EmptyState from '../../../components/empty/empty';
 import { getHotelBusinessDate } from '../../../utils/utilities';
+import LoadingPage from '../../../components/loading/Loading';
 
 const Home = () => {
   const router = useIonRouter();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const {fetchRecords, records } = useRecord();
-  const {fetchExpensesOnDate, expenses} = useExpenses();
+  const {fetchRecords, records , loading:recordLoading } = useRecord();
+  const {fetchExpensesOnDate, expenses , loading:expenseLoading} = useExpenses();
   const [currentDate, setCurrentDate] = useState(dayjs(getHotelBusinessDate()));
-  
-  
   const {
     fetchBalanceOnDate,
     fetchNewCustomersOnDateCount,
@@ -29,37 +28,46 @@ const Home = () => {
     totalSales,
     totalExpenses,
     recordCount: salesCount,
-    expensesCount
+    expensesCount,
+    loading:computationLoading
   
   } = useComputation();
   
-useEffect(() => {
-  loadData();
-}, [currentDate]);
+  const loading = recordLoading || expenseLoading || computationLoading;
+  
+  useEffect(() => {
+    loadData();
+  }, [currentDate]);
 
-const loadData = async () => {
-  try {
-    
-    const formattedDate = currentDate.format("YYYY-MM-DD"); // adjust if API expects another format
-    await Promise.all([
-      fetchBalanceOnDate(formattedDate),
-      fetchNewCustomersOnDateCount(formattedDate), 
-      fetchExpensesOnDate(formattedDate),
-      fetchRecords(formattedDate)
-    ]);
-  } catch (err) {
-    console.error("Load data error:", err);
-  }
-};
+  const loadData = async () => {
+    try {
+      
+      const formattedDate = currentDate.format("YYYY-MM-DD"); // adjust if API expects another format
+      await Promise.all([
+        fetchBalanceOnDate(formattedDate),
+        fetchNewCustomersOnDateCount(formattedDate), 
+        fetchExpensesOnDate(formattedDate),
+        fetchRecords(formattedDate)
+      ]);
+    } catch (err) {
+      console.error("Load data error:", err);
+    }
+  };
 
-const handleRefresh = async (e: CustomEvent) => {
-  await loadData();
-  e.detail.complete();
-};
+  const handleRefresh = async (e: CustomEvent) => {
+    await loadData();
+    e.detail.complete();
+  };
+
 
 
   return (
     <div className="flex flex-col gap-8  pt-8 bg-gray-100 overflow-y-auto h-full w-full text-black">
+          {/* Dark hint overlay */}
+        {loading && (
+            <LoadingPage/>
+      )}
+        
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh} className="text-gray-800">
           <IonRefresherContent />
         </IonRefresher>

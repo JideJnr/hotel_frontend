@@ -6,12 +6,13 @@ import { getNameInitials } from "../../../../utils/getInitials";
 import { useBooking } from "../../../../contexts/data/BookingContext";
 import { Edit3, Phone } from "lucide-react";
 import Button from "../../../../components/button/button";
+import LoadingPage from "../../../../components/loading/Loading";
 
 const BookingDetails = () => {
     const router = useIonRouter();
   
   const { id } = useParams<{ id: string }>();
-  const { fetchBookingById , booking , cancelBooking } = useBooking();
+  const { fetchBookingById , booking , cancelBooking , loading} = useBooking();
 
   useEffect(() => {
     fetchBookingById(id);
@@ -20,6 +21,9 @@ const BookingDetails = () => {
 
   return (
     <IonPage>
+      {loading && (
+        <LoadingPage/>
+      )}
       <FormHeader /> 
       <BackFormContainer title="Booking Details" subtitle="" className="max-w-2xl h-full">
         <div className="w-full h-full flex flex-col gap-8 text-gray-800">

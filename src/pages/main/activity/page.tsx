@@ -3,6 +3,7 @@ import { useActivity } from "../../../contexts/data/ActivityContext";
 import { formatDate } from "../../../utils/utilities";
 import Footer from "../../../components/footer/footer";
 import { typeLabels } from "../../../enum/enum";
+import LoadingPage from "../../../components/loading/Loading";
 
 const Activities = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -30,6 +31,10 @@ const Activities = () => {
 
   return (
     <div className="p-4 pt-8 bg-gray-100 text-gray-800 w-full h-full flex flex-col gap-6 overflow-y-auto capitalize">
+        {loading && (
+            <LoadingPage/>
+      )}
+      
       {loading ? (
         <div className="text-gray-500 text-sm">Loading...</div>
       ) : activities?.length > 0 ? (

@@ -10,12 +10,13 @@ import { useRecord } from "../../../../contexts/data/RecordContext";
 import { toast } from "react-toastify";
 import { Edit3, Phone } from "lucide-react";
 import { formatNaira } from "../../../../utils/formatNaira";
+import LoadingPage from "../../../../components/loading/Loading";
 
 const RoomDetails = () => {
   const { id } = useParams<{ id: string }>();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const { fetchRoom , currentRoom } = useRoom();
-  const { checkOutRecord } = useRecord();
+  const { fetchRoom , currentRoom , loading} = useRoom();
+  const { checkOutRecord, loading:checkOutLoading } = useRecord();
   const router = useIonRouter();
   useEffect(() => {
     fetchRoom(id);
@@ -40,6 +41,9 @@ const RoomDetails = () => {
     
   return (
     <IonPage>
+      {loading && (
+        <LoadingPage/>
+      )}
       <FormHeader /> 
       <BackFormContainer title="Room Details" subtitle="" className="max-w-2xl h-full">
         <div className="w-full h-full flex flex-col gap-8 text-gray-800 capitalize">
@@ -95,7 +99,7 @@ const RoomDetails = () => {
               </div>
               
               <div className="grid grid-cols-1 gap-2 mt-2">
-                <Button text="Check Out" className="w-full" onClick={handleCheckout} />
+                <Button text="Check Out" className="w-full" onClick={handleCheckout} loading={checkOutLoading} loadingText="checking out..." />
               </div>
             </div>
           }
