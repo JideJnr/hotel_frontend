@@ -44,7 +44,7 @@ const UserDetails = () => {
   return (
     <IonPage>
       <FormHeader />
-      <BackFormContainer title="User Details" subtitle="" className="max-w-2xl">
+      <BackFormContainer title="" subtitle="" className="max-w-2xl">
         <div className="w-full flex flex-col  gap-8 text-gray-800 capitalize">
 
             {/* Profile Image and Basic Info */}

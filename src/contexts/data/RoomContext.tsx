@@ -77,7 +77,6 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const wrappedFetchRoom = async (id: string) => {
     try {
       const response = await store.getRoomById(id);
-      console.log("Fetched Room Data:", response);
       if (response.success) {
         setCurrentRoom(response.data);
       }

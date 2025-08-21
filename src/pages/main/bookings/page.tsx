@@ -11,11 +11,7 @@ const Bookings = () => {
   const router = useIonRouter();
   const [showSearch, setShowSearch] = useState(true); // Modal opens by default
   const {bookings } = useBooking();
-
-  console.log('Bookings:', bookings);
   const data = bookings.bookings? bookings.bookings : []; 
-
-  console.log('Data:', data);
 
   return (
     <IonPage>

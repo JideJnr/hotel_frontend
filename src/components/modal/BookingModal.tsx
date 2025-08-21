@@ -40,7 +40,6 @@ const handleSearch = async () => {
     roomValues = selected.map((opt: Option) => String(opt.value));
   }
 
-  console.log("Selected rooms:", endDate,);
   const response = await fetchBookingsByFilter(
     startDate,
     endDate,

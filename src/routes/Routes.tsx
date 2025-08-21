@@ -38,6 +38,7 @@ const RoomDetails = React.lazy(() => import("../pages/main/room/details/RoomDeta
 const BookingsDetails = React.lazy(() => import("../pages/main/bookings/details/BookingDetails"));
 const StaffDetails = React.lazy(() => import("../pages/main/user/details/StaffDetails"));
 
+
 const Staff = React.lazy(() => import("../pages/main/user/staff"));
 const Bookings = React.lazy(() => import("../pages/main/bookings/page"));
 const Analytics = React.lazy(() => import("../pages/main/analytics/page"));
@@ -60,6 +61,7 @@ const Routes: React.FC = () => {
 
         {/* PRIVATE ROUTES */}
         <PrivateRoute path="/issue" exact component={Issue} />
+         <PrivateRoute path="/profile" exact component={StaffDetails} />
         <PrivateRoute path="/staff/:id" exact component={StaffDetails} />
         <PrivateRoute path="/staff" exact component={Staff} />
         <PrivateRoute path="/bookings/:id" exact component={BookingsDetails} />
