@@ -15,6 +15,8 @@ const Users = () => {
   const { fetchActiveCustomers, activeCustomers , recentCustomers , fetchRecentCustomers} = useCustomer();
   const [showSearch, setShowSearch ] = useState(false);
 
+  console.log("activeCustomers", activeCustomers);
+  console.log("recentCustomers", recentCustomers);
   const { totalCustomerCount, activeCustomerCount , fetchActiveCustomersCount, fetchTotalCustomersCount} = useComputation();
 
     useEffect(() => {

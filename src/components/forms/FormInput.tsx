@@ -21,7 +21,7 @@ export const FormInput: React.FC<FormInputProps> = ({
       placeholder={placeholder}
       required={required}
       className="mt-1 block text-black bg-white w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm 
-                focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                focus:outline-none focus:ring-2 focus:ring-indigo-500 autofill:bg-white autofill:text-black"
     />
     {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
   </div>

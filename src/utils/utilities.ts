@@ -1,5 +1,19 @@
+import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+
+type FirestoreTimestamp = {
+  _seconds: number;
+  _nanoseconds: number;
+};
+
+dayjs.extend(advancedFormat);
+
+
 export function formatDate(dateString: string): string {
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) {
+    return "-";
+  }
   const options: Intl.DateTimeFormatOptions = {
     weekday: "short",
     month: "short",
@@ -63,4 +77,17 @@ export function getHotelBusinessDate(): Date {
   lagosNow.setUTCHours(0, 0, 0, 0);
 
   return lagosNow;
+}
+
+export function formatFirestoreDate(
+  ts: FirestoreTimestamp,
+  format: string = "Do, ddd MMMM YYYY"
+): string {
+  if (!ts?._seconds) return "";
+
+  // Convert Firestore seconds → JS Date (ms)
+  const date = new Date(ts._seconds * 1000 + ts._nanoseconds / 1_000_000);
+
+  // Format with dayjs
+  return dayjs(date).format(format);
 }

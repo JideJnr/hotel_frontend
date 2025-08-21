@@ -7,18 +7,39 @@ import { getNameInitials } from "../../../../utils/getInitials";
 import Footer from "../../../../components/footer/footer";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";
 import { Edit3, Phone } from "lucide-react";
+import { formatFirestoreDate } from "../../../../utils/utilities";
+import { useRecord } from "../../../../contexts/data/RecordContext";
 
 const UserDetails = () => {
   const router = useIonRouter();
   const { id } = useParams<{ id: string }>();
 
   const { fetchCustomer , customer } = useCustomer();
+  const {  checkOutRecord  } = useRecord();
+  
+  
   useEffect(() => {
     fetchCustomer(id)
   }, [id]);
 
   const bookings = customer?.bookings || [];
 
+  const handleCheckout = async () => {
+        if (!customer?.activeRoom && customer?.active) return;
+    
+        try {
+          const res = await checkOutRecord(customer?.activeRoom.recordId); // call context checkout
+          if (res?.success) {  
+             fetchCustomer(id)
+          } else {
+            console.error(res?.message || "Checkout failed");
+          }
+        } catch (err) {
+          console.error("Checkout failed");
+        }
+      };
+  
+  
 
   return (
     <IonPage>
@@ -72,7 +93,7 @@ const UserDetails = () => {
                   <DetailRow label="Username" value={customer?.userName || 0} />
                   <DetailRow label="Email" value={customer?.email||0} />
                   <DetailRow label="Address " value={customer?.address || 0} />
-                  <DetailRow label="Created At" value={customer?.email|| 0} />
+                  <DetailRow label="Created At" value={String(formatFirestoreDate(customer?.createdAt) || "")} />
               
 
               </div>
@@ -82,12 +103,13 @@ const UserDetails = () => {
             {customer?.active && (
               <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
                 <h3 className="text-lg font-semibold">Current Stay</h3>
-                <div className="text-sm">
-                  <p className="font-semibold">{customer?.currentRoom?.name}</p>
+                <div className="text-sm flex flex-col gap-1">
+                  <p className="font-semibold">ROOM : ROOM {customer?.activeRoom?.name}</p>
+                  <p className="font-medium"> Attendant : {customer?.activeRoom?.tellerName}</p>
                 </div>
           
                 <div className="grid grid-cols-1 gap-2 mt-2">
-                    <Button text="Check Out" className="w-full" />
+                    <Button text="Check Out" className="w-full" onClick={handleCheckout}/>
                 </div>
                 
               </div>

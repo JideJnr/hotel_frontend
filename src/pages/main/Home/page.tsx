@@ -11,13 +11,14 @@ import DateHeader from '../../../components/table/DateHeader';
 import FloatingMenu from '../../../components/table/FloatingMenu';
 import dayjs from 'dayjs';
 import EmptyState from '../../../components/empty/empty';
+import { getHotelBusinessDate } from '../../../utils/utilities';
 
 const Home = () => {
   const router = useIonRouter();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const {fetchRecords, records } = useRecord();
   const {fetchExpensesOnDate, expenses} = useExpenses();
-  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [currentDate, setCurrentDate] = useState(dayjs(getHotelBusinessDate()));
   
   
   const {

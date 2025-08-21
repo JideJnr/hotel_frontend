@@ -11,7 +11,7 @@ import { formatNaira } from "../../../utils/formatNaira";
 
 const Analytics = () => {
   const router = useIonRouter();
-  const [showSearch, setShowSearch] = useState(false); 
+  const [showSearch, setShowSearch] = useState(true); 
   const { overview, loading } = useAnalytics();
 
   const count: { customers: number; sales: number; expenses: number } = overview?.count || { customers: 0, sales: 0, expenses: 0 };
@@ -22,8 +22,6 @@ const Analytics = () => {
   return (
     <IonPage>
       <FormHeader />
-
-      {/* Search modal - Pass close handler */}
       <SearchModal 
         isOpen={showSearch} 
         onClose={() => setShowSearch(false)} 
@@ -32,18 +30,13 @@ const Analytics = () => {
       <div className="flex flex-col gap-8  py-8 bg-gray-100 overflow-y-auto h-full w-full text-black">
         <div className="flex justify-between items-center px-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+            <h1 className="text-xl md:text-2xl font-semibold tracking-tight">
               Analytics
             </h1>
             <p className="text-sm text-gray-500">
               Track your customers, activity and history.
             </p>
           </div>
-
-          {/* 🔎 Button to reopen search */}
-          <IonButton size="small" onClick={() => setShowSearch(true)}>
-            Reopen Search
-          </IonButton>
         </div>
 
         <div className="grid gap-4 lg:gap-8 grid-cols-2 w-full h-fit px-4">
@@ -54,6 +47,19 @@ const Analytics = () => {
         </div>
 
         <div className="flex flex-col  w-full flex-1 pt-4  rounded-lg shadow-md bg-white gap-8">
+          <button
+            onClick={() => setShowSearch(true)}
+            className="w-fit ml-auto mr-4 flex items-center justify-center text-gray-600 hover:text-gray-800 transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" 
+              fill="none" viewBox="0 0 24 24" 
+              strokeWidth={2} stroke="currentColor" 
+              className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h8m-8 6h16" />
+          </svg>
+
+          </button>
+
 
           <div className="flex flex-col gap-8  px-4 ">
 

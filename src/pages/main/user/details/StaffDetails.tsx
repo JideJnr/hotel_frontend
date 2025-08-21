@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { IonPage, useIonRouter } from "@ionic/react";
-import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import { useEffect } from "react";
 import { getNameInitials } from "../../../../utils/getInitials";
 import Footer from "../../../../components/footer/footer";
 import { Edit3, Phone } from "lucide-react";
 import { useStaff } from "../../../../contexts/data/StaffContext";
+import { formatDate } from "../../../../utils/utilities";
 
 const UserDetails = () => {
   const router = useIonRouter();
@@ -41,7 +41,7 @@ const UserDetails = () => {
               )}
 
               <div className="flex flex-col text-sm gap-1">
-                <h2 className="text-2xl font-semibold capitalize">{staff?.fullName}</h2>
+                <h2 className="text-xl font-semibold capitalize">{staff?.fullName}</h2>
                 <span>{staff?.phone}</span>
               </div>
             </div>
@@ -67,20 +67,19 @@ const UserDetails = () => {
                   <DetailRow label="FullName" value={staff?.fullName || 0} />
                   <DetailRow label="Email" value={staff?.email||0} />
                   <DetailRow label="Address " value={staff?.address || 0} />
-                  <DetailRow label="Created At" value={staff?.email|| 0} />
+                  <DetailRow label="Created At" value={formatDate(staff?.createdAt)|| '-'} />
               
 
               </div>
             </div>
-
-
 
             {/* Lodge History */}
             <div className="flex flex-col gap-2 px-2">
               <div className="flex justify-between">
                 
               <h3 className="text-lg font-semibold text-gray-600">Payment History</h3>
-              <div className="flex items-center justify-center  px-2 py-1 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-fit">
+              <div className="flex items-center justify-center  px-2 py-1 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-fit"
+               onClick={() => router.push(`/expenses/new?staffId=${id}`)}>
                     ADD NEW
               </div>
               </div>
@@ -103,9 +102,7 @@ const UserDetails = () => {
               )}
             </div>
 
-         
-
-          <Footer/>
+            <Footer/>
         </div>
       </BackFormContainer>
     </IonPage>

@@ -206,6 +206,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     try {
       const response = await storeFetchActiveCustomer();
       if (response.success && response.data) {
+        console.log("activeCustomers", response.data);
         setActiveCustomers(response.data);
       } else {
         toast.error(`Failed: ${response.message}`);
@@ -241,6 +242,8 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     fetchActiveCustomers: wrappedFetchActiveCustomers,
   }), [
     customers,
+    activeCustomers,
+    recentCustomers,
     totalCustomerCount,
     customerCount,
     customer,

@@ -116,7 +116,7 @@ const SignupContinue = () => {
             <FormFooter
               promptText="Already have an account?"
               linkText="Sign in"
-              linkPath="/auth/signin"
+              linkPath="/sign-in"
             />
           </form>
         </FormContainer>

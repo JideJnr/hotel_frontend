@@ -25,7 +25,7 @@ const Welcome = () => {
           <div className="h-fit mt-auto flex flex-col gap-4 mb-8 p-4">
             <Button
               className="!w-full !rounded-3xl"
-              onClick={() => router.push("/main")}
+              onClick={() => router.push("/home")}
               text="Continue"
             />
           </div>
