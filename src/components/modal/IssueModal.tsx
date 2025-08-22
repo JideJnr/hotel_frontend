@@ -5,7 +5,7 @@ import {
   IonButton,
   useIonRouter,
 } from "@ionic/react";
-import { FormDatePicker, FormMultiSelect, FormHeader, FileUpload, FormTextarea } from "../forms"; 
+import {  FormMultiSelect, FormHeader, FileUpload, FormTextarea } from "../forms"; 
 import { useCustomer } from "../../contexts/data/CustomerContext";
 import { useRoom } from "../../contexts/data/RoomContext";
 
@@ -33,6 +33,9 @@ const IssueModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     description: '',
     date: new Date().toISOString().split('T')[0],
     receiptBase64: '', // Add base64 field
+    staff: [] as { value: string; label: string }[],
+    clients: [] as { value: string; label: string }[],
+    rooms: [] as { value: string; label: string }[],
   });
 
     const [errors, setErrors] = useState({
@@ -106,7 +109,15 @@ const IssueModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
       label=""
       name="staff"
       value={formData.staff || []}
-      onChange={(s) => setFormData(prev => ({ ...prev, staff: s }))}
+      onChange={(s) =>
+        setFormData(prev => ({
+          ...prev,
+          staff: s.map(opt => ({
+            value: String(opt.value),
+            label: opt.label
+          }))
+        }))
+      }
       options={customers
         .filter(c => c.type === "staff") // assuming you tag customers
         .map(c => ({ value: c.id, label: c.name }))}
@@ -115,7 +126,6 @@ const IssueModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   </div>
 )}
 
-{/* If Client is selected, show client selection */}
 {selected.some(opt => opt.value === "client") && (
   <div className="mt-4">
     <label className="block text-sm font-medium text-gray-700">Select Clients</label>
@@ -123,7 +133,15 @@ const IssueModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
       label=""
       name="clients"
       value={formData.clients || []}
-      onChange={(s) => setFormData(prev => ({ ...prev, clients: s }))}
+      onChange={(s) =>
+        setFormData(prev => ({
+          ...prev,
+          clients: s.map(opt => ({
+            value: String(opt.value),
+            label: opt.label
+          }))
+        }))
+      }
       options={customers
         .filter(c => c.type === "client")
         .map(c => ({ value: c.id, label: c.name }))}
@@ -140,7 +158,15 @@ const IssueModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
       label=""
       name="rooms"
       value={formData.rooms || []}
-      onChange={(s) => setFormData(prev => ({ ...prev, rooms: s }))}
+      onChange={(s) =>
+        setFormData(prev => ({
+          ...prev,
+          rooms: s.map(opt => ({
+            value: String(opt.value),
+            label: opt.label
+          }))
+        }))
+      }
       options={rooms.map(r => ({ value: r.id, label: r.name }))}
       placeholder="Choose rooms…"
     />

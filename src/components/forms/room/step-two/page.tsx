@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import { useRoom } from "../../../../contexts/data/RoomContext";
+import Footer from "../../../footer/footer";
+import { formatNaira } from "../../../../utils/formatNaira";
 
 
 export interface RoomFormData {
@@ -19,10 +21,9 @@ export interface RoomFormData {
 
 const RoomStepTwo = () => {
   const router = useIonRouter();
-  const { createRoom } = useRoom();
+  const { createRoom , loading} = useRoom();
 
   const [formData, setFormData] = useState<RoomFormData | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const storedData = sessionStorage.getItem("roomData");
@@ -72,26 +73,27 @@ const RoomStepTwo = () => {
         subtitle="Please review the information before submitting"
         className="max-w-md"
       >
-        <div className="space-y-6">
+        <div className="space-y-4">
           <DetailRow label="Room Name" value={formData.name} />
           <DetailRow label="Description" value={formData.description || "N/A"} />
           <DetailRow label="Capacity" value={String(formData.capacity)} />
-          <DetailRow label="Price Per Night (₦)" value={String(formData.pricePerNight)} />
-          <DetailRow label="Price One Hour (₦)" value={String(formData.oneHour)} />
-          <DetailRow label="Price Two Hours (₦)" value={String(formData.twoHours)} />
+          <DetailRow label="Price Per Night (₦)" value={String(formatNaira(formData.pricePerNight||0))} />
+          <DetailRow label="Price One Hour (₦)" value={String(formatNaira(formData.oneHour||0))} />
+          <DetailRow label="Price Two Hours (₦)" value={String(formatNaira(formData.twoHours||0))} />
           <DetailRow label="Amenities" value={formData.amenities.join(", ") || "None"} />
         
-          <div className="flex flex-col gap-3 pt-4">
+          <div className=" mt-4">
             <Button
               text="Submit"
               onClick={handleSubmit}
-              disabled={isSubmitting}
-              loading={isSubmitting}
+              disabled={loading}
+              loading={loading}
               loadingText="Submitting..."
               className="w-full"
             />
           </div>
         </div>
+        <Footer/>
       </BackFormContainer>
     </IonPage>
   );

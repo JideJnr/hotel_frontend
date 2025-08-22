@@ -16,10 +16,7 @@ interface PaginationParams {
   lastId?: string;
 }
 
-interface DateRangeParams extends PaginationParams {
-  startDate: string;
-  endDate: string;
-}
+
 
 interface Expense {
   id: string;
@@ -36,7 +33,7 @@ interface ExpenseState {
 
   fetchExpense: (id: string) => Promise<Response>;
   fetchExpensesOnDateRange: (params?: any) => Promise<Response>;
-  fetchExpensesOnDate: ( date: string) => Promise<Response>;
+  fetchExpensesOnDate: ( date: string , page: number, limit:number) => Promise<Response>;
   fetchExpensesByCategory: (category: string, params?: PaginationParams) => Promise<Response>;
   fetchExpenseSummary: (params: { startDate: string; endDate: string }) => Promise<Response>;
   createExpense: (data: Partial<Expense>) => Promise<Response>;
@@ -72,10 +69,10 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
     }
   },
 
-  fetchExpensesOnDate: async (date:string) => {
+  fetchExpensesOnDate:  async (date: string, page: number = 1, limit: number = 10) => {
     set({ loading: true, error: null });
     try {
-      const response = await getExpensesOnDate(date);
+      const response = await getExpensesOnDate(date, page, limit); // You'll need to update your API function
       set({ loading: false });
       return response;
     } catch (err: any) {

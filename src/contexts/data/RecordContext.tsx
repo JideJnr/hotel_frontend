@@ -2,7 +2,6 @@ import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRecordStore } from '../../services/stores/recordStore';
 import { useIonRouter } from '@ionic/react';
-import { getHotelBusinessDate } from '../../utils/utilities';
 
 
 interface Record {
@@ -18,9 +17,9 @@ interface RecordContextType {
   createRecord: (payload: any) => Promise<void>;
   updateRecord: (id: string, payload: any) => Promise<void>;
   fetchRecord: (id: string) => Promise<void>;
-  fetchRecords: (id: string) => Promise<void>;
+  fetchRecords: (date: string, page:number, limit: number) => Promise<Response|undefined>;
   checkOutRecord: (id: string) => Promise<Response | undefined>;
-  fetchTodayRecords: () => Promise<void>;
+
 }
 
 const RecordContext = createContext<RecordContextType | undefined>(undefined);
@@ -64,30 +63,16 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
   };
 
-  const wrappedFetchRecords = async (date:string) => {
-    try {
-     const response = await store.fetchRecordsOnDate(date);
-      if (response?.data?.records) {
-        setRecords(response.data?.records as Record[]);
-      }
-    } catch (error) {
-      console.error('Fetch error:', error);
-    }
-  };
-
-const wrappedFetchTodayRecords = async () => {
-  const businessDate = getHotelBusinessDate();
-  const formattedDate = businessDate.toISOString().split('T')[0];
-
-  
+// In your context file
+const wrappedFetchRecords = async (date: string, page: number = 1, limit: number = 10) => {
   try {
-    const response = await store.fetchRecordsOnDate(formattedDate);
-
+    const response = await store.fetchRecordsOnDate(date, page, limit);
   
-    
-    if (response?.success && response?.data?.records) {
-      setRecords(response.data.records);
+    if (response?.success) {
+      setRecords(response.data.records as Record[]);
+
     }
+    return response;
   } catch (error) {
     console.error('Fetch error:', error);
   }
@@ -130,7 +115,6 @@ const wrappedFetchTodayRecords = async () => {
     updateRecord: wrappedUpdateRecord,
     fetchRecords: wrappedFetchRecords,
     fetchRecord: wrappedFetchRecord,
-    fetchTodayRecords: wrappedFetchTodayRecords,
     checkOutRecord: wrappedCheckoutRecord
   }), [records, record, loading, error]);
 

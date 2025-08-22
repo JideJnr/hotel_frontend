@@ -59,49 +59,24 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
     }
   };
 
-  // 🔹 Fetch Expenses by Range
-  const wrappedFetchExpenses = async (params?: { startDate?: string; endDate?: string; pageSize?: number }) => {
-    try {
-      const res = await store.fetchExpensesOnDateRange(params);
-      if (res?.success) {
-        setExpenses(res.data || []);
-      } else {
-        toast.error(res?.message || "Failed to fetch expenses");
-      }
-    } catch (error) {
-      toast.error("Failed to fetch expenses");
-    }
-  };
-
   // 🔹 Fetch Today's Expenses
-  const wrappedFetchTodayExpenses = async () => {
-    try {
-      const today = new Date();
-      const date = today.toISOString().split("T")[0];
-      const res = await store.fetchExpensesOnDate(date);
-      if (res?.success) {
-        setExpenses(res.data || []);
-      } else {
-        toast.error(res?.message || "Failed to fetch today's expenses");
-      }
-    } catch (error) {
-      toast.error("Failed to fetch today's expenses");
-    }
-  };
 
-  // 🔹 Fetch Expenses on Specific Date
-  const wrappedFetchExpensesOnDate = async (date: string) => {
-    try {
-      const res = await store.fetchExpensesOnDate(date);
-      if (res?.success) {
-        setExpenses(res.data || []);
-      } else {
-        toast.error(res?.message || "Failed to fetch expenses");
-      }
-    } catch (error) {
-      toast.error("Failed to fetch expenses");
+
+  // In your context file
+const wrappedFetchExpensesOnDate = async (date: string, page: number = 1, limit: number = 10) => {
+  try {
+    const response = await store.fetchExpensesOnDate(date, page, limit);
+    if (response?.success) {
+      setExpenses(response.data.expenses as Expense[]);
+      
     }
-  };
+    return response;
+  } catch (error) {
+    console.error('Fetch error:', error);
+  }
+};
+
+
 
   // 🔹 Fetch Single Expense
   const wrappedFetchExpense = async (id: string) => {
@@ -153,8 +128,6 @@ export const ExpenseProvider: React.FC<{ children: ReactNode }> = ({ children })
       createExpense: wrappedCreateExpense,
       updateExpense: wrappedUpdateExpense,
       deleteExpense: wrappedDeleteExpense,
-      fetchExpenses: wrappedFetchExpenses,
-      fetchTodayExpenses: wrappedFetchTodayExpenses,
       fetchExpensesOnDate: wrappedFetchExpensesOnDate,
       fetchExpense: wrappedFetchExpense,
       fetchExpensesByCategory: wrappedFetchExpensesByCategory,

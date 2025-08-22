@@ -22,7 +22,7 @@ interface RecordStoreState {
   loading: boolean;
   error: string | null;
   fetchRecordsOnDateRange: (params: DateRangeParams) => Promise<Response>;
-  fetchRecordsOnDate: (date: any) => Promise<Response>;
+  fetchRecordsOnDate: (date: any, page:number,limit:number) => Promise<Response>;
   fetchRecordById: (id: string) => Promise<Response>;
   fetchUserRecords: (params?: PaginationParams) => Promise<Response>;
   createRecord: (payload: RecordInput) => Promise<Response>;
@@ -48,17 +48,18 @@ export const useRecordStore = create<RecordStoreState>((set) => ({
     }
   },
 
-  fetchRecordsOnDate: async (date:string) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await getRecordsOnDate(date);
-      set({ loading: false });
-      return response;
-    } catch (err: any) {
-      set({ error: err.message, loading: false });
-      throw err;
-    }
-  },
+// In your store file
+fetchRecordsOnDate: async (date: string, page: number = 1, limit: number = 10) => {
+  set({ loading: true, error: null });
+  try {
+    const response = await getRecordsOnDate(date, page, limit); // You'll need to update your API function
+    set({ loading: false });
+    return response;
+  } catch (err: any) {
+    set({ error: err.message, loading: false });
+    throw err;
+  }
+},
 
   fetchRecordById: async (id) => {
     set({ loading: true, error: null });

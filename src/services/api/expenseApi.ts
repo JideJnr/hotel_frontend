@@ -28,7 +28,7 @@ interface DateRangeParams {
 
 /** 🔹 Get expenses within a date range */
 export const getExpensesByDateRange = async (params?: DateRangeParams & PaginationParams) => {
-  const res = await api.get('/expenses/range', { params });
+  const res = await api.get('/expenses/date/range', { params });
   return res.data ;
 };
 
@@ -39,10 +39,13 @@ export const getExpensesByCategory = async (category: string, params?: Paginatio
 };
 
 /** 🔹 Get expenses for a specific date (single-day) */
-export const getExpensesOnDate = async (date: string) => {
-  const res = await api.get(`/expenses/date`,{ params: { date } });
-  return res.data ;
+export const getExpensesOnDate =  async (date?: string, page: number = 1, limit: number = 10) => {
+  const params = { page: page.toString(), limit: limit.toString() };
+  const url = date ? `/expenses/date/${date}` : '/expenses/today';
+  const response = await api.get(url, { params });
+  return response.data;
 };
+
 
 /** 🔹 Get expense summary */
 export const getExpenseSummary = async (params: DateRangeParams) => {

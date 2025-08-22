@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { Edit3, Phone } from "lucide-react";
 import { formatNaira } from "../../../../utils/formatNaira";
 import LoadingPage from "../../../../components/loading/Loading";
+import { formatFirestoreDate } from "../../../../utils/utilities";
 
 const RoomDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -82,9 +83,9 @@ const RoomDetails = () => {
           <div className="flex flex-col gap-2">
             <div className="text-sm text-gray-600 grid grid-cols-1 gap-4 px-2">
               <DetailRow label='Description' value={currentRoom?.description||'-'}/>
-              <DetailRow label='Short Rest (One Hour)' value={formatNaira(currentRoom?.priceOneHour||0)}/>
-              <DetailRow label='Short Rest (Two Hours)' value={formatNaira(currentRoom?.priceTwoHours||0)} />
-              <DetailRow label='Overnight' value={formatNaira(currentRoom?.pricePerNight||0)}/>
+              {currentRoom && currentRoom?.priceOneHour > 0 && <DetailRow label='Short Rest (One Hour)' value={formatNaira(currentRoom?.priceOneHour||0)}/>}
+              {currentRoom && currentRoom?.priceTwoHour > 0 && <DetailRow label='Short Rest (Two Hours)' value={formatNaira(currentRoom?.priceTwoHours||0)} />}
+              {currentRoom && currentRoom?.pricePerNight > 0 &&<DetailRow label='Overnight' value={formatNaira(currentRoom?.pricePerNight||0)}/>}
             </div>
           </div>
 
@@ -110,6 +111,7 @@ const RoomDetails = () => {
               {currentRoom?.bookings?.map((booking:any, index:any) => (
                 <div
                   key={index}
+                  onClick={() => router.push(`/record/${booking.recordId}`, 'forward')}
                   className="flex gap-4 items-center px-4 py-2 border rounded-md text-sm"
                 >
                   <span className="flex w-10 h-10 flex-shrink-0 justify-center items-center bg-white border border-gray-200 text-[10px] font-semibold uppercase text-gray-600 rounded-full ">
@@ -117,7 +119,7 @@ const RoomDetails = () => {
                   </span>
                   <div>
                     <p className="font-semibold">{booking.customerName || ''}</p>
-                    <p className="text-gray-500"> {booking.tellerName}</p>
+                    <p className="text-gray-500"> {formatFirestoreDate(booking.checkedInTime)}</p>
                   </div>
                   <div className="text-xs text-gray-500 ml-auto mr-2">{formatNaira(booking.price)}</div>
                 </div>

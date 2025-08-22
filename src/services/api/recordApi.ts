@@ -56,8 +56,11 @@ export const deleteRecord = async (id: string) => {
 };
 
 // Get today's sales records
-export const getRecordsOnDate = async (date?: string) => {
-  const response = await api.get(`/records/${date}`);
+// In your API file
+export const getRecordsOnDate = async (date?: string, page: number = 1, limit: number = 10) => {
+  const params = { page: page.toString(), limit: limit.toString() };
+  const url = date ? `/records/${date}` : '/records/today';
+  const response = await api.get(url, { params });
   return response.data;
 };
 

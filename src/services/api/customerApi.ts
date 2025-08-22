@@ -41,7 +41,7 @@ export const customerRegisteredOnDateRange = async (params:any) => {
 };
 
 export const searchCustomers = async (query: string) => {
-  const res = await api.get(`/customers/search`, {
+  const res = await api.get(`/customers/customers/search`, {
     params: { query }
   });
   return res.data;

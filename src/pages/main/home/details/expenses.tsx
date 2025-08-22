@@ -6,10 +6,11 @@ import { useExpenses } from "../../../../contexts/data/ExpensesContext";
 import Footer from "../../../../components/footer/footer";
 import { getNameInitials } from "../../../../utils/getInitials";
 import { formatNaira } from "../../../../utils/formatNaira";
+import LoadingPage from "../../../../components/loading/Loading";
 
 const ExpensesDetails = () => {
   const { id } = useParams<{ id: string }>();  
-  const { fetchExpense , expense } = useExpenses();
+  const { fetchExpense , expense, loading } = useExpenses();
   
   useEffect(() => {
       fetchExpense(id)
@@ -18,6 +19,7 @@ const ExpensesDetails = () => {
 
   return (
     <IonPage>
+      {loading && <LoadingPage/>}
       <FormHeader />
       <BackFormContainer title="Expenses Details" subtitle="" className="max-w-2xl">
         <div className="w-full flex flex-col  gap-8 text-gray-800 capitalize">
@@ -32,7 +34,7 @@ const ExpensesDetails = () => {
 
             <div className="flex flex-col text-sm gap-1">
               <h2 className="text-xl font-semibold">{expense?.tellerName}</h2>
-          
+              <p className="">{expense?.category}</p>
             </div>
           </div>
 
@@ -42,9 +44,9 @@ const ExpensesDetails = () => {
             <div className="text-sm text-gray-600 flex flex-col gap-2 px-2">
              
               <DetailRow label='Amount' value={formatNaira(expense?.amount||0)}/>
-              <DetailRow label='Category' value={expense?.category||'-'}/>
-              <DetailRow label='Description' value={expense?.category||'-'}/>
-              <DetailRow label='Date' value='Date'/>
+             
+              <DetailRow label='Description' value={expense?.description||'-'}/>
+              <DetailRow label='Date' value={expense?.createdAt||'-'}/>
             </div>
 
           

@@ -4,16 +4,16 @@ import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import { useRecord } from "../../../../contexts/data/RecordContext";
 import { useEffect } from "react";
-import { useExpenses } from "../../../../contexts/data/ExpensesContext";
 import { getNameInitials } from "../../../../utils/getInitials";
-import { formatDate } from "../../../../utils/utilities";
 import Footer from "../../../../components/footer/footer";
 import { toast } from "react-toastify";
 import { formatNaira } from "../../../../utils/formatNaira";
+import { formatFirestoreDate } from "../../../../utils/utilities";
+import LoadingPage from "../../../../components/loading/Loading";
 
 const RecordDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const { fetchRecord , checkOutRecord ,record } = useRecord();
+  const { fetchRecord , checkOutRecord ,record ,loading } = useRecord();
 
 
   useEffect(() => {
@@ -39,6 +39,7 @@ const RecordDetails = () => {
 
   return (
     <IonPage>
+            {loading && <LoadingPage/>}
       <FormHeader />
       <BackFormContainer title="Record Details" subtitle="" className="max-w-2xl">
         <div className="w-full flex flex-col  gap-8 text-gray-800 capitalize">
@@ -52,8 +53,8 @@ const RecordDetails = () => {
         
 
             <div className="flex flex-col text-sm gap-1">
-              <h2 className="text-2xl font-semibold">Room {record?.roomName || "Guest"}</h2>
-          
+              <h2 className="text-xl font-semibold"> {record?.customerName || "Guest"}</h2>
+              <p className="font-medium">Room {record?.roomName || "-"}</p>
             </div>
           </div>
 
@@ -63,13 +64,14 @@ const RecordDetails = () => {
          
             <div className="text-sm text-gray-600 grid grid-cols-1 gap-2 px-2">
 
-              <DetailRow label='Teller' value={record?.tellerName || "N/A"} />
-              <DetailRow label='Lodge Type' value={record?.requestId}/>
-              <DetailRow label='Payment Method' value={record?.paymentMethodId||0}/>
+              <DetailRow label='Attendant' value={record?.tellerName || "-"} />
+              <DetailRow label='Booking Instruction' value={record?.bookingInstructions || "NONE"} />
+              <DetailRow label='Check-In Time' value={formatFirestoreDate(record?.createdAt) || "-"} />
+              {record && record.checkedOut && <DetailRow label='Check-Out Time' value={formatFirestoreDate(record?.checkedOut) } />}  
+              <DetailRow label='Request Type' value={record?.requestId||'-'}/>
+              <DetailRow label='Payment Method' value={record?.paymentMethodId||'-'}/>
               <DetailRow label='Price' value={formatNaira(record?.price||0)}/>
              
-              <DetailRow label='Booking Instruction' value={record?.bookingInstructions || "N/A"} />
-
 
             </div>
           

@@ -128,6 +128,7 @@ const UserDetails = () => {
                 {bookings.map((booking: any) => (
                   <div
                     key={booking.id}
+                    onClick={() => router.push(`/record/${booking.recordId}`, 'forward')}
                     className="flex justify-between items-center px-4 py-2 border rounded-md text-sm"
                   >
                     <div>

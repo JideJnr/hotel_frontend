@@ -10,6 +10,7 @@ import {
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import { RoomFormData } from "../step-two/page";
+import Footer from "../../../footer/footer";
 
 export default function CreateRoomForm() {
   const router = useIonRouter();
@@ -155,6 +156,7 @@ export default function CreateRoomForm() {
             <Button text="Create Room" type="submit" className="w-full" />
           </div>
         </form>
+        <Footer/>
       </BackFormContainer>
     </IonPage>
   );

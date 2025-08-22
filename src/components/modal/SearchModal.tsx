@@ -20,7 +20,7 @@ const SearchModal: React.FC<{
   onClose: () => void;
 }> = ({ isOpen, onClose }) => {
   const router = useIonRouter();
-  const { searchCustomers, customers, loading, error } = useCustomer();
+  const { searchCustomers, searchedCustomers, loading, error } = useCustomer();
 
   const [inputValue, setInputValue] = useState("");
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -37,7 +37,7 @@ const SearchModal: React.FC<{
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [inputValue, searchCustomers]);
+  }, [inputValue]);
 
   const handleClearInput = () => setInputValue("");
 
@@ -64,7 +64,7 @@ const SearchModal: React.FC<{
               <IonInput
                 value={inputValue}
                 placeholder="Search"
-                onIonChange={(e) => setInputValue(e.detail.value!)}
+                onIonInput={(e) => setInputValue(e.detail.value ?? "")}
                 clearInput
               />
 
@@ -91,28 +91,30 @@ const SearchModal: React.FC<{
                 </div>
               )}
 
-              {!loading && customers.length > 0 && (
-                <div className="bg-white rounded-lg shadow-sm divide-y divide-gray-200">
-                  {customers.map((c) => (
-                    <IonItem
-                      key={c.id}
-                      button
-                      onClick={() => handleUserSelect(c)}
-                      className="text-black bg-white"
-                      lines="none"
-                    >
-                      <IonLabel className="bg-white">
-                        <h2 className="capitalize text-black font-medium">{c.fullName}</h2>
-                        <p className="text-gray-500">@{c.userName}</p>
-                        {c.email && <p className="text-gray-500">{c.email}</p>}
-                      </IonLabel>
-                    </IonItem>
-                  ))}
-                </div>
+              {!loading && searchedCustomers.length > 0 && (
+  <div className="bg-white rounded-lg shadow-sm divide-y divide-gray-200">
+  {searchedCustomers.map((c) => (
+    <div
+      key={c.id}
+      onClick={() => handleUserSelect(c)}
+      className="px-4 py-3 cursor-pointer hover:bg-gray-50 transition flex"
+    >
+      <div>
+      <h2 className="capitalize text-black font-medium">{c.fullName}</h2>
+      
+      {c.email && <p className="text-gray-500">{c.email}</p>}
+      </div>
+      <div className="w-fit h-fit ml-auto mr-2 my-auto">
+x
+        </div>
+    </div>
+  ))}
+</div>
+
               )}
 
-              {!loading && inputValue.length > 2 && customers.length === 0 && (
-                <div className="bg-white rounded-lg shadow-sm text-center py-6 text-gray-500">
+              {!loading && inputValue.length > 2 && searchedCustomers.length === 0 && (
+                <div className="  text-center py-6 text-black">
                   No customers found
                 </div>
               )}

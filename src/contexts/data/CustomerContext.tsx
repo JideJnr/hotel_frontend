@@ -2,6 +2,7 @@ import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useIonRouter } from '@ionic/react';
 import { useCustomerStore } from '../../services/stores/customerStore';
+import { search } from 'ionicons/icons';
 
 interface Customer {
   id: string;
@@ -11,6 +12,7 @@ interface Customer {
 interface CustomerContextType {
   totalCustomerCount: number;
   recentCustomers: Customer[];
+  searchedCustomers: Customer[]; // <-- NEW
   activeCustomers: Customer[]; // <-- NEW
   customers: Customer[];
   customer: Customer | null;
@@ -36,6 +38,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [recentCustomers, setRecentCustomers] = useState<Customer[]>([]);
   const [activeCustomers, setActiveCustomers] = useState<Customer[]>([]);
+  const [searchedCustomers, setSearchCustomers] = useState<Customer[]>([]);
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [totalCustomerCount, setTotalCustomerCount] = useState<number>(0);
   const [customerCount, setCustomerCount] = useState<number>(0);
@@ -176,9 +179,10 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
   const wrappedSearchCustomers = async (query: string) => {
     try {
       const results = await storeSearchCustomer(query);
-      if (results && Array.isArray(results)) {
-        setCustomers(results);
-      }
+      
+      console.log('Search results:', results);
+      if (results.success && results.data) {
+        setSearchCustomers(results.data as Customer[]);}
       return results;
     } catch (error) {
       toast.error('Customer search error');
@@ -223,6 +227,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     totalCustomerCount,
     recentCustomers,
     activeCustomers,
+    searchedCustomers,
     customers,
     customer,
     loading,
@@ -242,6 +247,7 @@ export const CustomerProvider: React.FC<{ children: ReactNode }> = ({ children }
     customers,
     activeCustomers,
     recentCustomers,
+    searchedCustomers,
     totalCustomerCount,
     customerCount,
     customer,

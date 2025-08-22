@@ -2,13 +2,15 @@ import { useEffect } from "react";
 import { useActivity } from "../../../contexts/data/ActivityContext";
 import { formatDate } from "../../../utils/utilities";
 import Footer from "../../../components/footer/footer";
-import { typeLabels } from "../../../enum/enum";
+import { typeLabels, typeRoutes } from "../../../enum/enum";
 import LoadingPage from "../../../components/loading/Loading";
+import { useIonRouter } from "@ionic/react";
 
 const Activities = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const { fetchActivities, activities, loading } = useActivity();
-
+  const router = useIonRouter();
+  
   useEffect(() => {
     fetchActivities();
   }, []);
@@ -65,10 +67,15 @@ const Activities = () => {
                 </div>
 
                 {/* Activity details */}
-                <div className="col-span-8 p-1.5 pb-4">
+                <div className="col-span-8 p-1.5 pb-4"                     onClick={() => {
+                    const target = typeRoutes[act.type] ? typeRoutes[act.type](act) : null;
+                    if (target) {
+                      router.push(target);
+                    }
+                  }}>
                   <p className="mt-1 text-sm text-gray-600">
                     {user.role === "ADMIN" 
-                      ? user.role || "User" 
+                      ? act.userName || "ADMIN" 
                       : "You"}{" "}
                     {typeLabels[act.type]
                       ? typeLabels[act.type](act)

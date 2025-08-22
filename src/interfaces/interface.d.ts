@@ -325,6 +325,7 @@ interface Expense {
   receiptURL?: string;
   tellerName?: string;
   tellerId?: string;
+  createdAt?: any;
   
 }
 
@@ -338,9 +339,7 @@ interface ExpenseContextType {
   updateExpense: (id: string, payload: Partial<Expense>) => Promise<void>;
   deleteExpense: (id: string) => Promise<any>;
   fetchExpense: (id: string) => Promise<any>;
-  fetchExpenses: (params?: { startDate?: string; endDate?: string; pageSize?: number }) => Promise<void>;
-  fetchTodayExpenses: () => Promise<void>;
-  fetchExpensesOnDate: (id: string) => Promise<void>;
+  fetchExpensesOnDate: (date: string , page: number , limit: number) => Promise<Response|undefined>;
   fetchExpensesByCategory: (category: string, params?: { pageSize?: number }) => Promise<void>;
   fetchExpenseSummary: (params: { startDate: string; endDate: string }) => Promise<any>;
 }

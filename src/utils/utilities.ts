@@ -91,3 +91,17 @@ export function formatFirestoreDate(
   // Format with dayjs
   return dayjs(date).format(format);
 }
+
+export function formatFirestoreDateTime(
+  ts: FirestoreTimestamp,
+  format: string = "Do, ddd MMMM YYYY h:mm A"
+): string {
+  if (!ts?._seconds) return "";
+
+  // Firestore Timestamp → JS Date
+  const date = new Date(ts._seconds * 1000 + ts._nanoseconds / 1_000_000);
+
+  // Format with dayjs
+  return dayjs(date).format(format);
+}
+
