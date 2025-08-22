@@ -3,7 +3,7 @@ import { IonPage, useIonRouter } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import { useRoom } from "../../../../contexts/data/RoomContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getNameInitials } from "../../../../utils/getInitials";
 import Footer from "../../../../components/footer/footer";
 import { useRecord } from "../../../../contexts/data/RecordContext";
@@ -38,6 +38,85 @@ const RoomDetails = () => {
       console.error("Checkout error:", err);
       toast.error("Checkout failed");
     }
+  };
+
+  
+  // State for pagination
+  const [bookings, setBookings] = useState(currentRoom?.bookings || []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
+  
+  // Calculate pagination values
+  useEffect(() => {
+    setTotalPages(Math.ceil(bookings.length / itemsPerPage));
+  }, [bookings, itemsPerPage]);
+
+  // Get current bookings
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBookings = bookings.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber:any) => setCurrentPage(pageNumber);
+
+  // Handle next page
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Handle previous page
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Generate page numbers to show
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5;
+    
+    if (totalPages <= maxPagesToShow) {
+      // If total pages is less than max pages to show, show all
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Always include first page
+      pageNumbers.push(1);
+      
+      let startPage = Math.max(2, currentPage - 1);
+      let endPage = Math.min(totalPages - 1, currentPage + 1);
+      
+      if (currentPage <= 3) {
+        endPage = 4;
+      } else if (currentPage >= totalPages - 2) {
+        startPage = totalPages - 3;
+      }
+      
+      // Add ellipsis after first page if needed
+      if (startPage > 2) {
+        pageNumbers.push('...');
+      }
+      
+      // Add middle pages
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+      
+      // Add ellipsis before last page if needed
+      if (endPage < totalPages - 1) {
+        pageNumbers.push('...');
+      }
+      
+      // Always include last page
+      pageNumbers.push(totalPages);
+    }
+    
+    return pageNumbers;
   };
     
   return (

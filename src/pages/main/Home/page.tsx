@@ -185,7 +185,7 @@ const Home = () => {
         />
       </div>
 
-      <div className="flex flex-col gap-4 w-full h-full p-4 rounded-lg shadow-md bg-white">
+      <div className="flex flex-col gap-4 w-full  p-4 rounded-lg shadow-md bg-white">
         <DateHeader currentDate={currentDate} setCurrentDate={setCurrentDate} />
 
         <div className="flex flex-col gap-8">
@@ -202,8 +202,8 @@ const Home = () => {
                     key={index}
                   >
                     <ScheduleCard
-                      name={event.customerName}
-                      details={`Room ${event.roomName}`}
+                      name={` ${event.customerName}`}
+                      details={`Room ${event.roomName}- ${formatNaira(event.price)}`}
                     />
                   </div>
                 ))}
@@ -324,7 +324,7 @@ const Home = () => {
           )}
         </div>
 
-        <Footer className="" />
+        <Footer className="bg-white" />
       </div>
 
       {user && user.role !== "ADMIN" && <FloatingMenu />}

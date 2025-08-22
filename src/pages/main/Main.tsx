@@ -175,7 +175,7 @@ function Main() {
       <IonContent fullscreen>
         <TabGroup
           as="div"
-          className=" grid grid-cols-1 grid-rows-12 h-full w-full "
+          className=" grid grid-cols-1 grid-rows-12 h-screen w-screen "
         >
           <IonHeader className="!bg-white border-none  !shadow-none col-span-1 row-span-1">
             <div className="!bg-white p-2 flex ">
