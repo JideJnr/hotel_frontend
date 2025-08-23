@@ -77,7 +77,7 @@ export default function SalesStepOne() {
         subtitle="Step 1: Enter Sales details"
         className="max-w-2xl"
       >
-        <form onSubmit={e => { e.preventDefault(); handleNext(); }} className="space-y-6">
+        <form onSubmit={e => { e.preventDefault(); handleNext(); }} className="space-y-6 capitalize">
           <FormSelect
             label="Customer *"
             name="customer"

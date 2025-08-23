@@ -182,7 +182,7 @@ const { totalRoomsCount, activeRoomsCount } = useMemo(() => {
         </IonSegment>
 
         {filteredRooms && filteredRooms.length > 0 ? (
-          <>
+          < div className=" flex flex-col gap-4 min-h-[400px]">
             <div className="space-y-2 py-4">
               {paginatedRooms.map((room: any, index: number) => (
                 <div
@@ -199,7 +199,7 @@ const { totalRoomsCount, activeRoomsCount } = useMemo(() => {
 
             {/* Numbered pagination UI (centered, max 5 buttons) */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center  space-x-2">
+              <div className="flex justify-center items-center  space-x-2 mt-auto">
                 <button
                   disabled={!hasPrevPage}
                   onClick={handlePrevPage}
@@ -236,7 +236,7 @@ const { totalRoomsCount, activeRoomsCount } = useMemo(() => {
                 </button>
               </div>
             )}
-          </>
+          </div>
         ) : (
           <div className="py-4">
             <EmptyState />

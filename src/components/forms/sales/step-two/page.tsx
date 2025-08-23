@@ -73,7 +73,7 @@ const SalesStepTwo = () => {
         subtitle="Please review the information before submitting"
         className="max-w-xl"
       >
-        <div className="space-y-6">
+        <div className="space-y-6 capitalize">
           <div className="space-y-4">
             <DetailRow label="Customer" value={formData.customerName||'-'} />
             <DetailRow label="Room" value={formData.roomName||'-'} />

@@ -77,9 +77,7 @@ const Activities = () => {
                     {user.role === "ADMIN" 
                       ? act.userName || "ADMIN" 
                       : "You"}{" "}
-                    {typeLabels[act.type]
-                      ? typeLabels[act.type](act)
-                      : act.description}
+                    { act.description}
 
                   </p>
 
