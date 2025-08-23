@@ -2,6 +2,7 @@ import { useIonRouter } from "@ionic/react";
 import Button from "../../../components/button/button";
 import { useAuth } from "../../../contexts/auth/AuthContext";
 import { getNameInitials } from "../../../utils/getInitials";
+import Footer from "../../../components/footer/footer";
 
 
 
@@ -19,7 +20,7 @@ const Setting = () => {
     };
   
   return (
-    <div className="w-full h-full max-w-screen max-h-screen flex bg-gray-100  ">
+    <div className="w-full h-full overflow-y-auto flex bg-gray-100  ">
       <div className="w-full h-fit pt-8 gap-8 flex flex-col overflow-x-none overflow-y-auto text-sm">
         <div className="flex-col flex gap-4  ">
           <div className="w-full flex ">
@@ -85,6 +86,8 @@ const Setting = () => {
         <div className="flex justify-center p-4">
           <Button className="w-full "  text="Sign Out"  onClick={handleLogout} />
         </div>
+
+        <Footer/>
       </div>
     </div>
   );

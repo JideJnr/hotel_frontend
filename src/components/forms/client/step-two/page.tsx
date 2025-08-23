@@ -5,6 +5,7 @@ import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../..";
 import { useCustomerStore } from "../../../../services/stores/customerStore";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";
+import Footer from "../../../footer/footer";
 
 interface CustomerData {
   fullName: string;
@@ -97,6 +98,7 @@ const ClientStepTwo = () => {
       
         </div>
         </div>
+        <Footer/>
       </BackFormContainer>
     </IonPage>
   );

@@ -8,6 +8,7 @@ import {
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
 import { useRecord } from "../../../../contexts/data/RecordContext";
+import Footer from "../../../footer/footer";
 
 const SalesStepTwo = () => {
   const router = useIonRouter();
@@ -101,7 +102,9 @@ const SalesStepTwo = () => {
             />
           </div>
         </div>
+        <Footer/>
       </BackFormContainer>
+      
     </IonPage>
   );
 };

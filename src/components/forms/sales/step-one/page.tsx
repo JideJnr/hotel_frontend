@@ -15,6 +15,7 @@ import { useRoom } from "../../../../contexts/data/RoomContext";
 import { paymentOptions , requestOption } from "../../../../utils/enum";
 import { useRecord } from "../../../../contexts/data/RecordContext";
 import { useParams } from "react-router";
+import Footer from "../../../footer/footer";
 
 type Errors = {
   customer?: string;
@@ -171,6 +172,7 @@ export default function SalesStepOne() {
             <Button text="Next" type="submit" className="w-full"/>
           </div>
         </form>
+        <Footer/>
       </BackFormContainer>
     </IonPage>
   );

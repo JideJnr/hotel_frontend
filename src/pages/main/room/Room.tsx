@@ -165,7 +165,7 @@ const { totalRoomsCount, activeRoomsCount } = useMemo(() => {
         </div>
       )}
 
-      <div className="flex flex-col gap-4 w-full h-full bg-white p-4 rounded-lg shadow-md">
+      <div className="flex flex-col gap-4 w-full  bg-white p-4 rounded-lg shadow-md">
         <IonSegment
           value={activeTab}
           mode="md"

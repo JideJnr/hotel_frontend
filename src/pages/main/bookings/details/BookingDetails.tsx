@@ -64,7 +64,7 @@ const BookingDetails = () => {
           </div>
 
         <div className="flex justify-center p-4">
-          <Button className="w-full "  text="Make Payment"  
+          <Button className="w-full "  text="Confirm Booking"  
           onClick={() => router.push('/register/booking/payment/stepone', 'forward')} />
         </div>
           

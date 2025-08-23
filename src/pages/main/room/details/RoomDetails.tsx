@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { IonPage, useIonRouter } from "@ionic/react";
+import { IonIcon, IonPage, useIonRouter } from "@ionic/react";
 import Button from "../../../../components/button/button";
 import { BackFormContainer, DetailRow, FormHeader } from "../../../../components/forms";
 import { useRoom } from "../../../../contexts/data/RoomContext";
@@ -12,6 +12,7 @@ import { Edit3, Phone } from "lucide-react";
 import { formatNaira } from "../../../../utils/formatNaira";
 import LoadingPage from "../../../../components/loading/Loading";
 import { formatFirestoreDate } from "../../../../utils/utilities";
+import { chevronBack, chevronForward } from "ionicons/icons";
 
 const RoomDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -118,6 +119,25 @@ const RoomDetails = () => {
     
     return pageNumbers;
   };
+
+  const recordCurrentPage = currentPage;
+const recordTotalPages = totalPages;
+
+const recordHasPrevPage = recordCurrentPage > 1;
+const recordHasNextPage = recordCurrentPage < recordTotalPages;
+
+const handleRecordPrevPage = () => {
+  if (recordHasPrevPage) setCurrentPage((prev) => prev - 1);
+};
+
+const handleRecordNextPage = () => {
+  if (recordHasNextPage) setCurrentPage((prev) => prev + 1);
+};
+
+const handleRecordPageChange = (pageNum: number) => {
+  setCurrentPage(pageNum);
+};
+
     
   return (
     <IonPage>
@@ -187,7 +207,7 @@ const RoomDetails = () => {
           {currentRoom?.bookings && currentRoom?.bookings.length > 0 &&
             <div className="flex flex-col gap-2">
               <h3 className="text-lg font-semibold">Room History</h3>
-              {currentRoom?.bookings?.map((booking:any, index:any) => (
+             {currentBookings.map((booking: any, index: any) => (
                 <div
                   key={index}
                   onClick={() => router.push(`/record/${booking.recordId}`, 'forward')}
@@ -198,27 +218,55 @@ const RoomDetails = () => {
                   </span>
                   <div>
                     <p className="font-semibold">{booking.customerName || ''}</p>
-                    <p className="text-gray-500"> {formatFirestoreDate(booking.checkedInTime)}</p>
+                    <p className="text-gray-500">{formatFirestoreDate(booking.checkedInTime)}</p>
                   </div>
                   <div className="text-xs text-gray-500 ml-auto mr-2">{formatNaira(booking.price)}</div>
                 </div>
-                
               ))}
-            <div className="flex justify-between mt-4">
-              <button
-                className="btn-outline-light tablebutton me-2 mb-2 sm:mb-0 sm:inline block"
-            
-              >
-                {" Previous "}
-              </button>
+<div className="flex justify-center items-center mt-4 space-x-2">
+  <button
+    disabled={!recordHasPrevPage}
+    onClick={handleRecordPrevPage}
+    className="p-2 disabled:opacity-50"
+  >
+    <IonIcon icon={chevronBack} />
+  </button>
 
-              <button
-                className="btn-outline-light tablebutton sm:inline block me-2 mb-2 sm:mb-0"
-                
-              >
-                {" Next "}
-              </button>
-            </div>
+  <div className="flex space-x-1">
+    {Array.from({ length: Math.min(5, recordTotalPages) }, (_, i) => {
+      let pageNum;
+      if (recordTotalPages <= 5) pageNum = i + 1;
+      else if (recordCurrentPage <= 3) pageNum = i + 1;
+      else if (recordCurrentPage >= recordTotalPages - 2)
+        pageNum = recordTotalPages - 4 + i;
+      else pageNum = recordCurrentPage - 2 + i;
+
+      return (
+        <button
+          key={pageNum}
+          onClick={() => handleRecordPageChange(pageNum)}
+          className={`min-w-8 h-8 rounded ${
+            recordCurrentPage === pageNum
+              ? "font-bold bg-gray-200"
+              : "hover:bg-gray-100"
+          }`}
+        >
+          {pageNum}
+        </button>
+      );
+    })}
+  </div>
+
+  <button
+    disabled={!recordHasNextPage}
+    onClick={handleRecordNextPage}
+    className="p-2 disabled:opacity-50"
+  >
+    <IonIcon icon={chevronForward} />
+  </button>
+</div>
+
+
             </div>
           }
 

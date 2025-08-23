@@ -135,50 +135,6 @@ const UserDetails = () => {
                       <p className="font-semibold">Room {booking.name}</p>
                       <p className="text-gray-500">Host: {booking.tellerName}</p>
                     </div>
-                         {bookingPages > 1 && (
-                                    <div className="flex justify-center items-center mt-4 space-x-2">
-                                      <button
-                                        disabled={!expensesHasPrevPage}
-                                        onClick={handleExpensesPrevPage}
-                                        className="p-2"
-                                      >
-                                        <IonIcon icon={chevronBack} />
-                                      </button>
-                    
-                                      <div className="flex space-x-1">
-                                        {Array.from({ length: Math.min(5, expensesTotalPages) }, (_, i) => {
-                                          let pageNum;
-                                          if (expensesTotalPages <= 5) pageNum = i + 1;
-                                          else if (expensesCurrentPage <= 3) pageNum = i + 1;
-                                          else if (expensesCurrentPage >= expensesTotalPages - 2)
-                                            pageNum = expensesTotalPages - 4 + i;
-                                          else pageNum = expensesCurrentPage - 2 + i;
-                    
-                                          return (
-                                            <button
-                                              key={pageNum}
-                                              onClick={() => handleExpensesPageChange(pageNum)}
-                                              className={`min-w-8 h-8 ${
-                                                expensesCurrentPage === pageNum
-                                                  ? "font-bold bg-gray-200"
-                                                  : ""
-                                              }`}
-                                            >
-                                              {pageNum}
-                                            </button>
-                                          );
-                                        })}
-                                      </div>
-                    
-                                      <button
-                                        disabled={!expensesHasNextPage}
-                                        onClick={handleExpensesNextPage}
-                                        className="p-2"
-                                      >
-                                        <IonIcon icon={chevronForward} />
-                                      </button>
-                                    </div>
-                                  )}
                     <div className="text-xs text-gray-500">{booking.date}</div>
                   </div>
                 ))}

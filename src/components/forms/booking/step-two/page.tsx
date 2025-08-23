@@ -9,6 +9,7 @@ import {
 import Button from "../../../../components/button/button";
 import { useBooking } from "../../../../contexts/data/BookingContext";
 import { useRoom } from "../../../../contexts/data/RoomContext";
+import Footer from "../../../footer/footer";
 
 
 
@@ -196,6 +197,7 @@ const BookingStepTwo = () => {
             />
           </div>
         </div>
+        <Footer/>
       </BackFormContainer>
     </IonPage>
   );

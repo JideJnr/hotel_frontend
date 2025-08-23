@@ -16,3 +16,22 @@ export const logout = async () => {
   const res = await api.post('auth/logout');
   return res.data;
 };
+
+export const saveFcmToken = async (payload: any) => {
+  const res = await api.post('auth/fcm-token',payload);
+  return res.data;
+};
+
+// ...existing code...
+export const clearFcmToken = async (payload: any) => {
+  const res = await api.post('auth/clear-fcm-token', payload);
+  return res.data;
+};
+// .
+
+// ...existing code...
+export const clearAllFcmToken = async (payload: any) => {
+  const res = await api.post('auth/clear-all-fcm-token', payload);
+  return res.data;
+};
+// .

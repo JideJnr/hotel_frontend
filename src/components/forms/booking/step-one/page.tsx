@@ -14,6 +14,7 @@ import { useCustomer } from "../../../../contexts/data/CustomerContext";
 import { paymentOptions } from "../../../../utils/enum";
 import { useBooking } from "../../../../contexts/data/BookingContext";
 import { useParams } from "react-router";
+import Footer from "../../../footer/footer";
 
 // -------------------
 // Types
@@ -232,6 +233,7 @@ export default function BookingStepOne() {
             <Button text="Continue" type="submit" className="w-full" />
           </div>
         </form>
+        <Footer/>
       </BackFormContainer>
     </IonPage>
   );
