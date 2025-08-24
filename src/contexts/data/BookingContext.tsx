@@ -16,7 +16,7 @@ interface BookingContextType {
   loading: boolean;
   error: string | null;
   fetchBookingsByDate: (date: string) => Promise<void>;
-  fetchBookingsByFilter: (startDate: string, endDate: string , rooms:any) => Promise<Response|undefined>;
+  fetchBookingsByFilter: (startDate: string, endDate: string , rooms:any, customer:any) => Promise<Response|undefined>;
   fetchBookingById: (id: string) => Promise<void>;
   createBooking: (data: any) => Promise<void>;
   updateBooking: (id: string, data: any) => Promise<void>;
