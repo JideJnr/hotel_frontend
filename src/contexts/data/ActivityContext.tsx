@@ -2,6 +2,8 @@ import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useActivityStore } from '../../services/stores/activityStore';
 
+
+
 // Define a proper interface for your Activity type
 interface Activity {
   id: string;
