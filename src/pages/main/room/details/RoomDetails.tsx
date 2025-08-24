@@ -161,7 +161,7 @@ const handleRecordPageChange = (pageNum: number) => {
 
           {user && user.role == 'ADMIN' && 
 
-          <div className="flex items-center gap-4 w-full" onClick={() => router.push('/register/room/stepone', 'forward')}>
+          <div className="flex items-center gap-4 w-full" onClick={() => router.push(`/register/room/stepone/${id}`, 'forward')}>
             {/* Edit Button (secondary / gray outline) */}
             <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2">
               <Edit3 size={16} />
@@ -189,18 +189,18 @@ const handleRecordPageChange = (pageNum: number) => {
           </div>
 
           {currentRoom && currentRoom.active &&
-            <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
+            <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4"  >
               <h3 className="text-lg font-semibold">Current Stay</h3>
-              <div className="text-sm flex items-center gap-4">
+              <div className="text-sm flex items-center gap-4" onClick={() => router.push('/register/room/stepone', 'forward')}>
                 <span className="flex w-8 h-8 flex-shrink-0 justify-center items-center bg-white border border-gray-200 text-[10px] font-semibold uppercase text-gray-600 rounded-full ">
                   {getNameInitials(currentRoom?.activeCustomer?.customerName|| "Guest")}
                 </span>
-                <p className="font-semibold">{currentRoom?.activeCustomer?.customerName || "Guest"}</p>
+                <div>
+                  <p className="font-semibold">{currentRoom?.activeCustomer?.customerName || "Guest"}</p>
+                  <p className="text-gray-500">{formatNaira(currentRoom?.activeCustomer?.price)}</p>
+                </div>
               </div>
               
-              <div className="grid grid-cols-1 gap-2 mt-2">
-                <Button text="Check Out" className="w-full" onClick={handleCheckout} loading={checkOutLoading} loadingText="checking out..." />
-              </div>
             </div>
           }
 
@@ -223,48 +223,49 @@ const handleRecordPageChange = (pageNum: number) => {
                   <div className="text-xs text-gray-500 ml-auto mr-2">{formatNaira(booking.price)}</div>
                 </div>
               ))}
-<div className="flex justify-center items-center mt-4 space-x-2">
-  <button
-    disabled={!recordHasPrevPage}
-    onClick={handleRecordPrevPage}
-    className="p-2 disabled:opacity-50"
-  >
-    <IonIcon icon={chevronBack} />
-  </button>
+              
+            <div className="flex justify-center items-center mt-4 space-x-2">
+              <button
+                disabled={!recordHasPrevPage}
+                onClick={handleRecordPrevPage}
+                className="p-2 disabled:opacity-50"
+              >
+                <IonIcon icon={chevronBack} />
+              </button>
 
-  <div className="flex space-x-1">
-    {Array.from({ length: Math.min(5, recordTotalPages) }, (_, i) => {
-      let pageNum;
-      if (recordTotalPages <= 5) pageNum = i + 1;
-      else if (recordCurrentPage <= 3) pageNum = i + 1;
-      else if (recordCurrentPage >= recordTotalPages - 2)
-        pageNum = recordTotalPages - 4 + i;
-      else pageNum = recordCurrentPage - 2 + i;
+              <div className="flex space-x-1">
+                {Array.from({ length: Math.min(5, recordTotalPages) }, (_, i) => {
+                  let pageNum;
+                  if (recordTotalPages <= 5) pageNum = i + 1;
+                  else if (recordCurrentPage <= 3) pageNum = i + 1;
+                  else if (recordCurrentPage >= recordTotalPages - 2)
+                    pageNum = recordTotalPages - 4 + i;
+                  else pageNum = recordCurrentPage - 2 + i;
 
-      return (
-        <button
-          key={pageNum}
-          onClick={() => handleRecordPageChange(pageNum)}
-          className={`min-w-8 h-8 rounded ${
-            recordCurrentPage === pageNum
-              ? "font-bold bg-gray-200"
-              : "hover:bg-gray-100"
-          }`}
-        >
-          {pageNum}
-        </button>
-      );
-    })}
-  </div>
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => handleRecordPageChange(pageNum)}
+                      className={`min-w-8 h-8 rounded ${
+                        recordCurrentPage === pageNum
+                          ? "font-bold bg-gray-200"
+                          : "hover:bg-gray-100"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
 
-  <button
-    disabled={!recordHasNextPage}
-    onClick={handleRecordNextPage}
-    className="p-2 disabled:opacity-50"
-  >
-    <IonIcon icon={chevronForward} />
-  </button>
-</div>
+              <button
+                disabled={!recordHasNextPage}
+                onClick={handleRecordNextPage}
+                className="p-2 disabled:opacity-50"
+              >
+                <IonIcon icon={chevronForward} />
+              </button>
+            </div>
 
 
             </div>

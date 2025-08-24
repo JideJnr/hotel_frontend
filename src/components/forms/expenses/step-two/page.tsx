@@ -114,7 +114,7 @@ const ExpenseStepTwo = () => {
               disabled={isSubmitting}
               loading={isSubmitting}
               loadingText="Submitting..."
-              className="w-full"
+              className="w-full mt-8"
             />
           </div>
         </div>

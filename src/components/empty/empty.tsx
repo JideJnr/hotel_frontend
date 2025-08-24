@@ -3,14 +3,16 @@ import React from "react";
 interface EmptyStateProps {
   title?: string;
   description?: string;
+  className?: string;
 }
 
 const EmptyState: React.FC<EmptyStateProps> = ({
   title = "No data found",
   description = " We will notify you when there's an update.",
+  className,
 }) => {
   return (
-    <div className="flex flex-col items-center text-center p-4">
+    <div className={`flex flex-col items-center text-center p-4 ${className}`}>
       {/* Placeholder Illustration */}
       <svg
         className="mx-auto h-24 w-auto text-gray-400 "

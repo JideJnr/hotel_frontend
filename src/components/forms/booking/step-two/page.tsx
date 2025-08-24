@@ -89,13 +89,13 @@ const BookingStepTwo = () => {
     try {
       const bookingPayload = {
         customerId: formData.customerId,
+        customerName: formData.customerName,
         roomId: formData.roomId,
+        roomName: formData.roomName,
         checkInDate: formData.checkInDate,
         checkOutDate: formData.checkOutDate,
-        specialInstructions: formData.bookingInstruction,
-        paymentMethodId: formData.paymentMethodId,
-        totalAmount: getTotalAmount(),
-        status: "confirmed"
+        bookingInstructions: formData.bookingInstruction,
+        status: "BOOKED"
       };
 
       await createBooking(bookingPayload);
@@ -107,13 +107,7 @@ const BookingStepTwo = () => {
     }
   };
 
-  
-    const paymentOptions: Option[] = [
-      { value: "cash",     label: "Cash"     },
-      { value: "card",     label: "Card"     },
-      { value: "transfer", label: "Transfer" },
-    ];
-  
+
 
 
   return (

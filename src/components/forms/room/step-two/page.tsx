@@ -89,7 +89,7 @@ const RoomStepTwo = () => {
               disabled={loading}
               loading={loading}
               loadingText="Submitting..."
-              className="w-full"
+              className="w-full mt-8"
             />
           </div>
         </div>

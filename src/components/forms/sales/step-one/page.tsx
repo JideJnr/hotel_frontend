@@ -48,8 +48,6 @@ export default function SalesStepOne() {
 
   const [errors, setErrors] = useState<Errors>({});
 
-
-
   useEffect(() => {
     fetchCustomers();
     fetchAvailableRooms();

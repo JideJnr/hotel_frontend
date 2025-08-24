@@ -9,6 +9,8 @@ import { FormDatePicker, FormMultiSelect, FormHeader } from "../forms";
 import { useAnalytics } from "../../contexts/data/AnalyticsContext";
 import { useStaff } from "../../contexts/data/StaffContext";
 import { options } from "../../enum/enum";
+import { useCustomer } from "../../contexts/data/CustomerContext";
+import { useRoom } from "../../contexts/data/RoomContext";
 
 interface Option {
   value: string | number;
@@ -23,14 +25,20 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const router = useIonRouter();
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [customerSelection, setCustomerSelection] = useState<Option[]>([]);
+  const [roomSelection, setRoomSelection] = useState<Option[]>([]);
   const [staffSelection, setStaffSelection] = useState<Option[]>([]);
   const [dataSelection, setDataSelection] = useState<Option[]>([]);
   const { fetchOverview, loading } = useAnalytics();
 
    const { fetchStaffs, staffs } = useStaff();
+   const { fetchCustomers, customers } = useCustomer();
+   const {fetchRooms, rooms } = useRoom();
     
     useEffect(() => {
-      fetchStaffs()
+      fetchStaffs();
+      fetchCustomers();
+      fetchRooms();
     }, []);
 
   const handleSearch = async () => {
@@ -57,19 +65,35 @@ const AnalyticsModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     onClose();
   };
 
-const dataOptions = [
-  { value: "all", label: "All" },
-    ...options.map((option) => ({
-      value: option.value,
-      label: option.label,
-    })),
-  ];
+  const dataOptions = [
+    { value: "all", label: "All" },
+      ...options.map((option) => ({
+        value: option.value,
+        label: option.label,
+      })),
+    ];
 
   const staffOptions = [
   { value: "all", label: "All" },
     ...staffs.map((staff) => ({
       value: staff.id,
       label: staff.fullName,
+    })),
+  ];
+
+  const customerOptions = [
+  { value: "all", label: "All" },
+    ...customers.map((cus) => ({
+      value: cus.id,
+      label: cus.fullName,
+    })),
+  ];
+
+  const roomOptions = [
+  { value: "all", label: "All" },
+    ...rooms.map((room) => ({
+      value: room.id,
+      label: `Room ${room.name}`,
     })),
   ];
 
@@ -80,6 +104,7 @@ const dataOptions = [
 
         <div className="w-full max-w-2xl mx-auto">
           <div className="px-6 py-6 space-y-5 text-gray-800">
+            
             <div className="grid grid-cols-2 gap-3">
               <FormDatePicker
                 label="Start date"
@@ -101,16 +126,6 @@ const dataOptions = [
               <FormMultiSelect
                 label=""
                 name="tags"
-                value={staffSelection}
-                onChange={(s) => setStaffSelection(s)}
-                options={staffOptions}
-                placeholder="Choose tags…"
-              />
-            </div>
-            <div>
-              <FormMultiSelect
-                label=""
-                name="tags"
                 value={dataSelection}
                 onChange={(s) => {
                   if (s.some((opt) => opt.value === "all")) {
@@ -123,11 +138,42 @@ const dataOptions = [
                   }
                 }}
                 options={dataOptions}
-                placeholder="Choose Filters…"
+                placeholder="Filter by type…"
               />
             </div>
             
-
+            <div>
+              <FormMultiSelect
+                label=""
+                name="customer"
+                value={customerSelection}
+                onChange={(s) => setCustomerSelection(s)}
+                options={customerOptions}
+                placeholder="Filter by customer…"
+              />
+            </div>
+            
+            <div>
+              <FormMultiSelect
+                label=""
+                name="room"
+                value={roomSelection}
+                onChange={(s) => setRoomSelection(s)}
+                options={roomOptions}
+                placeholder="Filter by room…"
+              />
+            </div>
+            
+            <div>
+              <FormMultiSelect
+                label=""
+                name="staff"
+                value={staffSelection}
+                onChange={(s) => setStaffSelection(s)}
+                options={staffOptions}
+                placeholder="filter by staff…"
+              />
+            </div>
             
 
             <div className="flex justify-end gap-3 pt-2 border-t mt-2">

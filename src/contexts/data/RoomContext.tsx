@@ -21,7 +21,7 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
    
       if (response?.success) {
         toast.success('Room created successfully');
-        router.push(`/room/${response?.data?.id}`, 'forward');
+        router.push(`/room/${response?.data?.id}`, 'root');
       } else {
         toast.error(`Creation failed: ${response?.message}`);
       }
@@ -36,7 +36,7 @@ export const RoomProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const response = await store.updateRoom(id, payload);
       if (response?.success) {
         toast.success('Room updated successfully');
-        router.push(`/room/${response.data.Id}`, 'forward');
+        router.push(`/room/${response.data.Id}`, 'root');
       } else {
         toast.error(`Update failed: ${response?.message}`);
       }

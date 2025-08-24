@@ -39,6 +39,8 @@ const UserDetails = () => {
           console.error("Checkout failed");
         }
       };
+
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
   
   
 
@@ -71,9 +73,17 @@ const UserDetails = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 w-full" onClick={() => router.push('/register/customer/stepone', 'forward')}>
+                   {user && user.role == 'ADMIN' && 
+
+
+            <div className="flex items-center gap-4 w-full">
             
-              {/* Contact Button (primary / filled blue) */}
+              {/* Edit Button (secondary / gray outline) */}
+              <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2"  onClick={() => router.push(`/register/customer/stepone/${id}`, 'forward')}  >
+                <Edit3 size={16} />
+                Edit
+              </a>
+
               <a
                 href={`tel:+234${customer?.phone}`}
                 className="flex items-center justify-center gap-2 px-4 py-2 text-black border border-gray-800 rounded-lg text-sm font-medium hover:bg-gray-100  transition w-1/2"
@@ -81,13 +91,10 @@ const UserDetails = () => {
                 <Phone size={16} />
                 Contact
               </a>
-              {/* Edit Button (secondary / gray outline) */}
-              <a className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-800 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition w-1/2">
-                <Edit3 size={16} />
-                Edit
-              </a>
+            
 
             </div>
+}
 
             {/* Personal Information */}
             <div className="flex flex-col gap-2">
@@ -103,21 +110,30 @@ const UserDetails = () => {
               </div>
             </div>
 
-            {/* Current Guest Info */}
-            {customer?.active && (
-              <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
-                <h3 className="text-lg font-semibold">Current Stay</h3>
-                <div className="text-sm flex flex-col gap-1">
-                  <p className="font-semibold">ROOM : ROOM {customer?.activeRoom?.name}</p>
-                  <p className="font-medium"> Attendant : {customer?.activeRoom?.tellerName}</p>
-                </div>
-          
-                <div className="grid grid-cols-1 gap-2 mt-2">
-                    <Button text="Check Out" className="w-full" onClick={handleCheckout} loading={checkOutLoading} loadingText="Checking Out..."/>
-                </div>
-                
-              </div>
-            )}
+{/* Current Guest Info */}
+{customer?.activeRoom?.length > 0 && (
+  <div className="flex flex-col gap-4 bg-gray-50 border rounded-lg p-4">
+    <h3 className="text-lg font-semibold">Current Stay</h3>
+
+    {customer?.activeRoom.map((room: any, index: number) => (
+      <div key={index} className="text-sm flex flex-col gap-2 border-b pb-2 last:border-b-0 last:pb-0">
+        <p className="font-semibold">ROOM : ROOM {room?.name}</p>
+        <p className="font-medium">Attendant : {room?.tellerName}</p>
+
+        <div className="grid grid-cols-1 gap-2 mt-2">
+          <Button 
+            text="Check Out" 
+            className="w-full" 
+           
+            loading={checkOutLoading} 
+            loadingText="Checking Out..."
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
 
       
               

@@ -42,6 +42,7 @@ const SalesStepTwo = () => {
         customerId: formData.customerId,
         customerName: formData.customerName,
         roomId: formData.roomId,
+        roomName: formData.roomName,
         requestId: formData.requestId || null,
         bookingInstruction: formData.bookingInstruction || 'No Instruction Given',
         paymentMethodId:  formData.paymentMethodId || null,

@@ -12,8 +12,6 @@ import FormSelect from "../../FormSelect";
 import { useRoom } from "../../../../contexts/data/RoomContext";
 import { useCustomer } from "../../../../contexts/data/CustomerContext";
 import { paymentOptions } from "../../../../utils/enum";
-import { useBooking } from "../../../../contexts/data/BookingContext";
-import { useParams } from "react-router";
 import Footer from "../../../footer/footer";
 
 // -------------------

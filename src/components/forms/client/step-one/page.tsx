@@ -136,7 +136,7 @@ const ClientStepOne = () => {
               <Button 
                 text="Continue" 
                 type="submit" 
-                className="w-full"
+                className="w-full mt-8"
               />
             </div>
           </form>

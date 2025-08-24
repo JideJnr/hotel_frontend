@@ -1,28 +1,46 @@
 import { IonPage, useIonRouter } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { toast } from "react-toastify";
+
 import {
   BackFormContainer,
   FormHeader,
   FormInput,
   FormTextarea,
-  FormMultiSelect
+  FormMultiSelect,
 } from "../../../../components/forms";
 import Button from "../../../../components/button/button";
-import { RoomFormData } from "../step-two/page";
 import Footer from "../../../footer/footer";
+import { RoomFormData } from "../step-two/page";
+import { useRoom } from "../../../../contexts/data/RoomContext";
+import LoadingPage from "../../../loading/Loading";
 
 export default function CreateRoomForm() {
+  const { id } = useParams<{ id: string }>();
+  const { fetchRoom, currentRoom:room, loading } = useRoom();
   const router = useIonRouter();
+
+    // Fetch room if editing
+  useEffect(() => {
+    if (id) {
+      fetchRoom(id);
+    }
+  }, [id]);
+
   const [formData, setFormData] = useState<RoomFormData>({
-    name: "",
-    description: "",
-    capacity: null,
-    amenities: [],
-    pricePerNight: null,
-    oneHour: null,
-    twoHours: null
+     name: room.name || "",
+        description: room.description || "",
+        capacity: room.capacity || null,
+        amenities: room.amenity || [],
+        pricePerNight: room.pricePerNight || null,
+        oneHour: room.priceOneHour || null,
+        twoHours: room.priceTwoHours || null,
   });
+
+
+
+
 
   const [errors, setErrors] = useState<Partial<Record<keyof RoomFormData, string>>>({});
 
@@ -54,6 +72,7 @@ export default function CreateRoomForm() {
 
   return (
     <IonPage>
+      {loading && <LoadingPage  />}
       <FormHeader />
       <BackFormContainer
         title="Create Room"

@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import { getHotelBusinessDate } from "../../../utils/utilities";
 import LoadingPage from "../../../components/loading/Loading";
 import { chevronBack, chevronForward } from "ionicons/icons";
+import EmptyState from "../../../components/empty/empty";
 
 const Home = () => {
   const router = useIonRouter();
@@ -185,7 +186,7 @@ const Home = () => {
         />
       </div>
 
-      <div className="flex flex-col gap-4 w-full  p-4 rounded-lg shadow-md bg-white">
+      <div className="flex flex-col gap-4 w-full  p-4 rounded-lg shadow-md bg-white min-h-[400px]">
         <DateHeader currentDate={currentDate} setCurrentDate={setCurrentDate} />
 
         <div className="flex flex-col gap-8">
@@ -322,6 +323,13 @@ const Home = () => {
               )}
             </div>
           )}
+          
+          {(!records || records.length === 0) &&
+            (!expenses || expenses.length === 0) && (
+
+              <EmptyState className='py-8'/>
+            )}
+
         </div>
 
         <Footer className="bg-white" />
