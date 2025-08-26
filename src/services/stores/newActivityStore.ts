@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { fetchMyActivity, fetchStaffActivity } from '../api/activityApi';
+import { fetchMyActivity, fetchStaffActivity } from '../api/newActivityApi';
 
 
 interface ActivityStore {

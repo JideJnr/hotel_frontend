@@ -1,6 +1,6 @@
 import { createContext, useContext, ReactNode, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useAnalyticsStore } from '../../services/stores/analyticStore';
+import { useAnalyticsStore } from '../../services/stores/newAnalyticStore';
 
 
 // Define proper types for Analytics data
